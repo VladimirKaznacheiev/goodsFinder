@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         getMoyo();
-        getCitrus();
+
 
         storeTitlesList.add("MoYo");
         storeTitlesList.add("Citrus");
@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
                             goodsNamesList.remove(goodsNamesList.size() - 1);
                             goodsImagesList.remove(goodsImagesList.size() - 1);
                             pageCounter++;
-                            getCitrusGoods(currentRequestString + "&page=" + pageCounter);
+                            getCitrus(currentRequestString + "&page=" + pageCounter);
 
                             progressBar.setVisibility(View.VISIBLE);
                         } else {
@@ -293,9 +293,9 @@ public class MainActivity extends AppCompatActivity {
 
                     progressBar.setVisibility(View.VISIBLE); //to show
 
-
+                    getCitrus(s);
                     getMoyoGoods(s);
-                    getCitrusGoods(s);
+
 
                 } else {
                     errorTextMain.setVisibility(View.VISIBLE);
@@ -365,7 +365,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
+/*
     void getCitrusGoods(String search) {
         goodsListView.setEnabled(false);
         isFoundCitrus = false;
@@ -497,15 +497,109 @@ public class MainActivity extends AppCompatActivity {
                                 adapterCitrus.notifyDataSetChanged();
                                 goodsListView.setEnabled(true);
                             }
-                        
+
                     }}
             );
         }
     }
+*/
+
+
+
+    void getCitrus(String s){
+
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    doc = Jsoup.connect("https://www.citrus.ua/search?query="+s).get();
+                    Elements elements = doc.getElementsByAttributeValue("class", "short-itm-desc");
+
+                    elements.forEach(image-> {
+                        Element aElement = image.child(5);
+                        Element imgElement = image.child(2);
+                        Element priceElement = image.child(7);
+                        String url = "https://www.citrus.ua"+aElement.attr("href");
+                        String title = aElement.child(0).text();
+                        String price = "";
+
+                        if (priceElement.child(1).childrenSize()>1){
+                            if (priceElement.child(1).child(1).attr("class")=="price-not-ready"){
+                                price = "Цена формируется";
+                            } else {
+                                price = priceElement.child(1).child(1).child(0).text();
+                            }
+                        } else {
+                            if (priceElement.child(1).child(0).attr("class")=="price-not-ready"){
+                                price = "Цена формируется";
+                            } else {
+                                price = priceElement.child(1).child(0).text();
+                            }
+                        }
+
+                        Document doc2 = null;
+                        try {
+                            doc2 = Jsoup.connect(url).get();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        Elements images = doc2.getElementsByAttributeValue("class", "gallery").select("img");
+                        String img = images.attr("src");
 
 
 
 
+                        articleList.add(new Article(url, title, price,  img));
+                    });
+
+                    for (int i = goodsCount; i < articleList.size(); i++) {
+                        goodsNamesList.add(articleList.get(i).getName());
+                        goodsPricesList.add(articleList.get(i).getPrice() + " грн");
+
+                        goodsImagesList.add(articleList.get(i).getImg());
+
+                        Log.d(TAG,articleList.get(i).toString());
+
+                    }
+                    goodsCount = articleList.size();
+                    Element loadElement = doc.getElementsByAttributeValue("class", "catalog-card-container more-items product-card product-card--mini").first();
+
+                    if (loadElement != null) {
+                        goodsNamesList.add("Загрузить ещё");
+                        goodsPricesList.add("");
+
+                        goodsImagesList.add("https://image.flaticon.com/icons/png/512/16/16770.png");
+                        articleList.add(new Article(" ", "Загрузить ещё", "", "https://image.flaticon.com/icons/png/512/16/16770.png"));
+
+                    }
+
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            progressBar.setVisibility(View.GONE); // to hide
+                            adapterCitrus.notifyDataSetChanged();
+                            goodsListView.setEnabled(true);
+                        }
+                    });
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Log.d(TAG,"CITRUS ERROR");
+                }
+
+
+
+            }
+        };
+
+
+        webThread = new Thread(runnable);
+        webThread.start();
+
+    }
 
 
 
