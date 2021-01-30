@@ -97,30 +97,19 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                     Log.d("Testing",""+ childDataSnapshot.getValue());
 
 
-
                     String[] goodsInfo = String.valueOf(childDataSnapshot.getValue()).split("split", 4);
-                    for (int i = 0; i < goodsInfo.length; i++) {
 
-                        if(i == 0) {
-                            favouritesUrlList.set(counter, goodsInfo[i]);
-                        }else if(i == 1){
-                            favouritesImagesList.set(counter, goodsInfo[i]);
-                        }else if(i == 2){
-                            favouritesNamesList.set(counter, goodsInfo[i]);
-                        }else if(i == 3){
-                            favouritesPricesList.set(counter, goodsInfo[i]);
-                        }
+                        //Log.d("Testing",String.valueOf(childDataSnapshot.getValue()).split("split", 4)[3]);
 
+                        favouritesUrlList.add(counter, goodsInfo[0]);
+                        favouritesImagesList.add(counter, goodsInfo[1]);
+                        favouritesNamesList.add(counter, goodsInfo[2]);
+                        favouritesPricesList.add(counter, goodsInfo[3]);
 
                         adapter1.notifyDataSetChanged();
                         counter++;
-                    }
-
 
                 }
-
-
-
             }
 
             @Override
