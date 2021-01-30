@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "77933060713",
+    "firebase_url": "https://forbuy-db0e6-default-rtdb.firebaseio.com",
+    "project_id": "forbuy-db0e6",
+    "storage_bucket": "forbuy-db0e6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:77933060713:android:87ccf99238e14e407978f8",
+        "android_client_info": {
+          "package_name": "com.example.goodsfinder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "77933060713-r3ceep5d8treth7g87hincp7oah093e4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4ON6bFgITwrvNasps2W2yrCwgUcApxAU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "77933060713-r3ceep5d8treth7g87hincp7oah093e4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:77933060713:android:048ba846893424107978f8",
+        "android_client_info": {
+          "package_name": "com.example.users"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "77933060713-r3ceep5d8treth7g87hincp7oah093e4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4ON6bFgITwrvNasps2W2yrCwgUcApxAU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "77933060713-r3ceep5d8treth7g87hincp7oah093e4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
