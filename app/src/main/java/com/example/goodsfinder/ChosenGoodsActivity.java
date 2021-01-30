@@ -55,6 +55,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
     ArrayList<String> favouritesPricesList = new ArrayList<>();
     ArrayList<String> favouritesNamesList = new ArrayList<>();
     ArrayList<String> favouritesUrlList = new ArrayList<>();
+    ArrayList<String> favouritesList = new ArrayList<>();
 
     ListView goodsListView;
     MyAdapter adapter1;
@@ -88,7 +89,10 @@ public class ChosenGoodsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Map<String, Object> td = (HashMap<String,Object>) snapshot.getValue();
-
+                favouritesUrlList.clear();
+                favouritesImagesList.clear();
+                favouritesNamesList.clear();
+                favouritesPricesList.clear();
                 for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
                     int counter = 0;
                     DatabaseReference objRef = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid()).child( childDataSnapshot.getKey());
@@ -97,14 +101,17 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                     Log.d("Testing",""+ childDataSnapshot.getValue());
 
 
+                    favouritesList.add(String.valueOf(childDataSnapshot.getValue()));
                     String[] goodsInfo = String.valueOf(childDataSnapshot.getValue()).split("split", 4);
 
                         //Log.d("Testing",String.valueOf(childDataSnapshot.getValue()).split("split", 4)[3]);
 
+
+
                         favouritesUrlList.add(counter, goodsInfo[0]);
                         favouritesImagesList.add(counter, goodsInfo[1]);
                         favouritesNamesList.add(counter, goodsInfo[2]);
-                        favouritesPricesList.add(counter, goodsInfo[3]);
+                        favouritesPricesList.add(counter, goodsInfo[3].replaceAll(" грн","")+" грн");
 
                         adapter1.notifyDataSetChanged();
                         counter++;
@@ -156,7 +163,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
             LayoutInflater layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View goodsView = layoutInflater.inflate(R.layout.goods_view, parent, false);
             ImageView images = goodsView.findViewById(R.id.goodsImageMain);
-            ImageView imagesFavourite = goodsView.findViewById(R.id.goodsFavourite);
+            ImageView imagesDelete = goodsView.findViewById(R.id.goodsFavourite);
             TextView myTitle = goodsView.findViewById(R.id.goodsTitleMain);
             TextView myDescription = goodsView.findViewById(R.id.goodsPriceMain);
 
@@ -167,11 +174,58 @@ public class ChosenGoodsActivity extends AppCompatActivity {
             myTitle.setText(rTitle.get(position));
             myDescription.setText(rDescription.get(position));
 
-            imagesFavourite.setOnClickListener(new View.OnClickListener() {
+            imagesDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
                 //Open link from favourites
+
+                    //------------------------------------------------------------------------------------------
+
+                    mDatabase.child("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Map<String, Object> td = (HashMap<String,Object>) snapshot.getValue();
+
+                            for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
+                                DatabaseReference objRef = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid()).child( childDataSnapshot.getKey());
+                                Map<String,Object> taskMap = new HashMap<String,Object>();
+                                objRef.updateChildren(taskMap);
+
+                                String str = favouritesList.get(position);
+
+                                if (childDataSnapshot.getValue().equals(str)){
+                                    mDatabase.child("Users").child(user.getUid()).child(childDataSnapshot.getKey()).removeValue();
+                                    mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
+                                }
+
+
+                            }
+
+
+
+
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+                    //------------------------------------------------------------------------------------------
+                    Log.d("Testing",favouritesList.get(position));
+                    favouritesList.remove(position);
+                    favouritesUrlList.remove(position);
+                    favouritesImagesList.remove(position);
+                    favouritesNamesList.remove(position);
+                    favouritesPricesList.remove(position);
+
+
+                    adapter1.notifyDataSetChanged();
+
 
                 }
             });
