@@ -36,6 +36,7 @@ import android.webkit.WebViewClient;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -45,6 +46,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 import org.jsoup.Jsoup;
@@ -59,11 +67,16 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 
 public class MainActivity extends AppCompatActivity {
+    private DatabaseReference mDatabase;
+    private FirebaseAuth mAuth;
+    FirebaseUser user = mAuth.getInstance().getCurrentUser();
 
     private static final String TAG = "artFil";
 
@@ -124,6 +137,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        if (FirebaseAuth.getInstance().getCurrentUser() == null){
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+        } else {
+            if(getSupportActionBar()!=null) getSupportActionBar().setTitle(String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getEmail()));
+        }
+
+
+
         isFoundMoyo = false;
         isFoundCitrus = false;
         isFoundRozetka = false;
@@ -190,6 +215,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                 })
         );
+
+        findViewById(R.id.btn_logout).setOnClickListener(this::onClick);
+        findViewById(R.id.btn_to_chosen).setOnClickListener(this::onClick);
 
 
         goodsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -421,6 +449,21 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    public void onClick(View view) {
+        if(view.getId() == R.id.btn_logout) {
+            FirebaseAuth.getInstance().signOut();
+            if(getSupportActionBar()!=null) getSupportActionBar().setTitle(String.valueOf(FirebaseAuth.getInstance().getCurrentUser()));
+
+            if (FirebaseAuth.getInstance().getCurrentUser() == null){
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        } else if (view.getId() == R.id.btn_to_chosen){
+            Intent intent = new Intent(MainActivity.this, ChosenGoodsActivity.class);
+            startActivity(intent);
+        }
     }
 
     private void initRecyclerView() {
@@ -690,7 +733,7 @@ public class MainActivity extends AppCompatActivity {
                 String search1 = search.replace(" ", "%20");
                 browserRozetka.loadUrl(search1);
 
-                if(getSupportActionBar()!=null) getSupportActionBar().setTitle(browserRozetka.getUrl());
+                //if(getSupportActionBar()!=null) getSupportActionBar().setTitle(browserRozetka.getUrl());
                 Log.d(TAG,"Step 2");
             }
         });
@@ -866,8 +909,50 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG,arrLIst.get(position).getUrl());
-                    
+                    Log.d(TAG,arrLIst.get(position).getImg());
+                    Log.d(TAG,arrLIst.get(position).getName());
+                    Log.d(TAG,arrLIst.get(position).getPrice());
 
+
+
+
+                    mDatabase.child("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+                        public boolean inChosen = false;
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Map<String, Object> td = (HashMap<String,Object>) snapshot.getValue();
+
+                            for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
+                                DatabaseReference objRef = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid()).child( childDataSnapshot.getKey());
+                                Map<String,Object> taskMap = new HashMap<String,Object>();
+                                objRef.updateChildren(taskMap);
+
+                                String str = arrLIst.get(position).getUrl() + "split" + arrLIst.get(position).getImg() + "split" + arrLIst.get(position).getName() + "split" + arrLIst.get(position).getPrice();
+
+                                if (childDataSnapshot.getValue().equals(str)){
+                                    inChosen = true;
+                                }
+
+
+                            }
+
+                            mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
+                            if (!inChosen){
+                                mDatabase.child("Users").child(user.getUid()).push().setValue(arrLIst.get(position).getUrl()+"split"+arrLIst.get(position).getImg()+"split"+arrLIst.get(position).getName()+"split"+arrLIst.get(position).getPrice());
+                                Toast.makeText(MainActivity.this, "Товара нет в избранных, добавляю", Toast.LENGTH_SHORT).show();
+                            }  else {
+                                Toast.makeText(MainActivity.this, "Товар был ранее добален в избранные", Toast.LENGTH_SHORT).show();
+                            }
+
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
 
 
                 }
