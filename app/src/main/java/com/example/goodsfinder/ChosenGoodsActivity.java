@@ -98,7 +98,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                     DatabaseReference objRef = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid()).child( childDataSnapshot.getKey());
                     Map<String,Object> taskMap = new HashMap<String,Object>();
                     objRef.updateChildren(taskMap);
-                    Log.d("Testing",""+ childDataSnapshot.getValue());
+                    //Log.d("Testing",""+ childDataSnapshot.getValue());
 
 
                     favouritesList.add(String.valueOf(childDataSnapshot.getValue()));
@@ -192,23 +192,23 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                                 Map<String,Object> taskMap = new HashMap<String,Object>();
                                 objRef.updateChildren(taskMap);
 
-                                String str = favouritesList.get(position);
+
+                                String str = favouritesList.get(favouritesList.size()-position-1);
 
                                 if (childDataSnapshot.getValue().equals(str)){
-                                    mDatabase.child("Users").child(user.getUid()).child(childDataSnapshot.getKey()).removeValue();
+
+                                    favouritesList.clear();
+                                    adapter1.notifyDataSetChanged();
+
+                                    //Log.d("Testing1",""+ favouritesList.size());
+                                    //Log.d("Testing2",""+  childDataSnapshot.getKey());
+                                    mDatabase.child("Users").child(user.getUid()).child(childDataSnapshot.getKey()).setValue(null);
                                     mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
+                                    break;
                                 }
-
-
+                                mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
                             }
-
-
-
-
-
-
                         }
-
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
 
@@ -216,17 +216,6 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                     });
 
                     //------------------------------------------------------------------------------------------
-                    Log.d("Testing",favouritesList.get(position));
-                    favouritesList.remove(position);
-                    favouritesUrlList.remove(position);
-                    favouritesImagesList.remove(position);
-                    favouritesNamesList.remove(position);
-                    favouritesPricesList.remove(position);
-
-
-                    adapter1.notifyDataSetChanged();
-
-
                 }
             });
 
