@@ -886,7 +886,7 @@ public class MainActivity extends AppCompatActivity {
             LayoutInflater layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View goodsView = layoutInflater.inflate(R.layout.goods_view, parent, false);
             ImageView images = goodsView.findViewById(R.id.goodsImageMain);
-            ImageView imagesFavourite = goodsView.findViewById(R.id.goodsFavourite);
+            ImageView imageFavourite = goodsView.findViewById(R.id.goodsFavourite);
             TextView myTitle = goodsView.findViewById(R.id.goodsTitleMain);
             TextView myDescription = goodsView.findViewById(R.id.goodsPriceMain);
 
@@ -894,18 +894,49 @@ public class MainActivity extends AppCompatActivity {
 
 
             Glide.with(context).load(rImgs.get(position)).into(images);
-
             myTitle.setText(rTitle.get(position));
 
 
+            mDatabase.child("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+                public boolean inChosen = false;
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                    for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
+                        String str = arrLIst.get(position).getUrl() + "split" + arrLIst.get(position).getImg() + "split" + arrLIst.get(position).getName() + "split" + arrLIst.get(position).getPrice();
+                        if (childDataSnapshot.getValue().equals(str)){
+                            inChosen = true;
+                        }
+
+                        if(inChosen){
+                            imageFavourite.setImageResource(R.drawable.ic_baseline_star_24);
+                        }else{
+                            imageFavourite.setImageResource(R.drawable.ic_baseline_star_border_24);
+                        }
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+
+
             if (rTitle.get(position) == "Загрузить ещё") {
-                imagesFavourite.setVisibility(View.GONE);
+                imageFavourite.setVisibility(View.GONE);
                 myTitle.setTypeface(null, Typeface.BOLD_ITALIC);
                 myTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
             }
             myDescription.setText(rDescription.get(position));
 
-            imagesFavourite.setOnClickListener(new View.OnClickListener() {
+
+
+
+
+            imageFavourite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG,arrLIst.get(position).getUrl());
@@ -917,32 +948,43 @@ public class MainActivity extends AppCompatActivity {
 
 
                     mDatabase.child("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
-                        public boolean inChosen = false;
+                        public boolean inChosen;
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             Map<String, Object> td = (HashMap<String,Object>) snapshot.getValue();
 
                             for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
+
                                 DatabaseReference objRef = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid()).child( childDataSnapshot.getKey());
                                 Map<String,Object> taskMap = new HashMap<String,Object>();
                                 objRef.updateChildren(taskMap);
 
-                                String str = arrLIst.get(position).getUrl() + "split" + arrLIst.get(position).getImg() + "split" + arrLIst.get(position).getName() + "split" + arrLIst.get(position).getPrice();
 
+                                String str = arrLIst.get(position).getUrl() + "split" + arrLIst.get(position).getImg() + "split" + arrLIst.get(position).getName() + "split" + arrLIst.get(position).getPrice();
                                 if (childDataSnapshot.getValue().equals(str)){
                                     inChosen = true;
+
+                                       /* imageFavourite.setImageResource(R.drawable.ic_baseline_star_24);*/
+                                        Toast.makeText(MainActivity.this, "Товар был ранее добален в избранные", Toast.LENGTH_SHORT).show();
+                                        mDatabase.child("Users").child(user.getUid()).child(childDataSnapshot.getKey()).setValue(null);
+                                    mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
+                                        break;
+
+                                }else{
+                                    inChosen = false;
                                 }
 
 
                             }
 
-                            mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
                             if (!inChosen){
+                              /*  imageFavourite.setImageResource(R.drawable.ic_baseline_star_border_24);*/
                                 mDatabase.child("Users").child(user.getUid()).push().setValue(arrLIst.get(position).getUrl()+"split"+arrLIst.get(position).getImg()+"split"+arrLIst.get(position).getName()+"split"+arrLIst.get(position).getPrice());
                                 Toast.makeText(MainActivity.this, "Товара нет в избранных, добавляю", Toast.LENGTH_SHORT).show();
-                            }  else {
-                                Toast.makeText(MainActivity.this, "Товар был ранее добален в избранные", Toast.LENGTH_SHORT).show();
+                                mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
+                                return;
                             }
+
 
 
 

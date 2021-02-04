@@ -163,7 +163,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
             LayoutInflater layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View goodsView = layoutInflater.inflate(R.layout.goods_view, parent, false);
             ImageView images = goodsView.findViewById(R.id.goodsImageMain);
-            ImageView imagesDelete = goodsView.findViewById(R.id.goodsFavourite);
+            ImageView imageDelete = goodsView.findViewById(R.id.goodsFavourite);
             TextView myTitle = goodsView.findViewById(R.id.goodsTitleMain);
             TextView myDescription = goodsView.findViewById(R.id.goodsPriceMain);
 
@@ -173,8 +173,9 @@ public class ChosenGoodsActivity extends AppCompatActivity {
             Glide.with(context).load(rImgs.get(position)).into(images);
             myTitle.setText(rTitle.get(position));
             myDescription.setText(rDescription.get(position));
+            imageDelete.setImageResource(R.drawable.ic_baseline_delete_24);
 
-            imagesDelete.setOnClickListener(new View.OnClickListener() {
+            imageDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -204,6 +205,16 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                                     //Log.d("Testing2",""+  childDataSnapshot.getKey());
                                     mDatabase.child("Users").child(user.getUid()).child(childDataSnapshot.getKey()).setValue(null);
                                     mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
+
+                                    if (position == 0){
+                                        favouritesList.clear();
+                                        favouritesUrlList.clear();
+                                        favouritesImagesList.clear();
+                                        favouritesNamesList.clear();
+                                        favouritesPricesList.clear();
+                                        adapter1.notifyDataSetChanged();
+                                    }
+
                                     break;
                                 }
                                 mDatabase.child("Users").child(user.getUid()).removeEventListener(this);

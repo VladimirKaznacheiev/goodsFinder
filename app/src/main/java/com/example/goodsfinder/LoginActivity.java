@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             if (ETemail.getText().toString().length()<1 || ETpassword.getText().toString().length()<1){
                 Toast.makeText(LoginActivity.this, "Заполните все поля", Toast.LENGTH_SHORT).show();
             } else {
-                signin(ETemail.getText().toString(),ETpassword.getText().toString());
+                signIn(ETemail.getText().toString(),ETpassword.getText().toString());
             }
 
         }else if (view.getId() == R.id.btn_registration)
@@ -100,7 +100,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    public void signin(String email , String password)
+    public void signIn(String email , String password)
     {
         mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
