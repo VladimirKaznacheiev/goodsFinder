@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -84,6 +85,16 @@ public class ChosenGoodsActivity extends AppCompatActivity {
         adapter1 = new MyAdapter(this,favouritesNamesList,favouritesPricesList,favouritesImagesList,favouritesUrlList);
         goodsListView.setAdapter(adapter1);
 
+        goodsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                 @Override
+                                                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                                                     Uri address = Uri.parse(favouritesUrlList.get(i));
+                                                     Intent openlinkIntent = new Intent(Intent.ACTION_VIEW, address);
+                                                     startActivity(openlinkIntent);
+                                                 }
+
+                                             });
 
         mDatabase.child("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
