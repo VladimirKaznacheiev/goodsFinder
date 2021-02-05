@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -38,6 +39,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +54,8 @@ public class ChosenGoodsActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private List<String> DiscrTasks;
+
+    private Document doc = null;
 
     FirebaseUser user = mAuth.getInstance().getCurrentUser();
     String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -64,10 +73,18 @@ public class ChosenGoodsActivity extends AppCompatActivity {
 
     FirebaseListAdapter mAdapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chosen_goods_activity);
+
+        if (android.os.Build.VERSION.SDK_INT > 9)
+        {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
         findViewById(R.id.btn_to_main).setOnClickListener(this::onClick);
 
@@ -113,7 +130,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
 
 
                     favouritesList.add(String.valueOf(childDataSnapshot.getValue()));
-                    String[] goodsInfo = String.valueOf(childDataSnapshot.getValue()).split("split", 4);
+                    String[] goodsInfo = String.valueOf(childDataSnapshot.getValue()).split("split", 5);
 
                         //Log.d("Testing",String.valueOf(childDataSnapshot.getValue()).split("split", 4)[3]);
 
@@ -122,7 +139,132 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                         favouritesUrlList.add(counter, goodsInfo[0]);
                         favouritesImagesList.add(counter, goodsInfo[1]);
                         favouritesNamesList.add(counter, goodsInfo[2]);
-                        favouritesPricesList.add(counter, goodsInfo[3].replaceAll(" грн","")+" грн");
+                        //favouritesPricesList.add(counter, goodsInfo[4]);
+                        if (goodsInfo[0].contains("allo.ua")){
+                            try {
+
+                                doc = Jsoup.connect(goodsInfo[0]).get();
+                                Element elements = doc.getElementsByAttributeValue("class", "sum").last();
+
+
+                                String[] finalGoodsInfo = goodsInfo;
+                                String[] finalGoodsInfo1 = goodsInfo;
+                                int finalCounter1 = counter;
+
+                                    String price = elements.text();
+
+                                    if (!price.equals(finalGoodsInfo[4])) {
+
+                                        mDatabase.child("Users").child(user.getUid()).child(childDataSnapshot.getKey()).setValue(finalGoodsInfo1[0]+"split"+finalGoodsInfo1[1]+"split"+finalGoodsInfo1[2]+"split"+finalGoodsInfo1[4]+"split"+price);
+                                        mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
+
+                                        if (Integer.parseInt(finalGoodsInfo1[4].replace(" ", "").replace("грн", ""))>Integer.parseInt(price.replace(" ", "").replace("грн", ""))){
+                                            favouritesPricesList.add(finalCounter1, "old: " + finalGoodsInfo1[4].replaceAll(" грн","")+" грн " + "\nnow: " + price.replaceAll(" грн","")+" грн"+"\ndown");
+                                        } else if (Integer.parseInt(finalGoodsInfo1[4].replace(" ", "").replace("грн", ""))<Integer.parseInt(price.replace(" ", "").replace("грн", ""))){
+                                            favouritesPricesList.add(finalCounter1, "old: " + finalGoodsInfo1[4].replaceAll(" грн","")+" грн " + "\nnow: " + price.replaceAll(" грн","")+" грн"+"\nup");
+                                        } else{
+                                            favouritesPricesList.add(finalCounter1, "old: " + "\nnow: " + price.replaceAll(" грн","")+" грн"+"\nnone");
+                                        }
+                                        return;
+                                    } else{
+                                        if (Integer.parseInt(finalGoodsInfo1[3].replace(" ", "").replace("грн", ""))>Integer.parseInt(price.replace(" ", "").replace("грн", ""))){
+                                            favouritesPricesList.add(finalCounter1, "old: " + finalGoodsInfo1[3].replaceAll(" грн","")+" грн " + "\nnow: " + price.replaceAll(" грн","")+" грн"+"\ndown");
+                                        } else if (Integer.parseInt(finalGoodsInfo1[3].replace(" ", "").replace("грн", ""))<Integer.parseInt(price.replace(" ", "").replace("грн", ""))){
+                                            favouritesPricesList.add(finalCounter1, "old: " + finalGoodsInfo1[3].replaceAll(" грн","")+" грн " + "\nnow: " + price.replaceAll(" грн","")+" грн"+"\nup");
+                                        } else{
+                                            favouritesPricesList.add(finalCounter1, "old: " + "\nnow: " + price.replaceAll(" грн","")+" грн"+"\nnone");
+                                        }
+                                    }
+
+
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else if (goodsInfo[0].contains("moyo.ua")){
+                            try {
+
+                                doc = Jsoup.connect(goodsInfo[0]).get();
+                                Element elements = doc.getElementsByAttributeValue("class", "actual-price-amount").last();
+
+
+                                String[] finalGoodsInfo = goodsInfo;
+                                String[] finalGoodsInfo1 = goodsInfo;
+                                int finalCounter1 = counter;
+
+                                String price = elements.text();
+
+                                if (!price.equals(finalGoodsInfo[4])) {
+
+                                    mDatabase.child("Users").child(user.getUid()).child(childDataSnapshot.getKey()).setValue(finalGoodsInfo1[0]+"split"+finalGoodsInfo1[1]+"split"+finalGoodsInfo1[2]+"split"+finalGoodsInfo1[4]+"split"+price);
+                                    mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
+
+                                    if (Integer.parseInt(finalGoodsInfo1[4].replace(" ", "").replace("грн", ""))>Integer.parseInt(price.replace(" ", "").replace("грн", ""))){
+                                        favouritesPricesList.add(finalCounter1, "old: " + finalGoodsInfo1[4].replaceAll(" грн","")+" грн " + "\nnow: " + price.replaceAll(" грн","")+" грн"+"\ndown");
+                                    } else if (Integer.parseInt(finalGoodsInfo1[4].replace(" ", "").replace("грн", ""))<Integer.parseInt(price.replace(" ", "").replace("грн", ""))){
+                                        favouritesPricesList.add(finalCounter1, "old: " + finalGoodsInfo1[4].replaceAll(" грн","")+" грн " + "\nnow: " + price.replaceAll(" грн","")+" грн"+"\nup");
+                                    } else{
+                                        favouritesPricesList.add(finalCounter1, "old: " + "\nnow: " + price.replaceAll(" грн","")+" грн"+"\nnone");
+                                    }
+                                    return;
+                                } else{
+                                    if (Integer.parseInt(finalGoodsInfo1[3].replace(" ", "").replace("грн", ""))>Integer.parseInt(price.replace(" ", "").replace("грн", ""))){
+                                        favouritesPricesList.add(finalCounter1, "old: " + finalGoodsInfo1[3].replaceAll(" грн","")+" грн " + "\nnow: " + price.replaceAll(" грн","")+" грн"+"\ndown");
+                                    } else if (Integer.parseInt(finalGoodsInfo1[3].replace(" ", "").replace("грн", ""))<Integer.parseInt(price.replace(" ", "").replace("грн", ""))){
+                                        favouritesPricesList.add(finalCounter1, "old: " + finalGoodsInfo1[3].replaceAll(" грн","")+" грн " + "\nnow: " + price.replaceAll(" грн","")+" грн"+"\nup");
+                                    } else{
+                                        favouritesPricesList.add(finalCounter1, "old: " + "\nnow: " + price.replaceAll(" грн","")+" грн"+"\nnone");
+                                    }
+                                }
+
+
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else if (goodsInfo[0].contains("citrus.ua")){
+                            try {
+
+                                doc = Jsoup.connect(goodsInfo[0]).get();
+                                Element elements = doc.getElementsByAttributeValue("class", "buy-section__new-price").last();
+
+
+                                String[] finalGoodsInfo = goodsInfo;
+                                String[] finalGoodsInfo1 = goodsInfo;
+                                int finalCounter1 = counter;
+
+                                String price = elements.text();
+
+                                if (!price.equals(finalGoodsInfo[4])) {
+
+                                    mDatabase.child("Users").child(user.getUid()).child(childDataSnapshot.getKey()).setValue(finalGoodsInfo1[0]+"split"+finalGoodsInfo1[1]+"split"+finalGoodsInfo1[2]+"split"+finalGoodsInfo1[4]+"split"+price);
+                                    mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
+
+                                    if (Integer.parseInt(finalGoodsInfo1[4].replace(" ", "").replace("₴", "").replace("грн", ""))>Integer.parseInt(price.replace(" ", "").replace("₴", "").replace("грн", ""))){
+                                        favouritesPricesList.add(finalCounter1, "old: " + finalGoodsInfo1[4].replaceAll(" грн","").replace("₴", "")+" грн " + "\nnow: " + price.replaceAll(" грн","").replace("₴", "")+" грн"+"\ndown");
+                                    } else if (Integer.parseInt(finalGoodsInfo1[4].replace(" ", "").replace("грн", "").replace("₴", ""))<Integer.parseInt(price.replace(" ", "").replace("грн", "").replace("₴", ""))){
+                                        favouritesPricesList.add(finalCounter1, "old: " + finalGoodsInfo1[4].replaceAll(" грн","").replace("₴", "")+" грн " + "\nnow: " + price.replaceAll(" грн","").replace("₴", "")
+                                                +" грн"+"\nup");
+                                    } else{
+                                        favouritesPricesList.add(finalCounter1, "old: " + "\nnow: " + price.replaceAll(" грн","").replace("₴", "")+" грн"+"\nnone");
+                                    }
+                                    return;
+                                } else{
+                                    if (Integer.parseInt(finalGoodsInfo1[3].replace(" ", "").replace("₴", "").replace("грн", ""))>Integer.parseInt(price.replace(" ", "").replace("₴", "").replace("грн", ""))){
+                                        favouritesPricesList.add(finalCounter1, "old: " + finalGoodsInfo1[3].replaceAll(" грн","").replace("₴", "")+" грн " + "\nnow: " + price.replaceAll(" грн","").replace("₴", "")+" грн"+"\ndown");
+                                    } else if (Integer.parseInt(finalGoodsInfo1[3].replace(" ", "").replace("грн", "").replace("₴", ""))<Integer.parseInt(price.replace(" ", "").replace("₴", "").replace("грн", ""))){
+                                        favouritesPricesList.add(finalCounter1, "old: " + finalGoodsInfo1[3].replaceAll(" грн","").replace("₴", "")+" грн " + "\nnow: " + price.replaceAll(" грн","").replace("₴", "")+" грн"+"\nup");
+                                    } else{
+                                        favouritesPricesList.add(finalCounter1, "old: " + "\nnow: " + price.replaceAll(" грн","").replace("₴", "")+" грн"+"\nnone");
+                                    }
+                                }
+
+
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
 
                         adapter1.notifyDataSetChanged();
                         counter++;
