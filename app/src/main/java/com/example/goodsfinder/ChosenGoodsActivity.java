@@ -4,17 +4,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -56,11 +61,15 @@ public class ChosenGoodsActivity extends AppCompatActivity {
     private List<String> DiscrTasks;
 
     private Document doc = null;
+    private Document doc1 = null;
+    private final Handler uiHandler = new Handler();
+
+    private String priceRozetka = null;
+    private int counterRozetka = 0;
 
     FirebaseUser user = mAuth.getInstance().getCurrentUser();
     String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-
+    WebView browserRozetka;
     ArrayList<String> favouritesImagesList = new ArrayList<>();
     ArrayList<String> favouritesPricesList = new ArrayList<>();
     ArrayList<String> favouritesNamesList = new ArrayList<>();
@@ -74,6 +83,8 @@ public class ChosenGoodsActivity extends AppCompatActivity {
     FirebaseListAdapter mAdapter;
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -85,7 +96,8 @@ public class ChosenGoodsActivity extends AppCompatActivity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
-
+        browserRozetka = new WebView(this);
+        getMoyo();
         findViewById(R.id.btn_to_main).setOnClickListener(this::onClick);
 
         goodsListView = (ListView) findViewById(R.id.favouritesView);
@@ -126,13 +138,10 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                     DatabaseReference objRef = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid()).child( childDataSnapshot.getKey());
                     Map<String,Object> taskMap = new HashMap<String,Object>();
                     objRef.updateChildren(taskMap);
-                    //Log.d("Testing",""+ childDataSnapshot.getValue());
 
 
                     favouritesList.add(String.valueOf(childDataSnapshot.getValue()));
                     String[] goodsInfo = String.valueOf(childDataSnapshot.getValue()).split("split", 5);
-
-                    //Log.d("Testing",String.valueOf(childDataSnapshot.getValue()).split("split", 4)[3]);
 
 
 
@@ -182,47 +191,49 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     } else if (goodsInfo[0].contains("rozetka.com.ua")){
-//                        try {
 
-                            //doc = Jsoup.connect(goodsInfo[0]).get();
-                            //Element elements = doc.getElementsByAttributeValue("class", "actual-price-amount").last();
-
-
-                            String[] finalGoodsInfo = goodsInfo;
-                            String[] finalGoodsInfo1 = goodsInfo;
-                            int finalCounter1 = counter;
-
-                            //String price = elements.text();
-                            String price = "0";
-
-                            if (!price.equals(finalGoodsInfo[4])) {
-
-                                mDatabase.child("Users").child(user.getUid()).child(childDataSnapshot.getKey()).setValue(finalGoodsInfo1[0]+"split"+finalGoodsInfo1[1]+"split"+finalGoodsInfo1[2]+"split"+finalGoodsInfo1[4]+"split"+price);
-                                mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
-
-                                if (Integer.parseInt(finalGoodsInfo1[4].replace(" ", "").replace("грн", ""))>Integer.parseInt(price.replace(" ", "").replace("грн", ""))){
-                                    favouritesPricesList.add(finalCounter1, "old: " + finalGoodsInfo1[4].replaceAll(" грн","")+" грн " + "\nnow: " + price.replaceAll(" грн","")+" грн"+"\ndown");
-                                } else if (Integer.parseInt(finalGoodsInfo1[4].replace(" ", "").replace("грн", ""))<Integer.parseInt(price.replace(" ", "").replace("грн", ""))){
-                                    favouritesPricesList.add(finalCounter1, "old: " + finalGoodsInfo1[4].replaceAll(" грн","")+" грн " + "\nnow: " + price.replaceAll(" грн","")+" грн"+"\nup");
-                                } else{
-                                    favouritesPricesList.add(finalCounter1, "old: " + "\nnow: " + price.replaceAll(" грн","")+" грн"+"\nnone");
+                        uiHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                browserRozetka.loadUrl(goodsInfo[0]);
                                 }
-                                return;
-                            } else{
-                                if (Integer.parseInt(finalGoodsInfo1[3].replace(" ", "").replace("грн", ""))>Integer.parseInt(price.replace(" ", "").replace("грн", ""))){
-                                    favouritesPricesList.add(finalCounter1, "old: " + finalGoodsInfo1[3].replaceAll(" грн","")+" грн " + "\nnow: " + price.replaceAll(" грн","")+" грн"+"\ndown");
-                                } else if (Integer.parseInt(finalGoodsInfo1[3].replace(" ", "").replace("грн", ""))<Integer.parseInt(price.replace(" ", "").replace("грн", ""))){
-                                    favouritesPricesList.add(finalCounter1, "old: " + finalGoodsInfo1[3].replaceAll(" грн","")+" грн " + "\nnow: " + price.replaceAll(" грн","")+" грн"+"\nup");
-                                } else{
-                                    favouritesPricesList.add(finalCounter1, "old: " + "\nnow: " + price.replaceAll(" грн","")+" грн"+"\nnone");
-                                }
-                            }
+                            });
+
+                                if (priceRozetka != null) {
+
+                                    String[] finalGoodsInfo = goodsInfo;
+                                    String[] finalGoodsInfo1 = goodsInfo;
+                                    int finalCounter1 = counter;
+                                    counterRozetka = counter;
+
+                                    /*String oldPrice = finalGoodsInfo1[4].replaceAll(" грн", "") + " грн ";
+                                    String newPrice = priceRozetka.replaceAll(" грн", "").replace("₴", "");*/
+
+                                    if (!priceRozetka.equals(finalGoodsInfo[4])) {
+
+                                        mDatabase.child("Users").child(user.getUid()).child(childDataSnapshot.getKey()).setValue(finalGoodsInfo1[0] + "split" + finalGoodsInfo1[1] + "split" + finalGoodsInfo1[2] + "split" + finalGoodsInfo1[4] + "split" + priceRozetka);
+                                        mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
 
 
 
-/*                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }*/
+                                        if (Integer.parseInt(finalGoodsInfo1[4].replace(" ", "").replace("грн", "").replace("₴", "")) > Integer.parseInt(priceRozetka.replace(" ", "").replace("грн", "").replace("₴", ""))) {
+                                            favouritesPricesList.add(finalCounter1, "old: " + finalGoodsInfo1[4].replaceAll(" грн", "") + " грн " + "\nnow: " + priceRozetka.replaceAll(" грн", "") + " грн" + "\ndown");
+                                        } else if (Integer.parseInt(finalGoodsInfo1[4].replace(" ", "").replace("₴", "").replace("грн", "")) < Integer.parseInt(priceRozetka.replace("₴", "").replace(" ", "").replace("грн", ""))) {
+                                            favouritesPricesList.add(finalCounter1, "old: " + finalGoodsInfo1[4].replaceAll(" грн", "") + " грн " + "\nnow: " + priceRozetka.replace("₴", "").replaceAll(" грн", "") + " грн" + "\nup");
+                                        } else {
+                                            favouritesPricesList.add(finalCounter1, "old: " + "\nnow: " + priceRozetka.replaceAll(" грн", "") + " грн" + "\nnone");
+                                        }
+                                        return;
+                                    } else {
+                                        if (Integer.parseInt(finalGoodsInfo1[3].replace(" ", "").replace("грн", "").replace("₴", "")) > Integer.parseInt(priceRozetka.replace(" ", "").replace("₴", "").replace("грн", ""))) {
+                                            favouritesPricesList.add(finalCounter1, "old: " + finalGoodsInfo1[3].replaceAll(" грн", "") + " грн " + "\nnow: " + priceRozetka.replaceAll(" грн", "") + " грн" + "\ndown");
+                                        } else if (Integer.parseInt(finalGoodsInfo1[3].replace(" ", "").replace("грн", "").replace("₴", "")) < Integer.parseInt(priceRozetka.replace(" ", "").replace("₴", "").replace("грн", ""))) {
+                                            favouritesPricesList.add(finalCounter1, "old: " + finalGoodsInfo1[3].replaceAll(" грн", "") + " грн " + "\nnow: " + priceRozetka.replaceAll(" грн", "").replace("₴", "") + " грн" + "\nup");
+                                        } else {
+                                            favouritesPricesList.add(finalCounter1, "old: " + "\nnow: " + priceRozetka.replaceAll(" грн", "") + " грн" + "\nnone");
+                                        }
+                                    }
+                        }
                     } else if (goodsInfo[0].contains("citrus.ua")){
                         try {
 
@@ -282,6 +293,73 @@ public class ChosenGoodsActivity extends AppCompatActivity {
 
     }
 
+    void getMoyo() {
+        try {
+            browserRozetka.setVisibility(View.INVISIBLE);
+            browserRozetka.setLayerType(View.LAYER_TYPE_NONE, null);
+            browserRozetka.getSettings().setJavaScriptEnabled(true);
+            browserRozetka.getSettings().setBlockNetworkImage(false);
+            browserRozetka.getSettings().setDomStorageEnabled(true);
+            browserRozetka.getSettings().setLoadsImagesAutomatically(true);
+            browserRozetka.getSettings().setBlockNetworkLoads(false);
+            browserRozetka.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+            browserRozetka.getSettings().setDefaultTextEncodingName("utf-8");
+            //browserRozetka.getSettings().setLoadWithOverviewMode(true);
+
+            browserRozetka.addJavascriptInterface(new JSHtmlInterfaceMoyo(), "JSBridge");
+
+            browserRozetka.setWebViewClient(
+                    new WebViewClient() {
+
+                        @Override
+                        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                            super.onPageStarted(view, url, favicon);
+                        }
+
+                        @Override
+                        public void onPageFinished(WebView view, String url) {
+                            browserRozetka.loadUrl("javascript:window.JSBridge.showHTML('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>');");
+                        }
+                    }
+            );
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("ERROR", "Rozetka Error");
+        }
+
+
+    }
+
+    private class JSHtmlInterfaceMoyo{
+        @android.webkit.JavascriptInterface
+        public void showHTML(String html) {
+            final String htmlContent = html;
+
+            uiHandler.post(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+
+                try {
+                    doc1 = Jsoup.parse(htmlContent);
+                    priceRozetka = doc1.getElementsByAttributeValue("class", "product-prices__inner").last().child(0).text();
+                    favouritesPricesList.add(counterRozetka, priceRozetka.replace("₴", ""));
+                    adapter1.notifyDataSetChanged();
+                    Log.d("PRICE", priceRozetka);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.d("ERROR", "Moyo Error");
+                    priceRozetka = null;
+                }
+
+
+                        }
+                    }
+            );
+        }
+    }
 
     public void onClick(View view) {
         if(view.getId() == R.id.btn_to_main) {
@@ -326,7 +404,12 @@ public class ChosenGoodsActivity extends AppCompatActivity {
 
             Glide.with(context).load(rImgs.get(position)).into(images);
             myTitle.setText(rTitle.get(position));
-            myDescription.setText(rDescription.get(position));
+            try {
+                myDescription.setText(rDescription.get(position));
+            }  catch (Exception e) {
+                e.printStackTrace();
+            }
+
             imageDelete.setImageResource(R.drawable.ic_baseline_delete_24);
 
             imageDelete.setOnClickListener(new View.OnClickListener() {
@@ -355,8 +438,6 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                                     favouritesList.clear();
                                     adapter1.notifyDataSetChanged();
 
-                                    //Log.d("Testing1",""+ favouritesList.size());
-                                    //Log.d("Testing2",""+  childDataSnapshot.getKey());
                                     mDatabase.child("Users").child(user.getUid()).child(childDataSnapshot.getKey()).setValue(null);
                                     mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
 
