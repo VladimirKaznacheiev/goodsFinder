@@ -322,7 +322,7 @@ public class MainActivity extends AppCompatActivity {
                             goodsImagesListRozetka.remove(goodsImagesListRozetka.size() - 1);
                             pageCounterRozerka++;
 
-                            getRozetkaGoods("https://allo.ua/ru/catalogsearch/result/index/p-"+pageCounterRozerka+"/?q="+currentRequestString);
+                            getRozetkaGoods("https://allo.ua/ru/catalogsearch/result/index/p-"+pageCounterRozerka+"/?q="+currentRequestString.replace("%20", "+").replace("айфон","iphone"));
                             progressBar.setVisibility(View.VISIBLE);
 
 
@@ -402,7 +402,7 @@ public class MainActivity extends AppCompatActivity {
 
                     getCitrus(s);
                     getMoyoGoods(s);
-                    getRozetkaGoods("https://allo.ua/ru/catalogsearch/result/?q="+s);
+                    getRozetkaGoods("https://allo.ua/ru/catalogsearch/result/?q="+s.replace("айфон", "iphone"));
 
 
 
@@ -504,30 +504,30 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
 
                 try {
-                    doc = Jsoup.connect("https://www.citrus.ua/search?query="+s).get();
+                    doc = Jsoup.connect("https://www.citrus.ua/search?query="+s.replace(" ", "%20")).get();
                     Elements elements = doc.getElementsByAttributeValue("class", "short-itm-desc");
 
                     elements.forEach(image-> {
                         Element aElement = image.child(5);
                         Element imgElement = image.child(2);
-                        Element priceElement = image.child(7);
+                        Element priceElement2 = image.getElementsByAttributeValue("class", "old-price").last();
+                        Element priceElement = image.getElementsByAttributeValue("class", "price-number").last();
                         String url = "https://www.citrus.ua"+aElement.attr("href");
                         String title = aElement.child(0).text();
                         String price = "";
 
-                        if (priceElement.child(1).childrenSize()>1){
-                            if (priceElement.child(1).child(1).attr("class")=="price-not-ready"){
-                                price = "Цена формируется";
-                            } else {
-                                price = priceElement.child(1).child(1).child(0).text().replaceAll("грн","");
-                            }
-                        } else {
-                            if (priceElement.child(1).child(0).attr("class")=="price-not-ready"){
-                                price = "Цена формируется";
-                            } else {
+                        if (priceElement!=null){
+                            String price1 = priceElement.text().replace("₴", "").replace("грн", "").replace(" грн", "") + " грн";
 
-                                price = priceElement.child(1).child(0).text().replaceAll("грн","") ;
+                            if (priceElement2!=null){
+                                String price2 = priceElement2.text().replace("₴", "").replace("грн", "").replace(" грн", "") + " грн";
+                                price = "АКЦИЯ\nЗачёркнутая цена:\n" + price2 + "\nСейчас цена:\n" +  price1;
+                            } else {
+                                price = price1;
                             }
+
+                        } else {
+                            price = "Цена формируется";
                         }
 
                         Document doc2 = null;
@@ -542,7 +542,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-                        articleList.add(new Article(url, title, price+ " грн",  img));
+                        articleList.add(new Article(url, title, price,  img));
                     });
 
                     for (int i = goodsCount; i < articleList.size(); i++) {
@@ -601,7 +601,8 @@ public class MainActivity extends AppCompatActivity {
         uiHandler.post(new Runnable() {
             @Override
             public void run() {
-                String search1 = search.replace(" ", "+");
+                String search1 = "";
+                    search1 = search.replace(" ", "+");
                 if (search.contains("page=")){
                     browserMoyo.loadUrl(search1);
                 }else{
@@ -670,8 +671,26 @@ public class MainActivity extends AppCompatActivity {
 
                                 boolean isConsist = false;
                                 for (Element element : elements) {
-                                    String url = element.getElementsByAttributeValue("class", "goods-tile__heading").first().attr("href") ;
-                                    String price = element.getElementsByAttributeValue("class", "goods-tile__price-value").first().text() ;
+                                    String url = element.getElementsByAttributeValue("class", "goods-tile__heading").first().attr("href");
+                                    Element elprice = element.getElementsByAttributeValue("class", "goods-tile__price-value").first();
+                                    Element elprice2 = element.getElementsByAttributeValue("class", "goods-tile__price goods-tile__price_type_old").first();
+
+                                    String  price = "";
+
+                                    if (elprice.text()!=null){
+                                        String price1 = elprice.text().replace("₴", "").replace("грн", "").replace(" грн", "") + " грн";
+
+                                        if (elprice2.text()!=""){
+                                            Log.d("PRICE", elprice2.text());
+                                            String price2 = elprice2.text().replace("₴", "").replace("грн", "").replace(" грн", "") + " грн";
+                                            price =  "АКЦИЯ\nЗачёркнутая цена:\n" + price2 + "\nСейчас цена:\n" +  price1;
+                                        } else {
+                                            price = price1;
+                                        }
+
+                                    } else {
+                                        price = "Цена формируется";
+                                    }
                                     String title = element.getElementsByAttributeValue("class", "goods-tile__heading").first().text();
                                     String imgUrl = element.getElementsByAttributeValue("class", "goods-tile__picture").first().child(1).attr("src");
 
@@ -688,8 +707,7 @@ public class MainActivity extends AppCompatActivity {
 
                                         for (int i = goodsCountMoyo; i < articleListMoyo.size(); i++) {
                                             goodsNamesListMoyo.add(articleListMoyo.get(i).getName());
-                                            goodsPricesListMoyo.add(articleListMoyo.get(i).getPrice() + " грн");
-
+                                            goodsPricesListMoyo.add(articleListMoyo.get(i).getPrice());
                                             goodsImagesListMoyo.add(articleListMoyo.get(i).getImg());
 
 
@@ -808,7 +826,22 @@ public class MainActivity extends AppCompatActivity {
                                 for (Element element : elements) {
                                     String title = element.getElementsByAttributeValue("class", "product-card__title").first().text();
                                     String url = element.getElementsByAttributeValue("class", "product-card__title").first().attr("href");
-                                    String price = element.getElementsByAttributeValue("class", "sum").last().text();
+                                    Element el = element.getElementsByAttributeValue("class", "sum").last();
+                                    Element el2 = element.getElementsByAttributeValue("class", "sum").first();
+                                    String price;
+                                    if (el!=null){
+                                        String price1 = el.text().replace("₴", "").replace("грн", "").replace(" грн", "") + " грн";
+
+                                        if (el2!=null && !el2.equals(el)){
+                                            String price2 = el2.text().replace("₴", "").replace("грн", "").replace(" грн", "") + " грн";
+                                            price = "АКЦИЯ\nЗачёркнутая цена:\n" + price2 + "\nСейчас цена:\n" +  price1;
+                                        } else {
+                                            price =  price1;
+                                        }
+
+                                    } else {
+                                        price = "Цена формируется";
+                                    }
                                     // String imgUrl = String.valueOf(element.getElementsByAttributeValue("class", "goods-tile__picture").first().childrenSize());
                                     String imgUrl = element.getElementsByAttributeValue("class", "gallery__img-wrapper").first().select("img").attr("data-src");
 
@@ -935,7 +968,13 @@ public class MainActivity extends AppCompatActivity {
                 myTitle.setTypeface(null, Typeface.BOLD_ITALIC);
                 myTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
             }
-            myDescription.setText(rDescription.get(position));
+            try {
+                myDescription.setText(rDescription.get(position));
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.d(TAG, "Rozetka Error");
+            }
+
 
 
 
@@ -973,11 +1012,19 @@ public class MainActivity extends AppCompatActivity {
                                        /* imageFavourite.setImageResource(R.drawable.ic_baseline_star_24);*/
                                         Toast.makeText(MainActivity.this, "Товар был ранее добален в избранные", Toast.LENGTH_SHORT).show();
                                         mDatabase.child("Users").child(user.getUid()).child(childDataSnapshot.getKey()).setValue(null);
-                                    mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
+                                        mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
+                                        imageFavourite.setImageResource(R.drawable.ic_baseline_star_24);
+                                        adapterCitrus.notifyDataSetChanged();
+                                        adapterRozetka.notifyDataSetChanged();
+                                        adapterMoyo.notifyDataSetChanged();
                                         break;
 
                                 }else{
                                     inChosen = false;
+                                    imageFavourite.setImageResource(R.drawable.ic_baseline_star_border_24);
+                                    adapterCitrus.notifyDataSetChanged();
+                                    adapterRozetka.notifyDataSetChanged();
+                                    adapterMoyo.notifyDataSetChanged();
                                 }
 
 
@@ -985,7 +1032,15 @@ public class MainActivity extends AppCompatActivity {
 
                             if (!inChosen){
                               /*  imageFavourite.setImageResource(R.drawable.ic_baseline_star_border_24);*/
-                                mDatabase.child("Users").child(user.getUid()).push().setValue(arrLIst.get(position).getUrl()+"split"+arrLIst.get(position).getImg()+"split"+arrLIst.get(position).getName()+"split"+arrLIst.get(position).getPrice()+"split"+arrLIst.get(position).getPrice());
+                                String str = "";
+                                if (arrLIst.get(position).getUrl().contains("allo.ua")){
+                                    str = "ALLO";
+                                } else if (arrLIst.get(position).getUrl().contains("citrus.ua")){
+                                    str = "CITRUS";
+                                } else if (arrLIst.get(position).getUrl().contains("rozetka.com.ua")){
+                                    str = "ROZETKA";
+                                }
+                                mDatabase.child("Users").child(user.getUid()).push().setValue(arrLIst.get(position).getUrl()+"split"+arrLIst.get(position).getImg()+"split"+arrLIst.get(position).getName()+"split"+str);
                                 mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
                                 Toast.makeText(MainActivity.this, "Товара нет в избранных, добавляю", Toast.LENGTH_SHORT).show();
                                 return;
