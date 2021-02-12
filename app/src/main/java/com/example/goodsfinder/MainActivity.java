@@ -517,10 +517,10 @@ public class MainActivity extends AppCompatActivity {
                         String price = "";
 
                         if (priceElement!=null){
-                            String price1 = priceElement.text().replace("₴", "").replace("грн", "").replace(" грн", "") + " грн";
+                            String price1 = priceElement.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
 
                             if (priceElement2!=null){
-                                String price2 = priceElement2.text().replace("₴", "").replace("грн", "").replace(" грн", "") + " грн";
+                                String price2 = priceElement2.text().replace("₴", "").replace(" грн", "") .replace("грн", "")+ " грн";
                                 price = "АКЦИЯ\nЗачёркнутая цена:\n" + price2 + "\nСейчас цена:\n" +  price1;
                             } else {
                                 price = price1;
@@ -678,11 +678,11 @@ public class MainActivity extends AppCompatActivity {
                                     String  price = "";
 
                                     if (elprice.text()!=null){
-                                        String price1 = elprice.text().replace("₴", "").replace("грн", "").replace(" грн", "") + " грн";
+                                        String price1 = elprice.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
 
                                         if (elprice2.text()!=""){
                                             Log.d("PRICE", elprice2.text());
-                                            String price2 = elprice2.text().replace("₴", "").replace("грн", "").replace(" грн", "") + " грн";
+                                            String price2 = elprice2.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
                                             price =  "АКЦИЯ\nЗачёркнутая цена:\n" + price2 + "\nСейчас цена:\n" +  price1;
                                         } else {
                                             price = price1;
@@ -830,10 +830,10 @@ public class MainActivity extends AppCompatActivity {
                                     Element el2 = element.getElementsByAttributeValue("class", "sum").first();
                                     String price;
                                     if (el!=null){
-                                        String price1 = el.text().replace("₴", "").replace("грн", "").replace(" грн", "") + " грн";
+                                        String price1 = el.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
 
                                         if (el2!=null && !el2.equals(el)){
-                                            String price2 = el2.text().replace("₴", "").replace("грн", "").replace(" грн", "") + " грн";
+                                            String price2 = el2.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
                                             price = "АКЦИЯ\nЗачёркнутая цена:\n" + price2 + "\nСейчас цена:\n" +  price1;
                                         } else {
                                             price =  price1;
@@ -857,7 +857,7 @@ public class MainActivity extends AppCompatActivity {
 
                                         for (int i = goodsCountRozetka; i < articleListRozetka.size(); i++) {
                                             goodsNamesListRozetka.add(articleListRozetka.get(i).getName());
-                                            goodsPricesListRozetka.add(articleListRozetka.get(i).getPrice() + " грн");
+                                            goodsPricesListRozetka.add(articleListRozetka.get(i).getPrice());
 
                                             goodsImagesListRozetka.add(articleListRozetka.get(i).getImg());
                                             Log.d(TAG, articleListRozetka.get(i).toString());
