@@ -1011,6 +1011,7 @@ public class MainActivity extends AppCompatActivity {
 
                                        /* imageFavourite.setImageResource(R.drawable.ic_baseline_star_24);*/
                                         Toast.makeText(MainActivity.this, "Товар был ранее добален в избранные", Toast.LENGTH_SHORT).show();
+                                        notifyDataSetChanged();
                                         mDatabase.child("Users").child(user.getUid()).child(childDataSnapshot.getKey()).setValue(null);
                                         mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
                                         imageFavourite.setImageResource(R.drawable.ic_baseline_star_24);
@@ -1043,6 +1044,7 @@ public class MainActivity extends AppCompatActivity {
                                 mDatabase.child("Users").child(user.getUid()).push().setValue(arrLIst.get(position).getUrl()+"split"+arrLIst.get(position).getImg()+"split"+arrLIst.get(position).getName()+"split"+str);
                                 mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
                                 Toast.makeText(MainActivity.this, "Товара нет в избранных, добавляю", Toast.LENGTH_SHORT).show();
+                                notifyDataSetChanged();
                                 return;
                             }
 
