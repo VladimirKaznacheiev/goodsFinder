@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
     int goodsCount = 0;
     int goodsCountMoyo = 0;
     int goodsCountRozetka = 0;
+
     List<Article> articleList = new ArrayList<>();
     List<Article> articleListMoyo = new ArrayList<>();
     List<Article> articleListRozetka = new ArrayList<>();
