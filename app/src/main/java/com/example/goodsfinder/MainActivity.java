@@ -674,7 +674,7 @@ public class MainActivity extends AppCompatActivity {
                                 for (Element element : elements) {
                                     String url = element.getElementsByAttributeValue("class", "goods-tile__heading").first().attr("href");
                                     Element elprice = element.getElementsByAttributeValue("class", "goods-tile__price-value").first();
-                                    Element elprice2 = element.getElementsByAttributeValue("class", "goods-tile__price goods-tile__price_type_old").first();
+                                    Element elprice2 = element.getElementsByAttributeValue("class", "goods-tile__price--old price--gray").first();
 
                                     String  price = "";
 
