@@ -687,7 +687,8 @@ public class ChosenGoodsActivity extends AppCompatActivity {
             imageDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    imageDelete.setClickable(false);
+                    //imageDelete.setClickable(false);
+
 
                     //------------------------------------------------------------------------------------------
 
@@ -704,48 +705,61 @@ public class ChosenGoodsActivity extends AppCompatActivity {
 
 
 
+                                    try {
+                                        String str = favouritesNamesList.get(position).replace("\nCITRUS", "").replace("\nALLO", "").replace("\nROZETKA", "");
 
-                                    String str = favouritesNamesList.get(position).replace("\nCITRUS", "").replace("\nALLO", "").replace("\nROZETKA", "");
-
-                                    Log.d("TEST", position +", "+str+", "+childDataSnapshot.getValue());
-                                    if (String.valueOf(childDataSnapshot.getValue()).contains(str)){
+                                        if (String.valueOf(childDataSnapshot.getValue()).contains(str)){
 
 
-                                        for (int i = 0; i < infoLoaded.size(); i++) {
-                                            str1 = infoLoaded.get(i).split("SPLIT", 6)[2].replace("CITRUS", "").replace("ALLO", "").replace("ROZETKA", "");
-                                            str2 = favouritesNamesList.get(position).replace("CITRUS", "").replace("ALLO", "").replace("ROZETKA", "");
+                                            for (int i = 0; i < infoLoaded.size(); i++) {
+                                                str1 = infoLoaded.get(i).split("SPLIT", 6)[2].replace("CITRUS", "").replace("ALLO", "").replace("ROZETKA", "");
+                                                str2 = favouritesNamesList.get(position).replace("CITRUS", "").replace("ALLO", "").replace("ROZETKA", "");
 
-                                            Log.d("TEST1", str1);
+                                                Log.d("TEST1", str1);
 
-                                            if (str2.contains(str1)){
+                                                if (str2.contains(str1)){
 
-                                                Log.d("TEST2", str1);
+                                                    Log.d("TEST2", str1);
 
-                                                infoLoaded.remove(i);
+                                                    infoLoaded.remove(i);
 
-                                                break;
+                                                    break;
+                                                }
                                             }
+
+
+                                            infoLoadedUp.clear();
+                                            for (int i = 0; i < infoLoaded.size(); i++) {
+                                                infoLoadedUp.add(i, infoLoaded.get(i));
+                                            }
+
+                                            try {
+                                                favouritesUrlList.remove(favouritesList.size()-1-position);
+                                                favouritesImagesList.remove(position);
+                                                favouritesNamesList.remove(position);
+                                                favouritesPricesList.remove(position);
+                                                //favouritesList.remove(favouritesList.size()-1-position);
+
+                                                adapter1.notifyDataSetChanged();
+
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+
+                                            adapter1.notifyDataSetChanged();
+
+                                            mDatabase.child("Users").child(user.getUid()).child(childDataSnapshot.getKey()).setValue(null);
+                                            mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
+
+                                            break;
                                         }
-
-
-                                        infoLoadedUp.clear();
-                                        for (int i = 0; i < infoLoaded.size(); i++) {
-                                            infoLoadedUp.add(i, infoLoaded.get(i));
-                                        }
-
-                                        favouritesUrlList.remove(favouritesList.size()-1-position);
-                                        favouritesImagesList.remove(position);
-                                        favouritesNamesList.remove(position);
-                                        favouritesPricesList.remove(position);
-                                        //favouritesList.remove(favouritesList.size()-1-position);
-
-                                        adapter1.notifyDataSetChanged();
-
-                                        mDatabase.child("Users").child(user.getUid()).child(childDataSnapshot.getKey()).setValue(null);
-                                        mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
-
-                                        break;
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        //Toast.makeText(ChosenGoodsActivity.this, "Загрузились не все товары, подождите", Toast.LENGTH_SHORT).show();
                                     }
+
+
+
                                     mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
                                 }
                             }

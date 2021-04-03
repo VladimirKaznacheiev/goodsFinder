@@ -531,13 +531,13 @@ public class MainActivity extends AppCompatActivity {
                             price = "Цена формируется";
                         }
 
-                        Document doc2 = null;
+                        Document docCitrus = null;
                         try {
-                            doc2 = Jsoup.connect(url).get();
+                            docCitrus = Jsoup.connect(url).get();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        Elements images = doc2.getElementsByAttributeValue("class", "gallery").select("img");
+                        Elements images = docCitrus.getElementsByAttributeValue("class", "gallery").select("img");
                         String img = images.attr("src");
 
 
@@ -940,19 +940,25 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                    for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
-                        String str = arrLIst.get(position).getUrl();
-                        String[] goodsInfo = String.valueOf(childDataSnapshot.getValue()).split("split", 2);
-                        if (goodsInfo[0].equals(str)){
-                            inChosen = true;
-                        }
+                    try {
+                        for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
+                            String str = arrLIst.get(position).getUrl();
+                            String[] goodsInfo = String.valueOf(childDataSnapshot.getValue()).split("split", 2);
+                            if (goodsInfo[0].equals(str)){
+                                inChosen = true;
+                            }
 
-                        if(inChosen){
-                            imageFavourite.setImageResource(R.drawable.ic_baseline_star_24);
-                        }else{
-                            imageFavourite.setImageResource(R.drawable.ic_baseline_star_border_24);
+                            if(inChosen){
+                                imageFavourite.setImageResource(R.drawable.ic_baseline_star_24);
+                            }else{
+                                imageFavourite.setImageResource(R.drawable.ic_baseline_star_border_24);
+                            }
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+
+                    mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
 
                 }
 
@@ -1011,7 +1017,7 @@ public class MainActivity extends AppCompatActivity {
                                     inChosen = true;
 
                                        /* imageFavourite.setImageResource(R.drawable.ic_baseline_star_24);*/
-                                        Toast.makeText(MainActivity.this, "Товар был ранее добален в избранные", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(MainActivity.this, "Товар был ранее добавлен в избранные", Toast.LENGTH_SHORT).show();
                                         notifyDataSetChanged();
                                         mDatabase.child("Users").child(user.getUid()).child(childDataSnapshot.getKey()).setValue(null);
                                         mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
