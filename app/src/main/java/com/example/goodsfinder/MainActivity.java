@@ -1039,27 +1039,26 @@ public class MainActivity extends AppCompatActivity {
                    // Log.d(TAG,arrLIst.get(position).getPrice());
 
 
+                    if (isConnected()){
+                        mDatabase.child("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+                            public boolean inChosen;
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                Map<String, Object> td = (HashMap<String,Object>) snapshot.getValue();
+
+                                for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
+
+                                    DatabaseReference objRef = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid()).child( childDataSnapshot.getKey());
+                                    Map<String,Object> taskMap = new HashMap<String,Object>();
+                                    objRef.updateChildren(taskMap);
 
 
-                    mDatabase.child("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
-                        public boolean inChosen;
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            Map<String, Object> td = (HashMap<String,Object>) snapshot.getValue();
+                                    String str = arrLIst.get(position).getUrl();
+                                    String[] goodsInfo = String.valueOf(childDataSnapshot.getValue()).split("SPLITFORBUY", 2);
+                                    if (goodsInfo[0].equals(str)){
+                                        inChosen = true;
 
-                            for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
-
-                                DatabaseReference objRef = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid()).child( childDataSnapshot.getKey());
-                                Map<String,Object> taskMap = new HashMap<String,Object>();
-                                objRef.updateChildren(taskMap);
-
-
-                                String str = arrLIst.get(position).getUrl();
-                                String[] goodsInfo = String.valueOf(childDataSnapshot.getValue()).split("SPLITFORBUY", 2);
-                                if (goodsInfo[0].equals(str)){
-                                    inChosen = true;
-
-                                       /* imageFavourite.setImageResource(R.drawable.ic_baseline_star_24);*/
+                                        /* imageFavourite.setImageResource(R.drawable.ic_baseline_star_24);*/
                                         Toast.makeText(MainActivity.this, "Товар був раніше доданий в обрані", Toast.LENGTH_SHORT).show();
                                         notifyDataSetChanged();
                                         mDatabase.child("Users").child(user.getUid()).child(childDataSnapshot.getKey()).setValue(null);
@@ -1070,44 +1069,49 @@ public class MainActivity extends AppCompatActivity {
                                         adapterMoyo.notifyDataSetChanged();
                                         break;
 
-                                }else{
-                                    inChosen = false;
-                                    imageFavourite.setImageResource(R.drawable.ic_baseline_star_border_24);
-                                    adapterCitrus.notifyDataSetChanged();
-                                    adapterRozetka.notifyDataSetChanged();
-                                    adapterMoyo.notifyDataSetChanged();
+                                    }else{
+                                        inChosen = false;
+                                        imageFavourite.setImageResource(R.drawable.ic_baseline_star_border_24);
+                                        adapterCitrus.notifyDataSetChanged();
+                                        adapterRozetka.notifyDataSetChanged();
+                                        adapterMoyo.notifyDataSetChanged();
+                                    }
+
+
                                 }
+
+                                if (!inChosen){
+                                    /*  imageFavourite.setImageResource(R.drawable.ic_baseline_star_border_24);*/
+                                    String str = "";
+                                    if (arrLIst.get(position).getUrl().contains("allo.ua")){
+                                        str = "ALLO";
+                                    } else if (arrLIst.get(position).getUrl().contains("citrus.ua")){
+                                        str = "CITRUS";
+                                    } else if (arrLIst.get(position).getUrl().contains("rozetka.com.ua")){
+                                        str = "ROZETKA";
+                                    }
+                                    mDatabase.child("Users").child(user.getUid()).push().setValue(arrLIst.get(position).getUrl()+"SPLITFORBUY"+arrLIst.get(position).getImg()+"SPLITFORBUY"+arrLIst.get(position).getName()+"SPLITFORBUY"+str);
+                                    mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
+                                    Toast.makeText(MainActivity.this, "Товар доданий до обраного", Toast.LENGTH_SHORT).show();
+                                    notifyDataSetChanged();
+                                    return;
+                                }
+
+
 
 
                             }
 
-                            if (!inChosen){
-                              /*  imageFavourite.setImageResource(R.drawable.ic_baseline_star_border_24);*/
-                                String str = "";
-                                if (arrLIst.get(position).getUrl().contains("allo.ua")){
-                                    str = "ALLO";
-                                } else if (arrLIst.get(position).getUrl().contains("citrus.ua")){
-                                    str = "CITRUS";
-                                } else if (arrLIst.get(position).getUrl().contains("rozetka.com.ua")){
-                                    str = "ROZETKA";
-                                }
-                                mDatabase.child("Users").child(user.getUid()).push().setValue(arrLIst.get(position).getUrl()+"SPLITFORBUY"+arrLIst.get(position).getImg()+"SPLITFORBUY"+arrLIst.get(position).getName()+"SPLITFORBUY"+str);
-                                mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
-                                Toast.makeText(MainActivity.this, "Товар доданий до обраного", Toast.LENGTH_SHORT).show();
-                                notifyDataSetChanged();
-                                return;
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
                             }
+                        });
+                    } else {
+                        Toast.makeText(MainActivity.this, "Помилка підключення до інтернету", Toast.LENGTH_SHORT).show();
+                    }
 
 
-
-
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
 
 
                 }
