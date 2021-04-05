@@ -141,7 +141,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
 
 
                     favouritesList.add(String.valueOf(childDataSnapshot.getValue()));
-                    String[] goodsInfo = String.valueOf(childDataSnapshot.getValue()).split("split", 4);
+                    String[] goodsInfo = String.valueOf(childDataSnapshot.getValue()).split("SPLITFORBUY", 4);
 
 
                     favouritesUrlList.add(counter, goodsInfo[0]);
@@ -176,11 +176,11 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                                     favouritesPricesList.add(counter, price1);
                                     favouritesOldPricesList.add(counter, price2);
 
-                                    infoLoaded.add(goodsInfo[0]+"SPLIT"+goodsInfo[1]+"SPLIT"+goodsInfo[2]+"SPLIT"+goodsInfo[3]+"SPLIT"+price2+"SPLIT"+price1);
+                                    infoLoaded.add(goodsInfo[0]+"SPLITFORBUY"+goodsInfo[1]+"SPLITFORBUY"+goodsInfo[2]+"SPLITFORBUY"+goodsInfo[3]+"SPLITFORBUY"+price2+"SPLITFORBUY"+price1);
                                 } else {
                                     favouritesPricesList.add(counter,  price1);
                                     favouritesOldPricesList.add(counter, " ");
-                                    infoLoaded.add(goodsInfo[0]+"SPLIT"+goodsInfo[1]+"SPLIT"+goodsInfo[2]+"SPLIT"+goodsInfo[3]+"SPLIT"+"0"+"SPLIT"+price1);
+                                    infoLoaded.add(goodsInfo[0]+"SPLITFORBUY"+goodsInfo[1]+"SPLITFORBUY"+goodsInfo[2]+"SPLITFORBUY"+goodsInfo[3]+"SPLITFORBUY"+"0"+"SPLITFORBUY"+price1);
                                 }
 
 
@@ -205,7 +205,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
 
                         favouritesPricesList.add(counter,  "Завантаження...");
                         favouritesOldPricesList.add(counter,  "Завантаження...");
-                        infoLoaded.add(goodsInfo[0]+"SPLIT"+goodsInfo[1]+"SPLIT"+goodsInfo[2]+"SPLIT"+goodsInfo[3]+"SPLIT");
+                        infoLoaded.add(goodsInfo[0]+"SPLITFORBUY"+goodsInfo[1]+"SPLITFORBUY"+goodsInfo[2]+"SPLITFORBUY"+goodsInfo[3]+"SPLITFORBUY");
 
                     } else if (goodsInfo[0].contains("citrus.ua")) {
 
@@ -231,17 +231,17 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                                     String price2 = elements2.text().replace("₴", "").replace("грн", "").replace(" грн", "") + " грн";
                                     favouritesPricesList.add(counter, price1);
                                     favouritesOldPricesList.add(counter, price2);
-                                    infoLoaded.add(goodsInfo[0]+"SPLIT"+goodsInfo[1]+"SPLIT"+goodsInfo[2]+"SPLIT"+goodsInfo[3]+"SPLIT"+price2+"SPLIT"+price1);
+                                    infoLoaded.add(goodsInfo[0]+"SPLITFORBUY"+goodsInfo[1]+"SPLITFORBUY"+goodsInfo[2]+"SPLITFORBUY"+goodsInfo[3]+"SPLITFORBUY"+price2+"SPLITFORBUY"+price1);
                                 } else {
                                     favouritesPricesList.add(counter,  price1);
                                     favouritesOldPricesList.add(counter, " ");
-                                    infoLoaded.add(goodsInfo[0]+"SPLIT"+goodsInfo[1]+"SPLIT"+goodsInfo[2]+"SPLIT"+goodsInfo[3]+"SPLIT"+"0"+"SPLIT"+price1);
+                                    infoLoaded.add(goodsInfo[0]+"SPLITFORBUY"+goodsInfo[1]+"SPLITFORBUY"+goodsInfo[2]+"SPLITFORBUY"+goodsInfo[3]+"SPLITFORBUY"+"0"+"SPLITFORBUY"+price1);
                                 }
 
                             } else {
                                 favouritesPricesList.add(counter, "Ціна формується");
                                 favouritesOldPricesList.add(counter, " ");
-                                infoLoaded.add(goodsInfo[0]+"SPLIT"+goodsInfo[1]+"SPLIT"+goodsInfo[2]+"SPLIT"+goodsInfo[3]+"SPLIT"+"0"+"SPLIT"+"0");
+                                infoLoaded.add(goodsInfo[0]+"SPLITFORBUY"+goodsInfo[1]+"SPLITFORBUY"+goodsInfo[2]+"SPLITFORBUY"+goodsInfo[3]+"SPLITFORBUY"+"0"+"SPLITFORBUY"+"0");
                             }
 
 
@@ -418,11 +418,11 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                             String price2 = oldPriceRozetka.text().replace("₴", "").replace("грн", "").replace(" грн", "") + " грн";
                             favouritesPricesList.set(Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)), price1);
                             favouritesOldPricesList.set(Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)),  price2);
-                            infoLoaded.set(infoLoaded.size()-1-Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)),  infoLoaded.get(infoLoaded.size()-1-Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)))+price2+"SPLIT"+price1);
+                            infoLoaded.set(infoLoaded.size()-1-Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)),  infoLoaded.get(infoLoaded.size()-1-Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)))+price2+"SPLITFORBUY"+price1);
                         } else {
                             favouritesPricesList.set(Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)),  price1);
                             favouritesOldPricesList.set(Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)),  " ");
-                            infoLoaded.set(infoLoaded.size()-1-Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)),  infoLoaded.get(infoLoaded.size()-1-Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)))+"0"+"SPLIT"+price1);
+                            infoLoaded.set(infoLoaded.size()-1-Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)),  infoLoaded.get(infoLoaded.size()-1-Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)))+"0"+"SPLITFORBUY"+price1);
                         }
 
 
@@ -488,8 +488,8 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                 sorted = true;
                 for (int i = 0; i < infoLoadedUp.size() - 1; i++) {
 
-                    String[] goodsInfo = String.valueOf(infoLoadedUp.get(i)).split("SPLIT", 6);
-                    String[] goodsInfoNext = String.valueOf(infoLoadedUp.get(i+1)).split("SPLIT", 6);
+                    String[] goodsInfo = String.valueOf(infoLoadedUp.get(i)).split("SPLITFORBUY", 6);
+                    String[] goodsInfoNext = String.valueOf(infoLoadedUp.get(i+1)).split("SPLITFORBUY", 6);
 
                     Log.d("START", String.valueOf(goodsInfo[2])+", "+goodsInfoNext[2]);
                     Log.d("FIRST", String.valueOf(goodsInfo[4])+", "+goodsInfoNext[4]);
@@ -515,7 +515,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
             favouritesOldPricesList.clear();
 
             for (int i = 0; i < infoLoadedUp.size(); i++) {
-                String[] goodsInfo = String.valueOf(infoLoadedUp.get(i)).split("SPLIT", 6);
+                String[] goodsInfo = String.valueOf(infoLoadedUp.get(i)).split("SPLITFORBUY", 6);
                 favouritesUrlList.add(i, goodsInfo[0]);
                 favouritesImagesList.add(i, goodsInfo[1]);
                 favouritesNamesList.add(i, goodsInfo[2]);
@@ -563,8 +563,8 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                 sorted = true;
                 for (int i = 0; i < infoLoadedUp.size() - 1; i++) {
 
-                    String[] goodsInfo = String.valueOf(infoLoadedUp.get(i)).split("SPLIT", 6);
-                    String[] goodsInfoNext = String.valueOf(infoLoadedUp.get(i+1)).split("SPLIT", 6);
+                    String[] goodsInfo = String.valueOf(infoLoadedUp.get(i)).split("SPLITFORBUY", 6);
+                    String[] goodsInfoNext = String.valueOf(infoLoadedUp.get(i+1)).split("SPLITFORBUY", 6);
 
                     if (Integer.parseInt(goodsInfo[5].replace("грн", "").replace(" ", "")) < Integer.parseInt(goodsInfoNext[5].replace("грн", "").replace(" ", ""))) {
                         temp = infoLoadedUp.get(i);
@@ -585,7 +585,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
             favouritesOldPricesList.clear();
 
             for (int i = 0; i < infoLoadedUp.size(); i++) {
-                String[] goodsInfo = String.valueOf(infoLoadedUp.get(i)).split("SPLIT", 6);
+                String[] goodsInfo = String.valueOf(infoLoadedUp.get(i)).split("SPLITFORBUY", 6);
                 favouritesUrlList.add(i, goodsInfo[0]);
                 favouritesImagesList.add(i, goodsInfo[1]);
                 favouritesNamesList.add(i, goodsInfo[2]);
@@ -636,7 +636,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                 favouritesOldPricesList.clear();
 
                 for (int i = 0; i < infoLoaded.size(); i++) {
-                    String[] goodsInfo = String.valueOf(infoLoaded.get(infoLoaded.size()-1-i)).split("SPLIT", 6);
+                    String[] goodsInfo = String.valueOf(infoLoaded.get(infoLoaded.size()-1-i)).split("SPLITFORBUY", 6);
                     favouritesUrlList.add(i, goodsInfo[0]);
                     favouritesImagesList.add(i, goodsInfo[1]);
                     favouritesNamesList.add(i, goodsInfo[2]);
@@ -778,7 +778,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
 
 
                                             for (int i = 0; i < infoLoaded.size(); i++) {
-                                                str1 = infoLoaded.get(i).split("SPLIT", 6)[2].replace("CITRUS", "").replace("ALLO", "").replace("ROZETKA", "");
+                                                str1 = infoLoaded.get(i).split("SPLITFORBUY", 6)[2].replace("CITRUS", "").replace("ALLO", "").replace("ROZETKA", "");
                                                 str2 = favouritesNamesList.get(position).replace("CITRUS", "").replace("ALLO", "").replace("ROZETKA", "");
 
                                                 Log.d("TEST1", str1);

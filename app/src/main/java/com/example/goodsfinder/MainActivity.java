@@ -986,7 +986,7 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
                             String str = arrLIst.get(position).getUrl();
-                            String[] goodsInfo = String.valueOf(childDataSnapshot.getValue()).split("split", 2);
+                            String[] goodsInfo = String.valueOf(childDataSnapshot.getValue()).split("SPLITFORBUY", 2);
                             if (goodsInfo[0].equals(str)){
                                 inChosen = true;
                             }
@@ -1055,7 +1055,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                                 String str = arrLIst.get(position).getUrl();
-                                String[] goodsInfo = String.valueOf(childDataSnapshot.getValue()).split("split", 2);
+                                String[] goodsInfo = String.valueOf(childDataSnapshot.getValue()).split("SPLITFORBUY", 2);
                                 if (goodsInfo[0].equals(str)){
                                     inChosen = true;
 
@@ -1091,7 +1091,7 @@ public class MainActivity extends AppCompatActivity {
                                 } else if (arrLIst.get(position).getUrl().contains("rozetka.com.ua")){
                                     str = "ROZETKA";
                                 }
-                                mDatabase.child("Users").child(user.getUid()).push().setValue(arrLIst.get(position).getUrl()+"split"+arrLIst.get(position).getImg()+"split"+arrLIst.get(position).getName()+"split"+str);
+                                mDatabase.child("Users").child(user.getUid()).push().setValue(arrLIst.get(position).getUrl()+"SPLITFORBUY"+arrLIst.get(position).getImg()+"SPLITFORBUY"+arrLIst.get(position).getName()+"SPLITFORBUY"+str);
                                 mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
                                 Toast.makeText(MainActivity.this, "Товар доданий до обраного", Toast.LENGTH_SHORT).show();
                                 notifyDataSetChanged();
