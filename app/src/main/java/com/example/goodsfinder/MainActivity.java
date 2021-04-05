@@ -139,20 +139,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean isLoadedRozetka = false;
     public boolean isLoadedAllo = false;
 
-    public boolean isStartCitrus = false;
-    public boolean isStartRozetka = false;
-    public boolean isStartAllo = false;
-
-    public static boolean isOnline(Context context)
-    {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnectedOrConnecting())
-        {
-            return true;
-        }
-        return false;
-    }
 
     public int getCurrentStoreIndex() {
         return currentStoreIndex;
@@ -532,7 +518,6 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
 
                 try {
-                    isStartCitrus = true;
                     doc = Jsoup.connect("https://www.citrus.ua/search?query="+s.replace(" ", "%20")).get();;
                     Log.d("CONNECT", "connected main Citrus");
                     Elements elements = doc.getElementsByAttributeValue("class", "short-itm-desc");
@@ -569,6 +554,9 @@ public class MainActivity extends AppCompatActivity {
                             String img = images.attr("src");
 
                             articleList.add(new Article(url, title, price,  img));
+                            if (currentStoreIndex==1){
+                                errorTextMain.setVisibility(View.INVISIBLE);
+                            }
 
                             isLoadedCitrus = true;
                         } catch (IOException e) {
@@ -705,7 +693,6 @@ public class MainActivity extends AppCompatActivity {
                     new Runnable() {
                         @Override
                         public void run() {
-                            isStartRozetka = true;
                             Log.d("CONNECT", "connected main Rozetka");
 //                            if (!isFoundMoyo) {
 
@@ -741,6 +728,10 @@ public class MainActivity extends AppCompatActivity {
                                     articleListMoyo.add(new Article(url, title, price, imgUrl));
 
                                     isLoadedRozetka = true;
+
+                                    if (currentStoreIndex==0){
+                                        errorTextMain.setVisibility(View.INVISIBLE);
+                                    }
 
 
                                 }
@@ -862,7 +853,6 @@ public class MainActivity extends AppCompatActivity {
                     new Runnable() {
                         @Override
                         public void run() {
-                            isStartAllo=true;
 
                             Log.d("CONNECT", "connected main Allo");
 
@@ -896,6 +886,10 @@ public class MainActivity extends AppCompatActivity {
                                     articleListRozetka.add(new Article(url, title, price, imgUrl));
 
                                     isLoadedAllo = true;
+
+                                    if (currentStoreIndex==2){
+                                        errorTextMain.setVisibility(View.INVISIBLE);
+                                    }
 
 
                                 }
@@ -1259,31 +1253,22 @@ public class MainActivity extends AppCompatActivity {
 
             if (currentStoreIndex==0 && isLoadedRozetka){
                 errorTextMain.setVisibility(View.INVISIBLE);
-                progressBar.setVisibility(View.GONE);
             } else if (currentStoreIndex==1 && isLoadedCitrus) {
                 errorTextMain.setVisibility(View.INVISIBLE);
-                progressBar.setVisibility(View.GONE);
             } else if (currentStoreIndex==2 && isLoadedAllo){
                 errorTextMain.setVisibility(View.INVISIBLE);
-                progressBar.setVisibility(View.GONE);
             } else if (currentStoreIndex==0 && !isConnected() && !isLoadedRozetka){
                 errorTextMain.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.GONE);
             } else if (currentStoreIndex==1 && !isConnected() && !isLoadedCitrus) {
                 errorTextMain.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.GONE);
             } else if (currentStoreIndex==2 && !isConnected() && !isLoadedAllo){
                 errorTextMain.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.GONE);
-            } else if (currentStoreIndex==0 && isConnected() && !isLoadedRozetka && isStartRozetka){
+            } else if (currentStoreIndex==0 && isConnected() && !isLoadedRozetka){
                 errorTextMain.setVisibility(View.INVISIBLE);
-                progressBar.setVisibility(View.VISIBLE);
-            } else if (currentStoreIndex==1 && isConnected() && !isLoadedCitrus && isStartCitrus) {
+            } else if (currentStoreIndex==1 && isConnected() && !isLoadedCitrus) {
                 errorTextMain.setVisibility(View.INVISIBLE);
-                progressBar.setVisibility(View.VISIBLE);
-            } else if (currentStoreIndex==2 && isConnected() && !isLoadedAllo && isStartAllo){
+            } else if (currentStoreIndex==2 && isConnected() && !isLoadedAllo){
                 errorTextMain.setVisibility(View.INVISIBLE);
-                progressBar.setVisibility(View.VISIBLE);
             }
 
 

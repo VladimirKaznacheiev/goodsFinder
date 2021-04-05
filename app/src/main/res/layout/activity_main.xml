@@ -54,11 +54,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="200dp"
-        android:text="Ошибка подключения к интернету"
+        android:text="Помилка підключення до інтернету"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/goodsSearchView" />
+        app:layout_constraintTop_toBottomOf="@+id/goodsSearchView"
+        android:gravity="center"/>
 
     <SearchView
         android:id="@+id/goodsSearchView"
