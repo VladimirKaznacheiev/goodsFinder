@@ -232,8 +232,8 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                             urlsRozetka.add(goodsInfo[0]);
                             positionsRozetka.add(String.valueOf(counter));
 
-                            favouritesPricesList.add(counter,  "Loading...");
-                            favouritesOldPricesList.add(counter,  "Loading...");
+                            favouritesPricesList.add(counter,  "Завантаження...");
+                            favouritesOldPricesList.add(counter,  "Завантаження...");
                             infoLoaded.add(goodsInfo[0]+"SPLIT"+goodsInfo[1]+"SPLIT"+goodsInfo[2]+"SPLIT"+goodsInfo[3]+"SPLIT");
 
                         } else if (goodsInfo[0].contains("citrus.ua")) {
@@ -508,7 +508,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
 
 
         }else{
-                Toast.makeText(ChosenGoodsActivity.this, "Загрузились не все товары, подождите", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ChosenGoodsActivity.this, "Завантажилися не всі товари, зачекайте", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -576,7 +576,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
 
 
         }else{
-                Toast.makeText(ChosenGoodsActivity.this, "Загрузились не все товары, подождите", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ChosenGoodsActivity.this, "Завантажилися не всі товари, зачекайте", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -626,7 +626,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
 
 
             }else{
-                Toast.makeText(ChosenGoodsActivity.this, "Загрузились не все товары, подождите", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ChosenGoodsActivity.this, "Завантажилися не всі товари, зачекайте", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -769,7 +769,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                             }
                         });
                     } else{
-                        Toast.makeText(ChosenGoodsActivity.this, "Загрузились не все товары, подождите", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ChosenGoodsActivity.this, "Завантажилися не всі товари, зачекайте", Toast.LENGTH_SHORT).show();
                     }
 
 

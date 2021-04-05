@@ -75,6 +75,8 @@ import java.util.logging.Logger;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    public boolean isCatch = false;
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
     FirebaseUser user = mAuth.getInstance().getCurrentUser();
@@ -133,6 +135,25 @@ public class MainActivity extends AppCompatActivity {
     WebView browserMoyo;
     WebView browserRozetka;
 
+    public boolean isLoadedCitrus = false;
+    public boolean isLoadedRozetka = false;
+    public boolean isLoadedAllo = false;
+
+    public boolean isStartCitrus = false;
+    public boolean isStartRozetka = false;
+    public boolean isStartAllo = false;
+
+    public static boolean isOnline(Context context)
+    {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting())
+        {
+            return true;
+        }
+        return false;
+    }
+
     public int getCurrentStoreIndex() {
         return currentStoreIndex;
     }
@@ -145,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
         if (FirebaseAuth.getInstance().getCurrentUser() == null){
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
+            finish();
         } else {
             if(getSupportActionBar()!=null) getSupportActionBar().setTitle(String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getEmail()));
         }
@@ -178,7 +200,6 @@ public class MainActivity extends AppCompatActivity {
         getMoyo();
         getRozetka();
 
-
         storeTitlesList.add("Rozetka");
         storeTitlesList.add("Citrus");
         storeTitlesList.add("Allo");
@@ -187,6 +208,9 @@ public class MainActivity extends AppCompatActivity {
         storeImagesList.add("https://mmr.ua/uploaded/materials/a2a89af751.png");
         storeImagesList.add("https://yt3.ggpht.com/ytc/AAUvwnjVEgy0xS7qiFpem68qOwYiIBi4Fls8dZYw9EFm1A=s900-c-k-c0x00ffffff-no-rj");
         storeImagesList.add("data:image/png;base64,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");
+
+
+
 
 
         storeListView.addOnItemTouchListener(
@@ -268,8 +292,9 @@ public class MainActivity extends AppCompatActivity {
                 } else if (currentStoreIndex == 0) {
                     Element loadElement = doc1.getElementsByAttributeValue("class", "show-more__text").first();
 
+
                     if (loadElement == null ^ i != articleListMoyo.size() - 1) {
-                        Log.d(TAG, articleListMoyo.size() - 1 + "------" + i);
+                        //Log.d(TAG, articleListMoyo.size() - 1 + "------" + i);
                         Uri address = Uri.parse(articleListMoyo.get(i).getUrl());
                         Intent openlinkIntent = new Intent(Intent.ACTION_VIEW, address);
                         startActivity(openlinkIntent);
@@ -310,7 +335,7 @@ public class MainActivity extends AppCompatActivity {
                     Element loadElement = doc2.getElementsByAttributeValue("class", "pagination__next__link").first();
 
                     if (loadElement == null ^ i != articleListRozetka.size() - 1) {
-                        Log.d(TAG, articleListRozetka.size() - 1 + "------" + i);
+                        //Log.d(TAG, articleListRozetka.size() - 1 + "------" + i);
                         Uri address = Uri.parse(articleListRozetka.get(i).getUrl());
                         Intent openlinkIntent = new Intent(Intent.ACTION_VIEW, address);
                         startActivity(openlinkIntent);
@@ -461,6 +486,7 @@ public class MainActivity extends AppCompatActivity {
             if (FirebaseAuth.getInstance().getCurrentUser() == null){
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
+                finish();
             }
         } else if (view.getId() == R.id.btn_to_chosen){
             Intent intent = new Intent(MainActivity.this, ChosenGoodsActivity.class);
@@ -469,7 +495,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initRecyclerView() {
-        Log.d(TAG, "initRecyclerView: init recyclerview");
+        //Log.d(TAG, "initRecyclerView: init recyclerview");
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         RecyclerView recyclerView = findViewById(R.id.storeListView);
@@ -499,13 +525,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     void getCitrus(String s){
+        errorTextMain.setVisibility(View.INVISIBLE);
 
         runnable = new Runnable() {
             @Override
             public void run() {
 
                 try {
-                    doc = Jsoup.connect("https://www.citrus.ua/search?query="+s.replace(" ", "%20")).get();
+                    isStartCitrus = true;
+                    doc = Jsoup.connect("https://www.citrus.ua/search?query="+s.replace(" ", "%20")).get();;
+                    Log.d("CONNECT", "connected main Citrus");
                     Elements elements = doc.getElementsByAttributeValue("class", "short-itm-desc");
 
                     elements.forEach(image-> {
@@ -534,23 +563,29 @@ public class MainActivity extends AppCompatActivity {
                         Document docCitrus = null;
                         try {
                             docCitrus = Jsoup.connect(url).get();
+                            Log.d("CONNECT", "connected next try");
+
+                            Elements images = docCitrus.getElementsByAttributeValue("class", "gallery").select("img");
+                            String img = images.attr("src");
+
+                            articleList.add(new Article(url, title, price,  img));
+
+                            isLoadedCitrus = true;
                         } catch (IOException e) {
                             e.printStackTrace();
+                            Log.d("CONNECT", "connected next except");
+
                         }
-                        Elements images = docCitrus.getElementsByAttributeValue("class", "gallery").select("img");
-                        String img = images.attr("src");
 
 
-
-
-                        articleList.add(new Article(url, title, price,  img));
                     });
 
                     for (int i = goodsCount; i < articleList.size(); i++) {
                         goodsNamesList.add(articleList.get(i).getName());
-                        goodsPricesList.add(articleList.get(i).getPrice() );
+                        goodsPricesList.add(articleList.get(i).getPrice());
 
                         goodsImagesList.add(articleList.get(i).getImg());
+
 
 
 
@@ -558,12 +593,12 @@ public class MainActivity extends AppCompatActivity {
                     goodsCount = articleList.size();
                     Element loadElement = doc.getElementsByAttributeValue("class", "catalog-card-container more-items product-card product-card--mini").first();
 
-                    if (loadElement != null) {
-                        goodsNamesList.add("Загрузить ещё");
+                    if (loadElement != null && goodsCount > 0) {
+                        goodsNamesList.add("Завантажити ще");
                         goodsPricesList.add("");
 
                         goodsImagesList.add("https://image.flaticon.com/icons/png/512/16/16770.png");
-                        articleList.add(new Article(" ", "Загрузить ещё", "", "https://image.flaticon.com/icons/png/512/16/16770.png"));
+                        articleList.add(new Article(" ", "Завантажити ще", "", "https://image.flaticon.com/icons/png/512/16/16770.png"));
 
                     }
 
@@ -574,6 +609,10 @@ public class MainActivity extends AppCompatActivity {
                             progressBar.setVisibility(View.GONE); // to hide
                             adapterCitrus.notifyDataSetChanged();
                             goodsListView.setEnabled(true);
+
+                            if (!isConnected()) {
+                                errorTextMain.setVisibility(View.VISIBLE);
+                            }
                         }
                     });
 
@@ -582,7 +621,6 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                     Log.d(TAG,"CITRUS ERROR");
                 }
-
 
 
             }
@@ -597,6 +635,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     void getMoyoGoods(String search) {
+
+
         goodsListView.setEnabled(false);
         //isFoundMoyo = false;
         uiHandler.post(new Runnable() {
@@ -665,6 +705,8 @@ public class MainActivity extends AppCompatActivity {
                     new Runnable() {
                         @Override
                         public void run() {
+                            isStartRozetka = true;
+                            Log.d("CONNECT", "connected main Rozetka");
 //                            if (!isFoundMoyo) {
 
                                 doc1 = Jsoup.parse(htmlContent);
@@ -682,7 +724,7 @@ public class MainActivity extends AppCompatActivity {
                                         String price1 = elprice.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
 
                                         if (elprice2.text()!=""){
-                                            Log.d("PRICE", elprice2.text());
+                                            //Log.d("PRICE", elprice2.text());
                                             String price2 = elprice2.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
                                             price =  "АКЦИЯ\nЗачёркнутая цена:\n" + price2 + "\nСейчас цена:\n" +  price1;
                                         } else {
@@ -697,6 +739,8 @@ public class MainActivity extends AppCompatActivity {
 
 
                                     articleListMoyo.add(new Article(url, title, price, imgUrl));
+
+                                    isLoadedRozetka = true;
 
 
                                 }
@@ -716,12 +760,12 @@ public class MainActivity extends AppCompatActivity {
                                         goodsCountMoyo = articleListMoyo.size();
                                         Element loadElement = doc1.getElementsByAttributeValue("class", "show-more__text").first();
 
-                                        if (loadElement != null) {
-                                            goodsNamesListMoyo.add("Загрузить ещё");
+                                        if (loadElement != null  && goodsCount > 0) {
+                                            goodsNamesListMoyo.add("Завантажити ще");
                                             goodsPricesListMoyo.add("");
 
                                             goodsImagesListMoyo.add("https://image.flaticon.com/icons/png/512/16/16770.png");
-                                            articleListMoyo.add(new Article(" ", "Загрузить ещё", "", "https://image.flaticon.com/icons/png/512/16/16770.png"));
+                                            articleListMoyo.add(new Article(" ", "Завантажити ще", "", "https://image.flaticon.com/icons/png/512/16/16770.png"));
 
                                         }
                                         progressBar.setVisibility(View.GONE); // to hide
@@ -730,7 +774,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 });
 
-                                Log.d(TAG, articleListMoyo.size() + "  " + goodsImagesListMoyo.size());
+                                //Log.d(TAG, articleListMoyo.size() + "  " + goodsImagesListMoyo.size());
 
                                 isFoundMoyo = true;
                                 adapterMoyo.notifyDataSetChanged();
@@ -818,10 +862,13 @@ public class MainActivity extends AppCompatActivity {
                     new Runnable() {
                         @Override
                         public void run() {
+                            isStartAllo=true;
+
+                            Log.d("CONNECT", "connected main Allo");
 
                             if (!isFoundRozetka) {
                                 Log.d(TAG, "Step 3");
-                                Log.d(TAG, htmlContent);
+                                //Log.d(TAG, htmlContent);
                                 doc2 = Jsoup.parse(htmlContent);
                                 Elements elements = doc2.getElementsByAttributeValue("class", "product-card");
                                 for (Element element : elements) {
@@ -841,12 +888,14 @@ public class MainActivity extends AppCompatActivity {
                                         }
 
                                     } else {
-                                        price = "Цена формируется";
+                                        price = "Ціна формується";
                                     }
                                     // String imgUrl = String.valueOf(element.getElementsByAttributeValue("class", "goods-tile__picture").first().childrenSize());
                                     String imgUrl = element.getElementsByAttributeValue("class", "gallery__img-wrapper").first().select("img").attr("data-src");
 
                                     articleListRozetka.add(new Article(url, title, price, imgUrl));
+
+                                    isLoadedAllo = true;
 
 
                                 }
@@ -861,18 +910,18 @@ public class MainActivity extends AppCompatActivity {
                                             goodsPricesListRozetka.add(articleListRozetka.get(i).getPrice());
 
                                             goodsImagesListRozetka.add(articleListRozetka.get(i).getImg());
-                                            Log.d(TAG, articleListRozetka.get(i).toString());
+                                            //Log.d(TAG, articleListRozetka.get(i).toString());
 
                                         }
                                         goodsCountRozetka = articleListRozetka.size();
                                         Element loadElement = doc2.getElementsByAttributeValue("class", "pagination__next__link").first();
 
-                                        if (loadElement != null) {
-                                            goodsNamesListRozetka.add("Загрузить ещё");
+                                        if (loadElement != null  && goodsCount > 0) {
+                                            goodsNamesListRozetka.add("Завантажити ще");
                                             goodsPricesListRozetka.add("");
 
                                             goodsImagesListRozetka.add("https://image.flaticon.com/icons/png/512/16/16770.png");
-                                            articleListRozetka.add(new Article(" ", "Загрузить ещё", "", "https://image.flaticon.com/icons/png/512/16/16770.png"));
+                                            articleListRozetka.add(new Article(" ", "Завантажити ще", "", "https://image.flaticon.com/icons/png/512/16/16770.png"));
 
                                         }
                                         progressBar.setVisibility(View.GONE); // to hide
@@ -970,7 +1019,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-            if (rTitle.get(position) == "Загрузить ещё") {
+            if (rTitle.get(position) == "Завантажити ще") {
                 imageFavourite.setVisibility(View.GONE);
                 myTitle.setTypeface(null, Typeface.BOLD_ITALIC);
                 myTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
@@ -990,10 +1039,10 @@ public class MainActivity extends AppCompatActivity {
             imageFavourite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d(TAG,arrLIst.get(position).getUrl());
-                    Log.d(TAG,arrLIst.get(position).getImg());
-                    Log.d(TAG,arrLIst.get(position).getName());
-                    Log.d(TAG,arrLIst.get(position).getPrice());
+                    //Log.d(TAG,arrLIst.get(position).getUrl());
+                    //Log.d(TAG,arrLIst.get(position).getImg());
+                    //Log.d(TAG,arrLIst.get(position).getName());
+                   // Log.d(TAG,arrLIst.get(position).getPrice());
 
 
 
@@ -1017,7 +1066,7 @@ public class MainActivity extends AppCompatActivity {
                                     inChosen = true;
 
                                        /* imageFavourite.setImageResource(R.drawable.ic_baseline_star_24);*/
-                                        Toast.makeText(MainActivity.this, "Товар был ранее добавлен в избранные", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(MainActivity.this, "Товар був раніше доданий в обрані", Toast.LENGTH_SHORT).show();
                                         notifyDataSetChanged();
                                         mDatabase.child("Users").child(user.getUid()).child(childDataSnapshot.getKey()).setValue(null);
                                         mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
@@ -1050,7 +1099,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                                 mDatabase.child("Users").child(user.getUid()).push().setValue(arrLIst.get(position).getUrl()+"split"+arrLIst.get(position).getImg()+"split"+arrLIst.get(position).getName()+"split"+str);
                                 mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
-                                Toast.makeText(MainActivity.this, "Товара нет в избранных, добавляю", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "Товар доданий до обраного", Toast.LENGTH_SHORT).show();
                                 notifyDataSetChanged();
                                 return;
                             }
@@ -1205,7 +1254,39 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(ViewHolder holder, final int position) {
-            Log.d(TAG, "onBindViewHolder: called.");
+            //Log.d(TAG, "onBindViewHolder: called.");
+
+
+            if (currentStoreIndex==0 && isLoadedRozetka){
+                errorTextMain.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.GONE);
+            } else if (currentStoreIndex==1 && isLoadedCitrus) {
+                errorTextMain.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.GONE);
+            } else if (currentStoreIndex==2 && isLoadedAllo){
+                errorTextMain.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.GONE);
+            } else if (currentStoreIndex==0 && !isConnected() && !isLoadedRozetka){
+                errorTextMain.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+            } else if (currentStoreIndex==1 && !isConnected() && !isLoadedCitrus) {
+                errorTextMain.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+            } else if (currentStoreIndex==2 && !isConnected() && !isLoadedAllo){
+                errorTextMain.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+            } else if (currentStoreIndex==0 && isConnected() && !isLoadedRozetka && isStartRozetka){
+                errorTextMain.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
+            } else if (currentStoreIndex==1 && isConnected() && !isLoadedCitrus && isStartCitrus) {
+                errorTextMain.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
+            } else if (currentStoreIndex==2 && isConnected() && !isLoadedAllo && isStartAllo){
+                errorTextMain.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
+            }
+
+
 
 
             Glide.with(mContext)
@@ -1218,7 +1299,6 @@ public class MainActivity extends AppCompatActivity {
 
             if(position == currentStoreIndex){
                 holder.name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-
 
                 holder.image.getLayoutParams().height = (int) getResources().getDimension(R.dimen.imageview_height);
                 holder.image.getLayoutParams().width = (int) getResources().getDimension(R.dimen.imageview_width);
