@@ -1110,10 +1110,6 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(MainActivity.this, "Помилка підключення до інтернету", Toast.LENGTH_SHORT).show();
                     }
-
-
-
-
                 }
             });
 
