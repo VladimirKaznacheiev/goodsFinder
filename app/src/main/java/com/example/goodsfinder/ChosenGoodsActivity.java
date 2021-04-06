@@ -186,7 +186,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
 
 
                             } else {
-                                favouritesPricesList.add(counter, "Ціна формується");
+                                favouritesPricesList.add(counter, getString(R.string.form_price));
                                 favouritesOldPricesList.add(counter, " ");
                             }
 
@@ -203,8 +203,8 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                         urlsRozetka.add(goodsInfo[0]);
                         positionsRozetka.add(String.valueOf(counter));
 
-                        favouritesPricesList.add(counter,  "Завантаження...");
-                        favouritesOldPricesList.add(counter,  "Завантаження...");
+                        favouritesPricesList.add(counter,  getString(R.string.loading));
+                        favouritesOldPricesList.add(counter,  getString(R.string.loading));
                         infoLoaded.add(goodsInfo[0]+"SPLITFORBUY"+goodsInfo[1]+"SPLITFORBUY"+goodsInfo[2]+"SPLITFORBUY"+goodsInfo[3]+"SPLITFORBUY");
 
                     } else if (goodsInfo[0].contains("citrus.ua")) {
@@ -239,7 +239,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                                 }
 
                             } else {
-                                favouritesPricesList.add(counter, "Ціна формується");
+                                favouritesPricesList.add(counter, getString(R.string.form_price));
                                 favouritesOldPricesList.add(counter, " ");
                                 infoLoaded.add(goodsInfo[0]+"SPLITFORBUY"+goodsInfo[1]+"SPLITFORBUY"+goodsInfo[2]+"SPLITFORBUY"+goodsInfo[3]+"SPLITFORBUY"+"0"+"SPLITFORBUY"+"0");
                             }
@@ -430,7 +430,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
 
 
                     } else {
-                        favouritesPricesList.set(Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)), "Ціна формується");
+                        favouritesPricesList.set(Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)), getString(R.string.form_price));
                         favouritesOldPricesList.set(Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)),  " ");
                     }
 
@@ -540,7 +540,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                         favouritesOldPricesList.add(i, " ");
                     }
                 } else {
-                    favouritesPricesList.add(i, "Ціна формується");
+                    favouritesPricesList.add(i, getString(R.string.form_price));
                     favouritesOldPricesList.add(i, " ");
                 }
 
@@ -552,7 +552,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
 
 
         }else{
-                Toast.makeText(ChosenGoodsActivity.this, "Завантажилися не всі товари, зачекайте", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ChosenGoodsActivity.this, getString(R.string.goods_no_loaded), Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -610,7 +610,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                         favouritesOldPricesList.add(i, " ");
                     }
                 }else {
-                    favouritesPricesList.add(i, "Ціна формується");
+                    favouritesPricesList.add(i, getString(R.string.form_price));
                     favouritesOldPricesList.add(i, " ");
                 }
 
@@ -621,7 +621,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
 
 
         }else{
-                Toast.makeText(ChosenGoodsActivity.this, "Завантажилися не всі товари, зачекайте", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ChosenGoodsActivity.this, getString(R.string.goods_no_loaded), Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -661,7 +661,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                             favouritesOldPricesList.add(i, " ");
                         }
                     } else {
-                            favouritesPricesList.add(i, "Ціна формується");
+                            favouritesPricesList.add(i, getString(R.string.form_price));
                         favouritesOldPricesList.add(i, " ");
                         }
 
@@ -672,7 +672,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
 
 
             }else{
-                Toast.makeText(ChosenGoodsActivity.this, "Завантажилися не всі товари, зачекайте", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ChosenGoodsActivity.this, getString(R.string.goods_no_loaded), Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -693,7 +693,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
 
                 loadChoosen();
             } else {
-                Toast.makeText(ChosenGoodsActivity.this, "Помилка підключення до інтернету", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ChosenGoodsActivity.this, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -802,7 +802,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                                             }
 
                                             try {
-                                                favouritesUrlList.remove(favouritesList.size()-1-position);
+                                                favouritesUrlList.remove(favouritesUrlList.size()-1-position);
                                                 favouritesImagesList.remove(position);
                                                 favouritesNamesList.remove(position);
                                                 favouritesPricesList.remove(position);
@@ -839,11 +839,11 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                             }
                         });
                         } else{
-                            Toast.makeText(ChosenGoodsActivity.this, "Помилка підключення до інтернету", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ChosenGoodsActivity.this, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
                         }
                     }
                     else{
-                        Toast.makeText(ChosenGoodsActivity.this, "Завантажилися не всі товари, зачекайте", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ChosenGoodsActivity.this, getString(R.string.goods_no_loaded), Toast.LENGTH_SHORT).show();
                     }
 
 

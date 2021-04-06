@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Главная"
+        android:text="@string/main"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,7 +41,7 @@
         android:layout_marginTop="200dp"
         android:gravity="center"
         android:paddingTop="230dp"
-        android:text="Помилка підключення до інтернету"
+        android:text="@string/internet_error"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,7 +54,7 @@
         android:layout_marginTop="200dp"
         android:gravity="center"
         android:paddingTop="230dp"
-        android:text="В обраному немає товарів"
+        android:text="@string/chosen_empty"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -67,7 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="Up"
+        android:text="@string/up"
         app:layout_constraintStart_toEndOf="@+id/btn_to_main"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -77,7 +77,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="Down"
+        android:text="@string/down"
         app:layout_constraintStart_toEndOf="@+id/btn_sort_up"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -85,11 +85,11 @@
         android:id="@+id/btn_sort_default"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:text="Default"
-        app:layout_constraintStart_toEndOf="@+id/btn_sort_down"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="70dp"
+        android:text="@string/def"
+        app:layout_constraintStart_toStartOf="@+id/constraintLayout"
+        app:layout_constraintTop_toTopOf="@+id/errorTextChoosen" />
 
     <Button
         android:id="@+id/btn_reload"
@@ -97,7 +97,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginBottom="10dp"
-        android:text="Перезагрузить"
+        android:text="@string/reload"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

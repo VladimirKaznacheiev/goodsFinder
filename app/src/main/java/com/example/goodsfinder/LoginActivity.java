@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             if(view.getId() == R.id.btn_sign_in)
             {
                 if (ETemail.getText().toString().length()<1 || ETpassword.getText().toString().length()<1){
-                    Toast.makeText(LoginActivity.this, "Заповніть усі поля", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, this.getString(R.string.all_fields), Toast.LENGTH_SHORT).show();
                 } else {
                     signIn(ETemail.getText().toString(),ETpassword.getText().toString());
                 }
@@ -101,16 +101,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             {
 
                 if (ETemail.getText().toString().length()<1 || ETpassword.getText().toString().length()<1){
-                    Toast.makeText(LoginActivity.this, "Заповніть усі поля", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, this.getString(R.string.all_fields), Toast.LENGTH_SHORT).show();
                 } else {
                     if (ETemail.getText().toString().contains("@") && ETemail.getText().toString().replace("@", "").length()>1){
                         if (ETpassword.getText().toString().contains(" ") || ETpassword.getText().toString().length()<5){
-                            Toast.makeText(LoginActivity.this, "Пароль повинен бути без пробілів і мінімум 6 символів", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, this.getString(R.string.password_label), Toast.LENGTH_SHORT).show();
                         } else {
                             registration(ETemail.getText().toString(),ETpassword.getText().toString());
                         }
                     } else {
-                        Toast.makeText(LoginActivity.this, "Введіть коректно email", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this,  this.getString(R.string.correct_email), Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -119,7 +119,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             }
         } else {
-            Toast.makeText(LoginActivity.this, "Помилка підключення до інтернету", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, this.getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
         }
 
 
@@ -131,13 +131,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) {
-                    Toast.makeText(LoginActivity.this, "Aвторизація успішна", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, getString(R.string.auth_success), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
                 }else
 
-                    Toast.makeText(LoginActivity.this, "Aвторизація не вдалася. Перевірте введені дані", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, getString(R.string.auth_fail), Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -148,7 +148,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful())
                 {
-                    Toast.makeText(LoginActivity.this, "Реєстрація успішна", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, getString(R.string.register_success), Toast.LENGTH_SHORT).show();
 
                     //mDatabase.child("Users").push().setValue(ETemail.getText().toString());
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -156,7 +156,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     finish();
                 }
                 else
-                    Toast.makeText(LoginActivity.this, "Реєстрація не вдалася, можливо, така пошта, вже зареєстрована", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, getString(R.string.register_fail), Toast.LENGTH_SHORT).show();
             }
         });
     }

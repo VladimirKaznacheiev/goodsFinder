@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">ForBuy</string>
+    <string name="enter">Войти</string>
+    <string name="reg">Регистрация</string>
+    <string name="parol">Пароль</string>
+    <string name="e_mail">E-mail</string>
+    <string name="all_fields">Заполните все поля</string>
+    <string name="password_label">Пароль должен быть без пробелов и минимум 6 символов</string>
+    <string name="correct_email">Введите корректно email</string>
+    <string name="internet_error">Ошибка подключения к интернету</string>
+    <string name="auth_success">Авторизация успешна</string>
+    <string name="auth_fail">Авторизация не успешна. Проверте введённые данные</string>
+    <string name="register_success">Регистрация успешна</string>
+    <string name="register_fail">Регистрация не успешна, возможно, такая почта уже зарегистрирована</string>
+    <string name="form_price">Цена формируется</string>
+    <string name="load_more">Загрузить ещё</string>
+    <string name="goods_added_before">Товар удалён из избранных</string>
+    <string name="goods_added">Товар добавлен в избранные</string>
+    <string name="logout">Выйти</string>
+    <string name="chosen">Избранные</string>
+    <string name="search_hint">Введите название товара</string>
+    <string name="loading">Загрузка</string>
+    <string name="goods_no_loaded">Загрузились не все товары, подождите</string>
+    <string name="main">Главная</string>
+    <string name="chosen_empty">В избранном нету товаров</string>
+    <string name="up">По возрастанию</string>
+    <string name="down">По убыванию</string>
+    <string name="def">Стандартно</string>
+    <string name="reload">Перезагрузить</string>
+</resources>

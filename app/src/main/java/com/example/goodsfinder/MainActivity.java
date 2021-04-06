@@ -568,7 +568,7 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                         } else {
-                            price = "Цена формируется";
+                            price = getString(R.string.form_price);
                             oldPrice = "";
                         }
 
@@ -610,12 +610,12 @@ public class MainActivity extends AppCompatActivity {
                     Element loadElement = doc.getElementsByAttributeValue("class", "catalog-card-container more-items product-card product-card--mini").first();
 
                     if (loadElement != null && goodsCount > 0) {
-                        goodsNamesList.add("Завантажити ще");
+                        goodsNamesList.add(getString(R.string.load_more));
                         goodsPricesList.add("");
                         goodsOldPricesList.add("");
 
                         goodsImagesList.add("https://image.flaticon.com/icons/png/512/16/16770.png");
-                        articleList.add(new Article(" ", "Завантажити ще", "", "","https://image.flaticon.com/icons/png/512/16/16770.png"));
+                        articleList.add(new Article(" ", getString(R.string.load_more), "", "","https://image.flaticon.com/icons/png/512/16/16770.png"));
 
                     }
 
@@ -751,7 +751,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
 
                                 } else {
-                                    price = "Цена формируется";
+                                    price = getString(R.string.form_price);
                                     oldPrice = "";
                                 }
                                 String title = element.getElementsByAttributeValue("class", "goods-tile__heading").first().text();
@@ -786,12 +786,12 @@ public class MainActivity extends AppCompatActivity {
                                     Element loadElement = doc1.getElementsByAttributeValue("class", "show-more__text").first();
 
                                     if (loadElement != null  && goodsCount > 0) {
-                                        goodsNamesListMoyo.add("Завантажити ще");
+                                        goodsNamesListMoyo.add(getString(R.string.load_more));
                                         goodsPricesListMoyo.add("");
                                         goodsOldPricesListMoyo.add("");
 
                                         goodsImagesListMoyo.add("https://image.flaticon.com/icons/png/512/16/16770.png");
-                                        articleListMoyo.add(new Article(" ", "Завантажити ще", "","", "https://image.flaticon.com/icons/png/512/16/16770.png"));
+                                        articleListMoyo.add(new Article(" ", getString(R.string.load_more), "","", "https://image.flaticon.com/icons/png/512/16/16770.png"));
 
                                     }
                                     progressBar.setVisibility(View.GONE); // to hide
@@ -917,7 +917,7 @@ public class MainActivity extends AppCompatActivity {
                                         }
 
                                     } else {
-                                        price = "Ціна формується";
+                                        price = getString(R.string.form_price);
                                         oldPrice = "";
                                     }
                                     // String imgUrl = String.valueOf(element.getElementsByAttributeValue("class", "goods-tile__picture").first().childrenSize());
@@ -952,12 +952,12 @@ public class MainActivity extends AppCompatActivity {
                                         Element loadElement = doc2.getElementsByAttributeValue("class", "pagination__next__link").first();
 
                                         if (loadElement != null  && goodsCount > 0) {
-                                            goodsNamesListRozetka.add("Завантажити ще");
+                                            goodsNamesListRozetka.add(getString(R.string.load_more));
                                             goodsPricesListRozetka.add("");
                                             goodsOldPricesListRozetka.add("");
 
                                             goodsImagesListRozetka.add("https://image.flaticon.com/icons/png/512/16/16770.png");
-                                            articleListRozetka.add(new Article(" ", "Завантажити ще", "","", "https://image.flaticon.com/icons/png/512/16/16770.png"));
+                                            articleListRozetka.add(new Article(" ", getString(R.string.load_more), "","", "https://image.flaticon.com/icons/png/512/16/16770.png"));
 
                                         }
                                         progressBar.setVisibility(View.GONE); // to hide
@@ -1058,7 +1058,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-            if (rTitle.get(position) == "Завантажити ще") {
+            if (rTitle.get(position) == getString(R.string.load_more)) {
                 imageFavourite.setVisibility(View.GONE);
                 myTitle.setTypeface(null, Typeface.BOLD_ITALIC);
                 myTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
@@ -1105,7 +1105,7 @@ public class MainActivity extends AppCompatActivity {
                                         inChosen = true;
 
                                         /* imageFavourite.setImageResource(R.drawable.ic_baseline_star_24);*/
-                                        Toast.makeText(MainActivity.this, "Товар був раніше доданий в обрані", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(MainActivity.this, getString(R.string.goods_added_before), Toast.LENGTH_SHORT).show();
                                         notifyDataSetChanged();
                                         mDatabase.child("Users").child(user.getUid()).child(childDataSnapshot.getKey()).setValue(null);
                                         mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
@@ -1138,7 +1138,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                     mDatabase.child("Users").child(user.getUid()).push().setValue(arrLIst.get(position).getUrl()+"SPLITFORBUY"+arrLIst.get(position).getImg()+"SPLITFORBUY"+arrLIst.get(position).getName()+"SPLITFORBUY"+str);
                                     mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
-                                    Toast.makeText(MainActivity.this, "Товар доданий до обраного", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MainActivity.this, getString(R.string.goods_added), Toast.LENGTH_SHORT).show();
                                     notifyDataSetChanged();
                                     return;
                                 }
@@ -1154,7 +1154,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
                     } else {
-                        Toast.makeText(MainActivity.this, "Помилка підключення до інтернету", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
                     }
                 }
             });

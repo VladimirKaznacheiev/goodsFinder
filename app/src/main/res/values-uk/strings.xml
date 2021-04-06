@@ -1,15 +1,15 @@
 <resources>
     <string name="app_name">ForBuy</string>
-    <string name="enter">Log in</string>
-    <string name="reg">Register</string>
-    <string name="parol">Password</string>
+    <string name="enter">Увійти</string>
+    <string name="reg">Реєстрація</string>
+    <string name="parol">Пароль</string>
     <string name="e_mail">E-mail</string>
-    <string name="all_fields">Fill in all fields</string>
-    <string name="password_label">Password must be without spaces and at least 6 characters</string>
-    <string name="correct_email">Enter the email correctly</string>
-    <string name="internet_error">Error connecting to the Internet</string>
-    <string name="auth_success">Authorization successful</string>
-    <string name="auth_fail">Authorization failed. Check the entered data</string>
+    <string name="all_fields">Заповніть усі поля</string>
+    <string name="password_label">Пароль має бути без пробілів і щонайменше 6 символів</string>
+    <string name="correct_email">Введіть коректно email</string>
+    <string name="internet_error">Помилка підключення до інтернету</string>
+    <string name="auth_success">Aвторизація успішна</string>
+    <string name="auth_fail">Aвторизація не вдалася. Перевірте введені дані</string>
     <string name="register_success">Реєстрація успішна</string>
     <string name="register_fail">Реєстрація не вдалася, можливо, така пошта вже зареєстрована</string>
     <string name="form_price">Ціна формується</string>
