@@ -74,6 +74,8 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 
+
+
 public class MainActivity extends AppCompatActivity {
 
     public boolean isCatch = false;
@@ -104,14 +106,17 @@ public class MainActivity extends AppCompatActivity {
     List<Article> articleListRozetka = new ArrayList<>();
     ArrayList<String> goodsNamesList = new ArrayList<>();
     ArrayList<String> goodsPricesList = new ArrayList<>();
+    ArrayList<String> goodsOldPricesList = new ArrayList<>();
     ArrayList<String> goodsImagesList = new ArrayList<>();
 
     ArrayList<String> goodsImagesListMoyo = new ArrayList<>();
     ArrayList<String> goodsPricesListMoyo = new ArrayList<>();
+    ArrayList<String> goodsOldPricesListMoyo = new ArrayList<>();
     ArrayList<String> goodsNamesListMoyo = new ArrayList<>();
 
     ArrayList<String> goodsImagesListRozetka = new ArrayList<>();
     ArrayList<String> goodsPricesListRozetka = new ArrayList<>();
+    ArrayList<String> goodsOldPricesListRozetka = new ArrayList<>();
     ArrayList<String> goodsNamesListRozetka = new ArrayList<>();
 
 
@@ -177,9 +182,9 @@ public class MainActivity extends AppCompatActivity {
         goodsListView = (ListView) findViewById(R.id.goodsList);
         storeListView = (RecyclerView) findViewById(R.id.storeListView);
         progressBar = findViewById(R.id.progressBar);
-        adapterCitrus = new MyAdapter(this, goodsNamesList, goodsPricesList, goodsImagesList,articleList);
-        adapterMoyo = new MyAdapter(this, goodsNamesListMoyo, goodsPricesListMoyo, goodsImagesListMoyo,articleListMoyo);
-        adapterRozetka = new MyAdapter(this, goodsNamesListRozetka, goodsPricesListRozetka, goodsImagesListRozetka,articleListRozetka);
+        adapterCitrus = new MyAdapter(this, goodsNamesList, goodsPricesList, goodsOldPricesList, goodsImagesList,articleList);
+        adapterMoyo = new MyAdapter(this, goodsNamesListMoyo, goodsPricesListMoyo, goodsOldPricesListMoyo, goodsImagesListMoyo,articleListMoyo);
+        adapterRozetka = new MyAdapter(this, goodsNamesListRozetka, goodsPricesListRozetka, goodsOldPricesListRozetka, goodsImagesListRozetka,articleListRozetka);
         goodsListView.setAdapter(adapterMoyo);
 
 
@@ -217,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
                             goodsListView.setAdapter(adapterRozetka);
 
                         }
-                       initRecyclerView();
+                        initRecyclerView();
 
                     }
 
@@ -249,6 +254,7 @@ public class MainActivity extends AppCompatActivity {
 
                             articleList.remove(articleList.size() - 1);
                             goodsPricesList.remove(goodsPricesList.size() - 1);
+                            goodsOldPricesList.remove(goodsOldPricesList.size() - 1);
                             goodsNamesList.remove(goodsNamesList.size() - 1);
                             goodsImagesList.remove(goodsImagesList.size() - 1);
                             pageCounter++;
@@ -261,9 +267,11 @@ public class MainActivity extends AppCompatActivity {
                             goodsNamesList.clear();
                             goodsImagesList.clear();
                             goodsPricesList.clear();
+                            goodsOldPricesList.clear();
                             goodsNamesListMoyo.clear();
                             goodsImagesListMoyo.clear();
                             goodsPricesListMoyo.clear();
+                            goodsOldPricesListMoyo.clear();
                             articleList.clear();
                             articleListMoyo.clear();
                             adapterCitrus.notifyDataSetChanged();
@@ -289,6 +297,7 @@ public class MainActivity extends AppCompatActivity {
                         if (isConnected()) {
                             articleListMoyo.remove(articleListMoyo.size() - 1);
                             goodsPricesListMoyo.remove(goodsPricesListMoyo.size() - 1);
+                            goodsOldPricesListMoyo.remove(goodsOldPricesListMoyo.size() - 1);
                             goodsNamesListMoyo.remove(goodsNamesListMoyo.size() - 1);
                             goodsImagesListMoyo.remove(goodsImagesListMoyo.size() - 1);
                             pageCounterMoyo++;
@@ -303,9 +312,11 @@ public class MainActivity extends AppCompatActivity {
                             goodsNamesList.clear();
                             goodsImagesList.clear();
                             goodsPricesList.clear();
+                            goodsOldPricesList.clear();
                             goodsNamesListMoyo.clear();
                             goodsImagesListMoyo.clear();
                             goodsPricesListMoyo.clear();
+                            goodsOldPricesListMoyo.clear();
                             articleList.clear();
                             articleListMoyo.clear();
                             adapterCitrus.notifyDataSetChanged();
@@ -330,6 +341,7 @@ public class MainActivity extends AppCompatActivity {
                         if (isConnected()) {
                             articleListRozetka.remove(articleListRozetka.size() - 1);
                             goodsPricesListRozetka.remove(goodsPricesListRozetka.size() - 1);
+                            goodsOldPricesListRozetka.remove(goodsOldPricesListRozetka.size() - 1);
                             goodsNamesListRozetka.remove(goodsNamesListRozetka.size() - 1);
                             goodsImagesListRozetka.remove(goodsImagesListRozetka.size() - 1);
                             pageCounterRozerka++;
@@ -344,12 +356,15 @@ public class MainActivity extends AppCompatActivity {
                             goodsNamesList.clear();
                             goodsImagesList.clear();
                             goodsPricesList.clear();
+                            goodsOldPricesList.clear();
                             goodsNamesListMoyo.clear();
                             goodsImagesListMoyo.clear();
                             goodsPricesListMoyo.clear();
+                            goodsOldPricesListMoyo.clear();
                             goodsNamesListRozetka.clear();
                             goodsImagesListRozetka.clear();
                             goodsPricesListRozetka.clear();
+                            goodsOldPricesListRozetka.clear();
                             articleList.clear();
                             articleListMoyo.clear();
                             articleListRozetka.clear();
@@ -394,12 +409,15 @@ public class MainActivity extends AppCompatActivity {
                 goodsNamesList.clear();
                 goodsImagesList.clear();
                 goodsPricesList.clear();
+                goodsOldPricesList.clear();
                 goodsNamesListMoyo.clear();
                 goodsImagesListMoyo.clear();
                 goodsPricesListMoyo.clear();
+                goodsOldPricesListMoyo.clear();
                 goodsNamesListRozetka.clear();
                 goodsImagesListRozetka.clear();
                 goodsPricesListRozetka.clear();
+                goodsOldPricesListRozetka.clear();
                 articleList.clear();
                 articleListMoyo.clear();
                 articleListRozetka.clear();
@@ -439,12 +457,15 @@ public class MainActivity extends AppCompatActivity {
                 goodsNamesList.clear();
                 goodsImagesList.clear();
                 goodsPricesList.clear();
+                goodsOldPricesList.clear();
                 goodsNamesListMoyo.clear();
                 goodsImagesListMoyo.clear();
                 goodsPricesListMoyo.clear();
+                goodsOldPricesListMoyo.clear();
                 goodsNamesListRozetka.clear();
                 goodsImagesListRozetka.clear();
                 goodsPricesListRozetka.clear();
+                goodsOldPricesListRozetka.clear();
                 articleList.clear();
                 articleListMoyo.clear();
                 articleListRozetka.clear();
@@ -477,6 +498,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (view.getId() == R.id.btn_to_chosen){
             Intent intent = new Intent(MainActivity.this, ChosenGoodsActivity.class);
             startActivity(intent);
+            finish();
         }
     }
 
@@ -518,7 +540,8 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
 
                 try {
-                    doc = Jsoup.connect("https://www.citrus.ua/search?query="+s.replace(" ", "%20")).get();;
+                    doc = Jsoup.connect("https://www.citrus.ua/search?query="+s.replace(" ", "%20")).get();
+                    Log.d("TEXT", doc.getElementsByAttributeValue("class", "product-img").attr("src"));
                     Log.d("CONNECT", "connected main Citrus");
                     Elements elements = doc.getElementsByAttributeValue("class", "short-itm-desc");
 
@@ -530,30 +553,34 @@ public class MainActivity extends AppCompatActivity {
                         String url = "https://www.citrus.ua"+aElement.attr("href");
                         String title = aElement.child(0).text();
                         String price = "";
+                        String oldPrice = "";
 
                         if (priceElement!=null){
                             String price1 = priceElement.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
 
                             if (priceElement2!=null){
                                 String price2 = priceElement2.text().replace("₴", "").replace(" грн", "") .replace("грн", "")+ " грн";
-                                price = "АКЦИЯ\nЗачёркнутая цена:\n" + price2 + "\nСейчас цена:\n" +  price1;
+                                price = price1;
+                                oldPrice = price2;
                             } else {
                                 price = price1;
+                                oldPrice = "";
                             }
 
                         } else {
                             price = "Цена формируется";
+                            oldPrice = "";
                         }
 
                         Document docCitrus = null;
                         try {
-                            docCitrus = Jsoup.connect(url).get();
+                            docCitrus = Jsoup.connect(url).timeout(0).get();
                             Log.d("CONNECT", "connected next try");
 
                             Elements images = docCitrus.getElementsByAttributeValue("class", "gallery").select("img");
                             String img = images.attr("src");
 
-                            articleList.add(new Article(url, title, price,  img));
+                            articleList.add(new Article(url, title, price, oldPrice,  img));
                             if (currentStoreIndex==1){
                                 errorTextMain.setVisibility(View.INVISIBLE);
                             }
@@ -571,6 +598,7 @@ public class MainActivity extends AppCompatActivity {
                     for (int i = goodsCount; i < articleList.size(); i++) {
                         goodsNamesList.add(articleList.get(i).getName());
                         goodsPricesList.add(articleList.get(i).getPrice());
+                        goodsOldPricesList.add(articleList.get(i).getOldPrice());
 
                         goodsImagesList.add(articleList.get(i).getImg());
 
@@ -584,9 +612,10 @@ public class MainActivity extends AppCompatActivity {
                     if (loadElement != null && goodsCount > 0) {
                         goodsNamesList.add("Завантажити ще");
                         goodsPricesList.add("");
+                        goodsOldPricesList.add("");
 
                         goodsImagesList.add("https://image.flaticon.com/icons/png/512/16/16770.png");
-                        articleList.add(new Article(" ", "Завантажити ще", "", "https://image.flaticon.com/icons/png/512/16/16770.png"));
+                        articleList.add(new Article(" ", "Завантажити ще", "", "","https://image.flaticon.com/icons/png/512/16/16770.png"));
 
                     }
 
@@ -631,7 +660,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 String search1 = "";
-                    search1 = search.replace(" ", "+");
+                search1 = search.replace(" ", "+");
                 if (search.contains("page=")){
                     browserMoyo.loadUrl(search1);
                 }else{
@@ -696,80 +725,86 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("CONNECT", "connected main Rozetka");
 //                            if (!isFoundMoyo) {
 
-                                doc1 = Jsoup.parse(htmlContent);
-                                Elements elements = doc1.getElementsByAttributeValue("class", "goods-tile__inner");
+                            doc1 = Jsoup.parse(htmlContent);
+                            Elements elements = doc1.getElementsByAttributeValue("class", "goods-tile__inner");
 
-                                boolean isConsist = false;
-                                for (Element element : elements) {
-                                    String url = element.getElementsByAttributeValue("class", "goods-tile__heading").first().attr("href");
-                                    Element elprice = element.getElementsByAttributeValue("class", "goods-tile__price-value").first();
-                                    Element elprice2 = element.getElementsByAttributeValue("class", "goods-tile__price--old price--gray").first();
+                            boolean isConsist = false;
+                            for (Element element : elements) {
+                                String url = element.getElementsByAttributeValue("class", "goods-tile__heading").first().attr("href");
+                                Element elprice = element.getElementsByAttributeValue("class", "goods-tile__price-value").first();
+                                Element elprice2 = element.getElementsByAttributeValue("class", "goods-tile__price--old price--gray").first();
 
-                                    String  price = "";
+                                String  price = "";
+                                String  oldPrice = "";
 
-                                    if (elprice.text()!=null){
-                                        String price1 = elprice.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
+                                if (elprice.text()!=null){
+                                    String price1 = elprice.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
 
-                                        if (elprice2.text()!=""){
-                                            //Log.d("PRICE", elprice2.text());
-                                            String price2 = elprice2.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
-                                            price =  "АКЦИЯ\nЗачёркнутая цена:\n" + price2 + "\nСейчас цена:\n" +  price1;
-                                        } else {
-                                            price = price1;
-                                        }
-
+                                    if (elprice2.text()!=""){
+                                        //Log.d("PRICE", elprice2.text());
+                                        String price2 = elprice2.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
+                                        price = price1;
+                                        oldPrice = price2;
                                     } else {
-                                        price = "Цена формируется";
+                                        price = price1;
+                                        oldPrice = "";
                                     }
-                                    String title = element.getElementsByAttributeValue("class", "goods-tile__heading").first().text();
-                                    String imgUrl = element.getElementsByAttributeValue("class", "goods-tile__picture").first().child(1).attr("src");
+
+                                } else {
+                                    price = "Цена формируется";
+                                    oldPrice = "";
+                                }
+                                String title = element.getElementsByAttributeValue("class", "goods-tile__heading").first().text();
+                                String imgUrl = element.getElementsByAttributeValue("class", "goods-tile__picture").first().child(1).attr("src");
 
 
-                                    articleListMoyo.add(new Article(url, title, price, imgUrl));
+                                articleListMoyo.add(new Article(url, title, price, oldPrice, imgUrl));
 
-                                    isLoadedRozetka = true;
+                                isLoadedRozetka = true;
 
-                                    if (currentStoreIndex==0){
-                                        errorTextMain.setVisibility(View.INVISIBLE);
+                                if (currentStoreIndex==0){
+                                    errorTextMain.setVisibility(View.INVISIBLE);
+                                }
+
+
+                            }
+
+                            runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+
+                                    for (int i = goodsCountMoyo; i < articleListMoyo.size(); i++) {
+                                        goodsNamesListMoyo.add(articleListMoyo.get(i).getName());
+                                        goodsPricesListMoyo.add(articleListMoyo.get(i).getPrice());
+                                        goodsOldPricesListMoyo.add(articleListMoyo.get(i).getOldPrice());
+                                        goodsImagesListMoyo.add(articleListMoyo.get(i).getImg());
+
+
                                     }
+                                    goodsCountMoyo = articleListMoyo.size();
+                                    Element loadElement = doc1.getElementsByAttributeValue("class", "show-more__text").first();
+
+                                    if (loadElement != null  && goodsCount > 0) {
+                                        goodsNamesListMoyo.add("Завантажити ще");
+                                        goodsPricesListMoyo.add("");
+                                        goodsOldPricesListMoyo.add("");
+
+                                        goodsImagesListMoyo.add("https://image.flaticon.com/icons/png/512/16/16770.png");
+                                        articleListMoyo.add(new Article(" ", "Завантажити ще", "","", "https://image.flaticon.com/icons/png/512/16/16770.png"));
+
+                                    }
+                                    progressBar.setVisibility(View.GONE); // to hide
 
 
                                 }
+                            });
 
-                                runOnUiThread(new Runnable() {
+                            //Log.d(TAG, articleListMoyo.size() + "  " + goodsImagesListMoyo.size());
 
-                                    @Override
-                                    public void run() {
-
-                                        for (int i = goodsCountMoyo; i < articleListMoyo.size(); i++) {
-                                            goodsNamesListMoyo.add(articleListMoyo.get(i).getName());
-                                            goodsPricesListMoyo.add(articleListMoyo.get(i).getPrice());
-                                            goodsImagesListMoyo.add(articleListMoyo.get(i).getImg());
-
-
-                                        }
-                                        goodsCountMoyo = articleListMoyo.size();
-                                        Element loadElement = doc1.getElementsByAttributeValue("class", "show-more__text").first();
-
-                                        if (loadElement != null  && goodsCount > 0) {
-                                            goodsNamesListMoyo.add("Завантажити ще");
-                                            goodsPricesListMoyo.add("");
-
-                                            goodsImagesListMoyo.add("https://image.flaticon.com/icons/png/512/16/16770.png");
-                                            articleListMoyo.add(new Article(" ", "Завантажити ще", "", "https://image.flaticon.com/icons/png/512/16/16770.png"));
-
-                                        }
-                                        progressBar.setVisibility(View.GONE); // to hide
-
-
-                                    }
-                                });
-
-                                //Log.d(TAG, articleListMoyo.size() + "  " + goodsImagesListMoyo.size());
-
-                                isFoundMoyo = true;
-                                adapterMoyo.notifyDataSetChanged();
-                                goodsListView.setEnabled(true);
+                            isFoundMoyo = true;
+                            adapterMoyo.notifyDataSetChanged();
+                            goodsListView.setEnabled(true);
 //                            }
 
                             //Log.d("TEST", doc.html());
@@ -867,23 +902,28 @@ public class MainActivity extends AppCompatActivity {
                                     Element el = element.getElementsByAttributeValue("class", "sum").last();
                                     Element el2 = element.getElementsByAttributeValue("class", "sum").first();
                                     String price;
+                                    String oldPrice;
                                     if (el!=null){
                                         String price1 = el.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
 
+
                                         if (el2!=null && !el2.equals(el)){
                                             String price2 = el2.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
-                                            price = "АКЦИЯ\nЗачёркнутая цена:\n" + price2 + "\nСейчас цена:\n" +  price1;
+                                            price = price1;
+                                            oldPrice = price2;
                                         } else {
                                             price =  price1;
+                                            oldPrice =  "";
                                         }
 
                                     } else {
                                         price = "Ціна формується";
+                                        oldPrice = "";
                                     }
                                     // String imgUrl = String.valueOf(element.getElementsByAttributeValue("class", "goods-tile__picture").first().childrenSize());
                                     String imgUrl = element.getElementsByAttributeValue("class", "gallery__img-wrapper").first().select("img").attr("data-src");
 
-                                    articleListRozetka.add(new Article(url, title, price, imgUrl));
+                                    articleListRozetka.add(new Article(url, title, price, oldPrice, imgUrl));
 
                                     isLoadedAllo = true;
 
@@ -902,6 +942,7 @@ public class MainActivity extends AppCompatActivity {
                                         for (int i = goodsCountRozetka; i < articleListRozetka.size(); i++) {
                                             goodsNamesListRozetka.add(articleListRozetka.get(i).getName());
                                             goodsPricesListRozetka.add(articleListRozetka.get(i).getPrice());
+                                            goodsOldPricesListRozetka.add(articleListRozetka.get(i).getOldPrice());
 
                                             goodsImagesListRozetka.add(articleListRozetka.get(i).getImg());
                                             //Log.d(TAG, articleListRozetka.get(i).toString());
@@ -913,9 +954,10 @@ public class MainActivity extends AppCompatActivity {
                                         if (loadElement != null  && goodsCount > 0) {
                                             goodsNamesListRozetka.add("Завантажити ще");
                                             goodsPricesListRozetka.add("");
+                                            goodsOldPricesListRozetka.add("");
 
                                             goodsImagesListRozetka.add("https://image.flaticon.com/icons/png/512/16/16770.png");
-                                            articleListRozetka.add(new Article(" ", "Завантажити ще", "", "https://image.flaticon.com/icons/png/512/16/16770.png"));
+                                            articleListRozetka.add(new Article(" ", "Завантажити ще", "","", "https://image.flaticon.com/icons/png/512/16/16770.png"));
 
                                         }
                                         progressBar.setVisibility(View.GONE); // to hide
@@ -946,15 +988,17 @@ public class MainActivity extends AppCompatActivity {
         Context context;
         List<String> rTitle = new ArrayList();
         List<String> rDescription = new ArrayList();
+        List<String> rDescription2 = new ArrayList();
         List<String> rImgs = new ArrayList();
         List<Article> arrLIst = new ArrayList<>();
 
 
-        MyAdapter(Context c, List<String> title, List<String> description, List<String> imgs, List arrList) {
+        MyAdapter(Context c, List<String> title, List<String> description, List<String> description2, List<String> imgs, List arrList) {
             super(c, R.layout.goods_view, R.id.goodsTitleMain, title);
             this.context = c;
             this.rTitle = title;
             this.rDescription = description;
+            this.rDescription2 = description2;
             this.rImgs = imgs;
             this.arrLIst = arrList;
 
@@ -970,6 +1014,7 @@ public class MainActivity extends AppCompatActivity {
             ImageView imageFavourite = goodsView.findViewById(R.id.goodsFavourite);
             TextView myTitle = goodsView.findViewById(R.id.goodsTitleMain);
             TextView myDescription = goodsView.findViewById(R.id.goodsPriceMain);
+            TextView myDescription2 = goodsView.findViewById(R.id.oldGoodsPriceMain);
 
             // now set our resources on views
 
@@ -1020,6 +1065,7 @@ public class MainActivity extends AppCompatActivity {
             }
             try {
                 myDescription.setText(rDescription.get(position));
+                myDescription2.setText(rDescription2.get(position));
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.d(TAG, "Rozetka Error");
@@ -1036,7 +1082,7 @@ public class MainActivity extends AppCompatActivity {
                     //Log.d(TAG,arrLIst.get(position).getUrl());
                     //Log.d(TAG,arrLIst.get(position).getImg());
                     //Log.d(TAG,arrLIst.get(position).getName());
-                   // Log.d(TAG,arrLIst.get(position).getPrice());
+                    // Log.d(TAG,arrLIst.get(position).getPrice());
 
 
                     if (isConnected()){
@@ -1123,12 +1169,14 @@ public class MainActivity extends AppCompatActivity {
         private String name;
         private String img;
         private String price;
+        private String oldPrice;
 
 
-        public Article(String url, String name, String price, String img) {
+        public Article(String url, String name, String price, String oldPrice, String img) {
             this.url = url;
             this.name = name;
             this.price = price;
+            this.oldPrice = oldPrice;
             this.img = img;
         }
 
@@ -1153,6 +1201,8 @@ public class MainActivity extends AppCompatActivity {
             return price;
         }
 
+        public String getOldPrice() { return oldPrice; }
+
         public void setPrice(String name) {
             this.price = price;
         }
@@ -1172,6 +1222,7 @@ public class MainActivity extends AppCompatActivity {
                     ", name='" + name + '\'' +
                     ", img='" + img + '\'' +
                     ", price='" + price + '\'' +
+                    ", oldPrice='" + price + '\'' +
                     '}';
         }
     }

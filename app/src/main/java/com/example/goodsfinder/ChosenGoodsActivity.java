@@ -335,6 +335,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
         if (FirebaseAuth.getInstance().getCurrentUser() == null){
             Intent intent = new Intent(ChosenGoodsActivity.this, MainActivity.class);
             startActivity(intent);
+            finish();
         }
 
         if(getSupportActionBar()!=null) getSupportActionBar().setTitle(String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getEmail()));
@@ -476,6 +477,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
         if(view.getId() == R.id.btn_to_main) {
             Intent intent = new Intent(ChosenGoodsActivity.this, MainActivity.class);
             startActivity(intent);
+            finish();
 
         }
 
