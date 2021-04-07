@@ -23,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -127,6 +128,9 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                 favouritesNamesList.clear();
                 favouritesPricesList.clear();
                 favouritesOldPricesList.clear();
+                infoLoaded.clear();
+                infoLoadedUp.clear();
+                favouritesList.clear();
 
                 boolean isNotEmpty = false;
 
@@ -299,6 +303,40 @@ public class ChosenGoodsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chosen_goods_activity);
 
+        String[] filters = { getString(R.string.def),  getString(R.string.up), getString(R.string.down)};
+
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        ArrayAdapter<String> adapterSpinner = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, filters);
+        adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapterSpinner);
+
+        AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String item = (String)parent.getItemAtPosition(position);
+
+                    if (item.equals(getString(R.string.def)) && isLoadedRozetka){
+                        sortDefault();
+                        Log.d("TETS", item);
+                    } else if (item.equals(getString(R.string.up))){
+                        sortUp();
+                        Log.d("TETS", item);
+                    } else if (item.equals(getString(R.string.down))){
+                        sortDown();
+                        Log.d("TETS", item);
+                    }
+
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        };
+        spinner.setOnItemSelectedListener(itemSelectedListener);
+
         errorTextChoosen = findViewById(R.id.errorTextChoosen);
         emptyTextChoosen = findViewById(R.id.emptyTextChoosen);
         errorTextChoosen.setVisibility(View.INVISIBLE);
@@ -323,9 +361,6 @@ public class ChosenGoodsActivity extends AppCompatActivity {
         browserRozetka = new WebView(this);
         getMoyo();
         findViewById(R.id.btn_to_main).setOnClickListener(this::onClick);
-        findViewById(R.id.btn_sort_up).setOnClickListener(this::onClick);
-        findViewById(R.id.btn_sort_down).setOnClickListener(this::onClick);
-        findViewById(R.id.btn_sort_default).setOnClickListener(this::onClick);
         findViewById(R.id.btn_reload).setOnClickListener(this::onClick);
 
         goodsListView = (ListView) findViewById(R.id.favouritesView);
@@ -481,33 +516,31 @@ public class ChosenGoodsActivity extends AppCompatActivity {
 
         }
 
-        if(view.getId() == R.id.btn_sort_up) {
-            if (isLoadedRozetka){
-                Log.d("BEFORE", String.valueOf(infoLoaded));
-            boolean sorted = false;
-            String temp;
-            while(!sorted) {
-                sorted = true;
-                for (int i = 0; i < infoLoadedUp.size() - 1; i++) {
+        if(view.getId() == R.id.btn_reload) {
+            if (isConnected()){
+                errorTextChoosen.setVisibility(View.INVISIBLE);
+                emptyTextChoosen.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
 
-                    String[] goodsInfo = String.valueOf(infoLoadedUp.get(i)).split("SPLITFORBUY", 6);
-                    String[] goodsInfoNext = String.valueOf(infoLoadedUp.get(i+1)).split("SPLITFORBUY", 6);
+                favouritesUrlList.clear();
+                favouritesImagesList.clear();
+                favouritesStoreImagesList.clear();
+                favouritesNamesList.clear();
+                favouritesPricesList.clear();
+                favouritesOldPricesList.clear();
 
-                    Log.d("START", String.valueOf(goodsInfo[2])+", "+goodsInfoNext[2]);
-                    Log.d("FIRST", String.valueOf(goodsInfo[4])+", "+goodsInfoNext[4]);
-                    Log.d("SECOND", String.valueOf(goodsInfo[5])+", "+goodsInfoNext[5]);
+                adapter1.notifyDataSetChanged();
 
-                    if (Integer.parseInt(goodsInfo[5].replace("грн", "").replace(" ", "")) > Integer.parseInt(goodsInfoNext[5].replace("грн", "").replace(" ", ""))) {
-                        temp = infoLoadedUp.get(i);
-
-                        infoLoadedUp.set(i, infoLoadedUp.get(i+1));
-
-                        infoLoadedUp.set(i+1, temp);
-                        sorted = false;
-                    }
-                }
+                loadChoosen();
+            } else {
+                Toast.makeText(ChosenGoodsActivity.this, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+    public void sortDefault(){
+        if (isLoadedRozetka){
 
+            Log.d("COMMON", String.valueOf(infoLoaded));
 
             favouritesUrlList.clear();
             favouritesImagesList.clear();
@@ -516,8 +549,8 @@ public class ChosenGoodsActivity extends AppCompatActivity {
             favouritesPricesList.clear();
             favouritesOldPricesList.clear();
 
-            for (int i = 0; i < infoLoadedUp.size(); i++) {
-                String[] goodsInfo = String.valueOf(infoLoadedUp.get(i)).split("SPLITFORBUY", 6);
+            for (int i = 0; i < infoLoaded.size(); i++) {
+                String[] goodsInfo = String.valueOf(infoLoaded.get(infoLoaded.size()-1-i)).split("SPLITFORBUY", 6);
                 favouritesUrlList.add(i, goodsInfo[0]);
                 favouritesImagesList.add(i, goodsInfo[1]);
                 favouritesNamesList.add(i, goodsInfo[2]);
@@ -528,15 +561,15 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                 }if(goodsInfo[3].equals("CITRUS")){
                     favouritesStoreImagesList.add(i,"https://yt3.ggpht.com/ytc/AAUvwnjVEgy0xS7qiFpem68qOwYiIBi4Fls8dZYw9EFm1A=s900-c-k-c0x00ffffff-no-rj");
                 }
-                favouritesPricesList.add(i, infoLoadedUp.get(i));
+                favouritesPricesList.add(i, infoLoaded.get(i));
                 favouritesOldPricesList.add(i, infoLoadedUp.get(i));
 
                 if (Integer.parseInt(goodsInfo[5].replace(" ", ""). replace("грн", "")) != 0) {
-                    if (Integer.parseInt(goodsInfo[4].replace(" ", "").replace("грн", "")) != 0) {
-                        favouritesPricesList.add(i, goodsInfo[5]);
-                        favouritesOldPricesList.add(i, goodsInfo[4]);
-                    } else {
-                        favouritesPricesList.add(i, goodsInfo[5]);
+                    if (Integer.parseInt(goodsInfo[4].replace(" ", ""). replace("грн", "")) != 0){
+                        favouritesPricesList.add(i,  goodsInfo[5]);
+                        favouritesOldPricesList.add(i,  goodsInfo[4]);
+                    } else{
+                        favouritesPricesList.add(i,  goodsInfo[5]);
                         favouritesOldPricesList.add(i, " ");
                     }
                 } else {
@@ -544,21 +577,19 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                     favouritesOldPricesList.add(i, " ");
                 }
 
-
             }
             adapter1.notifyDataSetChanged();
-                progressBar.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
 
 
 
         }else{
-                Toast.makeText(ChosenGoodsActivity.this, getString(R.string.goods_no_loaded), Toast.LENGTH_SHORT).show();
-            }
+            Toast.makeText(ChosenGoodsActivity.this, getString(R.string.goods_no_loaded), Toast.LENGTH_SHORT).show();
         }
-
-        if(view.getId() == R.id.btn_sort_down) {
-            if (isLoadedRozetka){
-                Log.d("TEST", String.valueOf(infoLoaded));
+    }
+    public void sortDown(){
+        if (isLoadedRozetka){
+            Log.d("TEST", String.valueOf(infoLoaded));
             boolean sorted = false;
             String temp;
             while(!sorted) {
@@ -577,7 +608,7 @@ public class ChosenGoodsActivity extends AppCompatActivity {
                 }
             }
 
-                Log.d("TEST", String.valueOf(infoLoaded));
+            Log.d("TEST", String.valueOf(infoLoaded));
 
             favouritesUrlList.clear();
             favouritesImagesList.clear();
@@ -616,85 +647,88 @@ public class ChosenGoodsActivity extends AppCompatActivity {
 
             }
             adapter1.notifyDataSetChanged();
-                progressBar.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
 
 
 
         }else{
-                Toast.makeText(ChosenGoodsActivity.this, getString(R.string.goods_no_loaded), Toast.LENGTH_SHORT).show();
-            }
+            Toast.makeText(ChosenGoodsActivity.this, getString(R.string.goods_no_loaded), Toast.LENGTH_SHORT).show();
         }
+    }
 
-        if(view.getId() == R.id.btn_sort_default) {
-            if (isLoadedRozetka){
+    public void sortUp(){
+        if (isLoadedRozetka){
+            Log.d("BEFORE", String.valueOf(infoLoaded));
+            boolean sorted = false;
+            String temp;
+            while(!sorted) {
+                sorted = true;
+                for (int i = 0; i < infoLoadedUp.size() - 1; i++) {
 
-                Log.d("COMMON", String.valueOf(infoLoaded));
+                    String[] goodsInfo = String.valueOf(infoLoadedUp.get(i)).split("SPLITFORBUY", 6);
+                    String[] goodsInfoNext = String.valueOf(infoLoadedUp.get(i+1)).split("SPLITFORBUY", 6);
 
-                favouritesUrlList.clear();
-                favouritesImagesList.clear();
-                favouritesStoreImagesList.clear();
-                favouritesNamesList.clear();
-                favouritesPricesList.clear();
-                favouritesOldPricesList.clear();
+                    Log.d("START", String.valueOf(goodsInfo[2])+", "+goodsInfoNext[2]);
+                    Log.d("FIRST", String.valueOf(goodsInfo[4])+", "+goodsInfoNext[4]);
+                    Log.d("SECOND", String.valueOf(goodsInfo[5])+", "+goodsInfoNext[5]);
 
-                for (int i = 0; i < infoLoaded.size(); i++) {
-                    String[] goodsInfo = String.valueOf(infoLoaded.get(infoLoaded.size()-1-i)).split("SPLITFORBUY", 6);
-                    favouritesUrlList.add(i, goodsInfo[0]);
-                    favouritesImagesList.add(i, goodsInfo[1]);
-                    favouritesNamesList.add(i, goodsInfo[2]);
-                    if(goodsInfo[3].equals("ROZETKA")){
-                        favouritesStoreImagesList.add(i,"https://mmr.ua/uploaded/materials/a2a89af751.png");
-                    }else if(goodsInfo[3].equals("ALLO")){
-                        favouritesStoreImagesList.add(i,"data:image/png;base64,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");
-                    }if(goodsInfo[3].equals("CITRUS")){
-                        favouritesStoreImagesList.add(i,"https://yt3.ggpht.com/ytc/AAUvwnjVEgy0xS7qiFpem68qOwYiIBi4Fls8dZYw9EFm1A=s900-c-k-c0x00ffffff-no-rj");
+                    if (Integer.parseInt(goodsInfo[5].replace("грн", "").replace(" ", "")) > Integer.parseInt(goodsInfoNext[5].replace("грн", "").replace(" ", ""))) {
+                        temp = infoLoadedUp.get(i);
+
+                        infoLoadedUp.set(i, infoLoadedUp.get(i+1));
+
+                        infoLoadedUp.set(i+1, temp);
+                        sorted = false;
                     }
-                    favouritesPricesList.add(i, infoLoaded.get(i));
-                    favouritesOldPricesList.add(i, infoLoadedUp.get(i));
-
-                    if (Integer.parseInt(goodsInfo[5].replace(" ", ""). replace("грн", "")) != 0) {
-                        if (Integer.parseInt(goodsInfo[4].replace(" ", ""). replace("грн", "")) != 0){
-                            favouritesPricesList.add(i,  goodsInfo[5]);
-                            favouritesOldPricesList.add(i,  goodsInfo[4]);
-                        } else{
-                            favouritesPricesList.add(i,  goodsInfo[5]);
-                            favouritesOldPricesList.add(i, " ");
-                        }
-                    } else {
-                            favouritesPricesList.add(i, getString(R.string.form_price));
-                        favouritesOldPricesList.add(i, " ");
-                        }
-
                 }
-                adapter1.notifyDataSetChanged();
-                progressBar.setVisibility(View.GONE);
-
-
-
-            }else{
-                Toast.makeText(ChosenGoodsActivity.this, getString(R.string.goods_no_loaded), Toast.LENGTH_SHORT).show();
             }
-        }
 
-        if(view.getId() == R.id.btn_reload) {
-            if (isConnected()){
-                errorTextChoosen.setVisibility(View.INVISIBLE);
-                emptyTextChoosen.setVisibility(View.INVISIBLE);
-                progressBar.setVisibility(View.VISIBLE);
 
-                favouritesUrlList.clear();
-                favouritesImagesList.clear();
-                favouritesStoreImagesList.clear();
-                favouritesNamesList.clear();
-                favouritesPricesList.clear();
-                favouritesOldPricesList.clear();
+            favouritesUrlList.clear();
+            favouritesImagesList.clear();
+            favouritesStoreImagesList.clear();
+            favouritesNamesList.clear();
+            favouritesPricesList.clear();
+            favouritesOldPricesList.clear();
 
-                adapter1.notifyDataSetChanged();
+            for (int i = 0; i < infoLoadedUp.size(); i++) {
+                Log.d("TETS", String.valueOf(infoLoadedUp.size() + " " + infoLoaded.size()));
+                String[] goodsInfo = String.valueOf(infoLoadedUp.get(i)).split("SPLITFORBUY", 6);
+                favouritesUrlList.add(i, goodsInfo[0]);
+                favouritesImagesList.add(i, goodsInfo[1]);
+                favouritesNamesList.add(i, goodsInfo[2]);
+                if(goodsInfo[3].equals("ROZETKA")){
+                    favouritesStoreImagesList.add(i,"https://mmr.ua/uploaded/materials/a2a89af751.png");
+                }else if(goodsInfo[3].equals("ALLO")){
+                    favouritesStoreImagesList.add(i,"data:image/png;base64,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");
+                }if(goodsInfo[3].equals("CITRUS")){
+                    favouritesStoreImagesList.add(i,"https://yt3.ggpht.com/ytc/AAUvwnjVEgy0xS7qiFpem68qOwYiIBi4Fls8dZYw9EFm1A=s900-c-k-c0x00ffffff-no-rj");
+                }
+                favouritesPricesList.add(i, infoLoadedUp.get(i));
+                favouritesOldPricesList.add(i, infoLoadedUp.get(i));
 
-                loadChoosen();
-            } else {
-                Toast.makeText(ChosenGoodsActivity.this, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
+                if (Integer.parseInt(goodsInfo[5].replace(" ", ""). replace("грн", "")) != 0) {
+                    if (Integer.parseInt(goodsInfo[4].replace(" ", "").replace("грн", "")) != 0) {
+                        favouritesPricesList.add(i, goodsInfo[5]);
+                        favouritesOldPricesList.add(i, goodsInfo[4]);
+                    } else {
+                        favouritesPricesList.add(i, goodsInfo[5]);
+                        favouritesOldPricesList.add(i, " ");
+                    }
+                } else {
+                    favouritesPricesList.add(i, getString(R.string.form_price));
+                    favouritesOldPricesList.add(i, " ");
+                }
+
+
             }
+            adapter1.notifyDataSetChanged();
+            progressBar.setVisibility(View.GONE);
+
+
+
+        }else{
+            Toast.makeText(ChosenGoodsActivity.this, getString(R.string.goods_no_loaded), Toast.LENGTH_SHORT).show();
         }
     }
 
