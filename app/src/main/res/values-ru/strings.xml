@@ -27,4 +27,6 @@
     <string name="down">По убыванию</string>
     <string name="def">Стандартно</string>
     <string name="reload">Перезагрузить</string>
+    <string name="theme">Тема</string>
+    <string name="about">Про нас</string>
 </resources>

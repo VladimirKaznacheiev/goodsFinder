@@ -27,4 +27,6 @@
     <string name="down">За зменшенням</string>
     <string name="def">Стандартно</string>
     <string name="reload">Перезавантажити</string>
+    <string name="theme">Тема</string>
+    <string name="about">Про нас</string>
 </resources>

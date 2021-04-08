@@ -27,4 +27,6 @@
     <string name="down">In descending</string>
     <string name="def">Default</string>
     <string name="reload">Reload</string>
+    <string name="theme">Theme</string>
+    <string name="about">About us</string>
 </resources>

@@ -433,8 +433,9 @@ public class MainActivity extends AppCompatActivity {
                     progressBar.setVisibility(View.VISIBLE); //to show
 
                     getCitrus(s);
+                    getMoyoGoods(s);
+                    getRozetkaGoods("https://allo.ua/ru/catalogsearch/result/?q="+s.replace("айфон", "iphone"));
 
-                    strForSearch = s;
 
 
 
@@ -627,9 +628,6 @@ public class MainActivity extends AppCompatActivity {
                             progressBar.setVisibility(View.GONE); // to hide
                             adapterCitrus.notifyDataSetChanged();
                             goodsListView.setEnabled(true);
-
-                            getMoyoGoods(strForSearch);
-                            getRozetkaGoods("https://allo.ua/ru/catalogsearch/result/?q="+strForSearch.replace("айфон", "iphone"));
 
                             if (!isConnected()) {
                                 errorTextMain.setVisibility(View.VISIBLE);
