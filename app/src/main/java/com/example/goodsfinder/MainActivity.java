@@ -7,6 +7,7 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -122,16 +123,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ArrayList<String> goodsPricesList = new ArrayList<>();
     ArrayList<String> goodsOldPricesList = new ArrayList<>();
     ArrayList<String> goodsImagesList = new ArrayList<>();
+    ArrayList<Integer> goodsColorsList = new ArrayList<>();
 
     ArrayList<String> goodsImagesListMoyo = new ArrayList<>();
     ArrayList<String> goodsPricesListMoyo = new ArrayList<>();
     ArrayList<String> goodsOldPricesListMoyo = new ArrayList<>();
     ArrayList<String> goodsNamesListMoyo = new ArrayList<>();
+    ArrayList<Integer> goodsColorsMoyo = new ArrayList<>();
 
     ArrayList<String> goodsImagesListRozetka = new ArrayList<>();
     ArrayList<String> goodsPricesListRozetka = new ArrayList<>();
     ArrayList<String> goodsOldPricesListRozetka = new ArrayList<>();
     ArrayList<String> goodsNamesListRozetka = new ArrayList<>();
+    ArrayList<Integer> goodsColorsRozetka = new ArrayList<>();
 
 
 
@@ -225,9 +229,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         goodsListView = (ListView) findViewById(R.id.goodsList);
         storeListView = (RecyclerView) findViewById(R.id.storeListView);
         progressBar = findViewById(R.id.progressBar);
-        adapterCitrus = new MyAdapter(this, goodsNamesList, goodsPricesList, goodsOldPricesList, goodsImagesList,articleList);
-        adapterMoyo = new MyAdapter(this, goodsNamesListMoyo, goodsPricesListMoyo, goodsOldPricesListMoyo, goodsImagesListMoyo,articleListMoyo);
-        adapterRozetka = new MyAdapter(this, goodsNamesListRozetka, goodsPricesListRozetka, goodsOldPricesListRozetka, goodsImagesListRozetka,articleListRozetka);
+        adapterCitrus = new MyAdapter(this, goodsNamesList, goodsPricesList, goodsOldPricesList, goodsImagesList,goodsColorsList,articleList);
+        adapterMoyo = new MyAdapter(this, goodsNamesListMoyo, goodsPricesListMoyo, goodsOldPricesListMoyo, goodsImagesListMoyo,goodsColorsMoyo,articleListMoyo);
+        adapterRozetka = new MyAdapter(this, goodsNamesListRozetka, goodsPricesListRozetka, goodsOldPricesListRozetka, goodsImagesListRozetka,goodsColorsRozetka,articleListRozetka);
         goodsListView.setAdapter(adapterMoyo);
 
 
@@ -299,6 +303,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             goodsOldPricesList.remove(goodsOldPricesList.size() - 1);
                             goodsNamesList.remove(goodsNamesList.size() - 1);
                             goodsImagesList.remove(goodsImagesList.size() - 1);
+                            goodsColorsList.remove(goodsColorsList.size() - 1);
                             pageCounter++;
                             getCitrus(currentRequestString + "&page=" + pageCounter);
 
@@ -311,18 +316,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             goodsPricesList.clear();
                             goodsOldPricesList.clear();
                             goodsNamesListMoyo.clear();
+                            goodsNamesListRozetka.clear();
                             goodsImagesListMoyo.clear();
+                            goodsImagesListRozetka.clear();
                             goodsPricesListMoyo.clear();
+                            goodsPricesListRozetka.clear();
+                            goodsColorsList.clear();
+                            goodsColorsMoyo.clear();
+                            goodsColorsRozetka.clear();
                             goodsOldPricesListMoyo.clear();
+                            goodsOldPricesListRozetka.clear();
                             articleList.clear();
                             articleListMoyo.clear();
+                            articleListRozetka.clear();
                             adapterCitrus.notifyDataSetChanged();
                             adapterMoyo.notifyDataSetChanged();
+                            adapterRozetka.notifyDataSetChanged();
                             currentRequestString = "";
                             pageCounter = 1;
                             pageCounterMoyo = 1;
+                            pageCounterRozerka = 1;
                             goodsCount = 0;
                             goodsCountMoyo = 0;
+                            goodsCountRozetka = 0;
                         }
                     }
                 } else if (currentStoreIndex == 0) {
@@ -342,6 +358,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             goodsOldPricesListMoyo.remove(goodsOldPricesListMoyo.size() - 1);
                             goodsNamesListMoyo.remove(goodsNamesListMoyo.size() - 1);
                             goodsImagesListMoyo.remove(goodsImagesListMoyo.size() - 1);
+                            goodsColorsMoyo.remove(goodsColorsMoyo.size() - 1);
                             pageCounterMoyo++;
 
                             getMoyoGoods("https://rozetka.com.ua/search/?page=" + pageCounterMoyo + "&text=" + currentRequestString);
@@ -356,18 +373,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             goodsPricesList.clear();
                             goodsOldPricesList.clear();
                             goodsNamesListMoyo.clear();
+                            goodsNamesListRozetka.clear();
                             goodsImagesListMoyo.clear();
+                            goodsImagesListRozetka.clear();
                             goodsPricesListMoyo.clear();
+                            goodsPricesListRozetka.clear();
+                            goodsColorsList.clear();
+                            goodsColorsMoyo.clear();
+                            goodsColorsRozetka.clear();
                             goodsOldPricesListMoyo.clear();
+                            goodsOldPricesListRozetka.clear();
                             articleList.clear();
                             articleListMoyo.clear();
+                            articleListRozetka.clear();
                             adapterCitrus.notifyDataSetChanged();
                             adapterMoyo.notifyDataSetChanged();
+                            adapterRozetka.notifyDataSetChanged();
                             currentRequestString = "";
                             pageCounter = 1;
                             pageCounterMoyo = 1;
+                            pageCounterRozerka = 1;
                             goodsCount = 0;
                             goodsCountMoyo = 0;
+                            goodsCountRozetka = 0;
                         }
                     }
                 }else if (currentStoreIndex == 2) {
@@ -386,6 +414,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             goodsOldPricesListRozetka.remove(goodsOldPricesListRozetka.size() - 1);
                             goodsNamesListRozetka.remove(goodsNamesListRozetka.size() - 1);
                             goodsImagesListRozetka.remove(goodsImagesListRozetka.size() - 1);
+                            goodsColorsRozetka.remove(goodsColorsRozetka.size() - 1);
                             pageCounterRozerka++;
 
                             getRozetkaGoods("https://allo.ua/ru/catalogsearch/result/index/p-"+pageCounterRozerka+"/?q="+currentRequestString.replace("%20", "+").replace("айфон","iphone"));
@@ -400,12 +429,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             goodsPricesList.clear();
                             goodsOldPricesList.clear();
                             goodsNamesListMoyo.clear();
-                            goodsImagesListMoyo.clear();
-                            goodsPricesListMoyo.clear();
-                            goodsOldPricesListMoyo.clear();
                             goodsNamesListRozetka.clear();
+                            goodsImagesListMoyo.clear();
                             goodsImagesListRozetka.clear();
+                            goodsPricesListMoyo.clear();
                             goodsPricesListRozetka.clear();
+                            goodsColorsList.clear();
+                            goodsColorsMoyo.clear();
+                            goodsColorsRozetka.clear();
+                            goodsOldPricesListMoyo.clear();
                             goodsOldPricesListRozetka.clear();
                             articleList.clear();
                             articleListMoyo.clear();
@@ -460,6 +492,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 goodsImagesListRozetka.clear();
                 goodsPricesListRozetka.clear();
                 goodsOldPricesListRozetka.clear();
+                goodsColorsList.clear();
+                goodsColorsMoyo.clear();
+                goodsColorsRozetka.clear();
                 articleList.clear();
                 articleListMoyo.clear();
                 articleListRozetka.clear();
@@ -540,6 +575,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 goodsImagesListRozetka.clear();
                 goodsPricesListRozetka.clear();
                 goodsOldPricesListRozetka.clear();
+                goodsColorsList.clear();
+                goodsColorsMoyo.clear();
+                goodsColorsRozetka.clear();
                 articleList.clear();
                 articleListMoyo.clear();
                 articleListRozetka.clear();
@@ -666,6 +704,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         goodsNamesList.add(articleList.get(i).getName());
                         goodsPricesList.add(articleList.get(i).getPrice());
                         goodsOldPricesList.add(articleList.get(i).getOldPrice());
+                        goodsColorsList.add(getResources().getColor(R.color.citrus_colour));
 
                         goodsImagesList.add(articleList.get(i).getImg());
 
@@ -677,6 +716,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         goodsNamesList.add(getString(R.string.load_more));
                         goodsPricesList.add("");
                         goodsOldPricesList.add("");
+                        goodsColorsList.add(getResources().getColor(R.color.loadmore_colour));
 
                         goodsImagesList.add("https://image.flaticon.com/icons/png/512/16/16770.png");
                         articleList.add(new Article(" ", getString(R.string.load_more), "", "","https://image.flaticon.com/icons/png/512/16/16770.png"));
@@ -865,7 +905,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                         goodsPricesListMoyo.add(articleListMoyo.get(i).getPrice());
                                         goodsOldPricesListMoyo.add(articleListMoyo.get(i).getOldPrice());
                                         goodsImagesListMoyo.add(articleListMoyo.get(i).getImg());
-
+                                        goodsColorsMoyo.add(getResources().getColor(R.color.rozetka_colour));
 
                                     }
                                     goodsCountMoyo = articleListMoyo.size();
@@ -875,6 +915,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                         goodsNamesListMoyo.add(getString(R.string.load_more));
                                         goodsPricesListMoyo.add("");
                                         goodsOldPricesListMoyo.add("");
+                                        goodsColorsMoyo.add(getResources().getColor(R.color.loadmore_colour));
 
                                         goodsImagesListMoyo.add("https://image.flaticon.com/icons/png/512/16/16770.png");
                                         articleListMoyo.add(new Article(" ", getString(R.string.load_more), "","", "https://image.flaticon.com/icons/png/512/16/16770.png"));
@@ -1029,6 +1070,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                             goodsNamesListRozetka.add(articleListRozetka.get(i).getName());
                                             goodsPricesListRozetka.add(articleListRozetka.get(i).getPrice());
                                             goodsOldPricesListRozetka.add(articleListRozetka.get(i).getOldPrice());
+                                            goodsColorsRozetka.add(getResources().getColor(R.color.allo_colour));
 
                                             goodsImagesListRozetka.add(articleListRozetka.get(i).getImg());
                                             //Log.d(TAG, articleListRozetka.get(i).toString());
@@ -1041,6 +1083,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                             goodsNamesListRozetka.add(getString(R.string.load_more));
                                             goodsPricesListRozetka.add("");
                                             goodsOldPricesListRozetka.add("");
+                                            goodsColorsRozetka.add(getResources().getColor(R.color.loadmore_colour));
 
                                             goodsImagesListRozetka.add("https://image.flaticon.com/icons/png/512/16/16770.png");
                                             articleListRozetka.add(new Article(" ", getString(R.string.load_more), "","", "https://image.flaticon.com/icons/png/512/16/16770.png"));
@@ -1076,16 +1119,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         List<String> rDescription = new ArrayList();
         List<String> rDescription2 = new ArrayList();
         List<String> rImgs = new ArrayList();
+        List<Integer> rColor = new ArrayList();
         List<Article> arrLIst = new ArrayList<>();
+        boolean isGoodsChoosen = false;
 
 
-        MyAdapter(Context c, List<String> title, List<String> description, List<String> description2, List<String> imgs, List arrList) {
+        MyAdapter(Context c, List<String> title, List<String> description, List<String> description2, List<String> imgs,List<Integer> color, List arrList) {
             super(c, R.layout.goods_view, R.id.goodsTitleMain, title);
             this.context = c;
             this.rTitle = title;
             this.rDescription = description;
             this.rDescription2 = description2;
             this.rImgs = imgs;
+            this.rColor = color;
             this.arrLIst = arrList;
 
         }
@@ -1101,32 +1147,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             TextView myTitle = goodsView.findViewById(R.id.goodsTitleMain);
             TextView myDescription = goodsView.findViewById(R.id.goodsPriceMain);
             TextView myDescription2 = goodsView.findViewById(R.id.oldGoodsPriceMain);
+            CardView backgroundCard = goodsView.findViewById(R.id.backgroungCard);
+
+
 
             // now set our resources on views
 
 
             Glide.with(context).load(rImgs.get(position)).into(images);
             myTitle.setText(rTitle.get(position));
+            backgroundCard.setCardBackgroundColor(rColor.get(position));
 
 
             mDatabase.child("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
-                public boolean inChosen = false;
+                public boolean inChosen;
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
 
+
+
                     try {
+
                         for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
+
                             String str = arrLIst.get(position).getUrl();
                             String[] goodsInfo = String.valueOf(childDataSnapshot.getValue()).split("SPLITFORBUY", 2);
                             if (goodsInfo[0].equals(str)){
-                                inChosen = true;
+
+                                imageFavourite.setImageResource(R.drawable.ic_baseline_star_24);
                             }
 
-                            if(inChosen){
-                                imageFavourite.setImageResource(R.drawable.ic_baseline_star_24);
-                            }else{
-                                imageFavourite.setImageResource(R.drawable.ic_baseline_star_border_24);
-                            }
+
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -1190,30 +1241,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     if (goodsInfo[0].equals(str)){
                                         inChosen = true;
 
-                                        /* imageFavourite.setImageResource(R.drawable.ic_baseline_star_24);*/
+                                         imageFavourite.setImageResource(R.drawable.ic_baseline_star_border_24);
                                         Toast.makeText(MainActivity.this, getString(R.string.goods_added_before), Toast.LENGTH_SHORT).show();
-                                        notifyDataSetChanged();
+
                                         mDatabase.child("Users").child(user.getUid()).child(childDataSnapshot.getKey()).setValue(null);
                                         mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
-                                        imageFavourite.setImageResource(R.drawable.ic_baseline_star_24);
-                                        adapterCitrus.notifyDataSetChanged();
-                                        adapterRozetka.notifyDataSetChanged();
-                                        adapterMoyo.notifyDataSetChanged();
+                                        //imageFavourite.setImageResource(R.drawable.ic_baseline_star_24);
+
                                         break;
 
                                     }else{
                                         inChosen = false;
-                                        imageFavourite.setImageResource(R.drawable.ic_baseline_star_border_24);
-                                        adapterCitrus.notifyDataSetChanged();
-                                        adapterRozetka.notifyDataSetChanged();
-                                        adapterMoyo.notifyDataSetChanged();
+                                        imageFavourite.setImageResource(R.drawable.ic_baseline_star_24);
+
                                     }
 
 
                                 }
 
+
                                 if (!inChosen){
-                                    /*  imageFavourite.setImageResource(R.drawable.ic_baseline_star_border_24);*/
+                                      imageFavourite.setImageResource(R.drawable.ic_baseline_star_24);
                                     String str = "";
                                     if (arrLIst.get(position).getUrl().contains("allo.ua")){
                                         str = "ALLO";
@@ -1225,7 +1273,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     mDatabase.child("Users").child(user.getUid()).push().setValue(arrLIst.get(position).getUrl()+"SPLITFORBUY"+arrLIst.get(position).getImg()+"SPLITFORBUY"+arrLIst.get(position).getName()+"SPLITFORBUY"+str);
                                     mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
                                     Toast.makeText(MainActivity.this, getString(R.string.goods_added), Toast.LENGTH_SHORT).show();
-                                    notifyDataSetChanged();
+
                                     return;
                                 }
 
@@ -1233,6 +1281,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
                             }
+
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {

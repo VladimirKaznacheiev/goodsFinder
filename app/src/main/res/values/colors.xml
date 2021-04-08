@@ -13,6 +13,11 @@
         <color name="black">#FF000000</color>
         <color name="white">#FFFFFFFF</color>
 
+        <color name="rozetka_colour">#C8FFE1</color>
+        <color name="citrus_colour">#FFE6C9</color>
+        <color name="allo_colour">#FFC6C6</color>
+        <color name="loadmore_colour">#A473FF</color>
+
         <color name="blue_800">#1565C0</color>
         <color name="grey_50">#FAFAFA</color>
 
