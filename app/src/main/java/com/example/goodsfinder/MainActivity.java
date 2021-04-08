@@ -15,6 +15,7 @@ import android.accessibilityservice.AccessibilityService;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
@@ -162,8 +163,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return currentStoreIndex;
     }
 
+    SharedPreferences mSettings;
+    public static final String APP_PREFERENCES = "searches";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = mSettings.edit();
+
+
+        for (int i = 6; i >= 1; i--) {
+            Log.d("SHAR", mSettings.getString(String.valueOf(i), ""));
+        }
+
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -462,8 +476,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     getMoyoGoods(s);
                     getRozetkaGoods("https://allo.ua/ru/catalogsearch/result/?q="+s.replace("айфон", "iphone"));
 
+                    boolean isPut = false;
 
+                    for (int i = 1; i <= 6; i++) {
+                        if (mSettings.getString(String.valueOf(i), "").equals("")){
+                            editor.putString(String.valueOf(i), s);
+                            isPut = true;
+                            editor.apply();
+                            editor.commit();
+                            break;
+                        }
+                    }
 
+                    String tmp = mSettings.getString("6", "");
+
+                    if (!isPut && !(s.equals(mSettings.getString("6", "")))){
+
+                        editor.putString("6", s);
+                        editor.apply();
+                        editor.commit();
+
+                        for (int i = 5; i >=1; i--) {
+                            editor.putString(String.valueOf(i), tmp);
+                            tmp = mSettings.getString(String.valueOf(i), "");
+
+                            editor.apply();
+                            editor.commit();
+                        }
+
+                    }
+
+                    for (int i = 6; i >= 1; i--) {
+                        Log.d("SHAR", mSettings.getString(String.valueOf(i), ""));
+                    }
 
                 } else {
                     errorTextMain.setVisibility(View.VISIBLE);
