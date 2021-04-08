@@ -29,4 +29,8 @@
     <string name="reload">Перезагрузить</string>
     <string name="theme">Тема</string>
     <string name="about">Про нас</string>
+    <string name="theme_dark">Тёмная</string>
+    <string name="theme_light">Светлая</string>
+    <string name="open">Открыть</string>
+    <string name="close">Закрыть</string>
 </resources>
