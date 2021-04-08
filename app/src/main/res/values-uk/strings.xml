@@ -33,4 +33,6 @@
     <string name="theme_light">Світла</string>
     <string name="open">Відкрити</string>
     <string name="close">Закрити</string>
+    <string name="settings_header">Налаштування</string>
+    <string name="another">Інше</string>
 </resources>

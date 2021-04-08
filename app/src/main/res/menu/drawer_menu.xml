@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    >
 
     <item android:title="@string/theme">
         <menu>
@@ -16,8 +17,19 @@
 
     </item>
 
-    <item
-        android:id="@+id/about"
-        android:icon="@drawable/ic__about_description_help_info_information_notification"
-        android:title="@string/about" />
+    <item android:title="@string/another">
+        <menu>
+            <item
+                android:id="@+id/about"
+                android:icon="@drawable/ic__about_description_help_info_information_notification"
+                android:title="@string/about" />
+            <item
+                android:id="@+id/logout"
+                android:icon="@drawable/ic_baseline_logout"
+                android:title="@string/logout" />
+        </menu>
+
+    </item>
+
+
 </menu>

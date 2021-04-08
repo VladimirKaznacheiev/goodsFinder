@@ -28,9 +28,11 @@
     <string name="def">Стандартно</string>
     <string name="reload">Перезагрузить</string>
     <string name="theme">Тема</string>
-    <string name="about">Про нас</string>
+    <string name="about">О нас</string>
     <string name="theme_dark">Тёмная</string>
     <string name="theme_light">Светлая</string>
     <string name="open">Открыть</string>
     <string name="close">Закрыть</string>
+    <string name="settings_header">Настройки</string>
+    <string name="another">Прочее</string>
 </resources>

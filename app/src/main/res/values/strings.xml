@@ -33,4 +33,6 @@
     <string name="theme_light">Light</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="settings_header">Settings</string>
+    <string name="another">Another</string>
 </resources>

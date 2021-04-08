@@ -31,6 +31,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,7 +82,7 @@ import java.util.logging.Logger;
 
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
@@ -193,13 +194,13 @@ public class MainActivity extends AppCompatActivity {
 
         drawerLayout = findViewById(R.id.drawer);
         navigationView = findViewById(R.id.navigationView);
+        navigationView.bringToFront();
+        navigationView.setNavigationItemSelectedListener(this);
 
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.down, R.string.down);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
         actionBarDrawerToggle.syncState();
-
-
 
 
 
@@ -261,7 +262,6 @@ public class MainActivity extends AppCompatActivity {
                 })
         );
 
-        findViewById(R.id.btn_logout).setOnClickListener(this::onClick);
         findViewById(R.id.btn_to_chosen).setOnClickListener(this::onClick);
 
 
@@ -515,16 +515,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClick(View view) {
-        if(view.getId() == R.id.btn_logout) {
-            FirebaseAuth.getInstance().signOut();
-            if(getSupportActionBar()!=null) getSupportActionBar().setTitle(String.valueOf(FirebaseAuth.getInstance().getCurrentUser()));
-
-            if (FirebaseAuth.getInstance().getCurrentUser() == null){
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        } else if (view.getId() == R.id.btn_to_chosen){
+        if (view.getId() == R.id.btn_to_chosen){
             Intent intent = new Intent(MainActivity.this, ChosenGoodsActivity.class);
             startActivity(intent);
             finish();
@@ -740,6 +731,28 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        if (menuItem.getItemId() == R.id.logout){
+            Log.d("TEST", "LOGOUT");
+            FirebaseAuth.getInstance().signOut();
+            if(getSupportActionBar()!=null) getSupportActionBar().setTitle(String.valueOf(FirebaseAuth.getInstance().getCurrentUser()));
+
+            if (FirebaseAuth.getInstance().getCurrentUser() == null){
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        } else if (menuItem.getItemId() == R.id.theme_dark){
+
+        } else if (menuItem.getItemId() == R.id.theme_light){
+
+        }
+        return true;
+    }
+
+
 
     private class JSHtmlInterfaceMoyo{
         @android.webkit.JavascriptInterface
