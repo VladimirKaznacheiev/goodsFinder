@@ -28,5 +28,6 @@
         <color name="header">#B1D0FF</color>
         <color name="menu">#CDE8FF</color>
         <color name="bg_spinner">#F8F8F8</color>
+        <color name="bg_searches">#EAEAEA</color>
 
 </resources>

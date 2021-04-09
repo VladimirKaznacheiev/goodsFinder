@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     DialogFragment dlg;
     DialogFragment dlg2;
+    ListView listSearches;
 
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
@@ -175,6 +176,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     SharedPreferences mSettings;
     public static final String APP_PREFERENCES = "searches";
 
+    public String[] searches = new String[6];
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -184,11 +187,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = mSettings.edit();
-
-
-        for (int i = 6; i >= 1; i--) {
-            Log.d("SHAR", mSettings.getString(String.valueOf(i), ""));
-        }
 
         if (mSettings.getString("theme", "").equals("")){
             editor.putString("theme", "light");
@@ -226,6 +224,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         initRecyclerView();
 
+
+
+        listSearches = (ListView) findViewById(R.id.searchHistory);
+        listSearches.setVisibility(View.INVISIBLE);
+
+        for (int i = 6; i >= 1; i--) {
+            Log.d("SHAR", mSettings.getString(String.valueOf(i), ""));
+            searches[6-i]=mSettings.getString(String.valueOf(i), "");
+        }
+
+        ArrayAdapter<String> adapterHistory = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, searches);
+
+        listSearches.setAdapter(adapterHistory);
+
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -234,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.bringToFront();
         navigationView.setNavigationItemSelectedListener(this);
 
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.down, R.string.down);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
         actionBarDrawerToggle.syncState();
@@ -486,6 +499,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View view) {
                 mySearchView.setIconified(false);
+                loadHistory();
             }
         });
 
@@ -533,11 +547,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     boolean isPut = false;
 
                     for (int i = 1; i <= 6; i++) {
-                        if (mSettings.getString(String.valueOf(i), "").equals("")){
+                        if (mSettings.getString(String.valueOf(i), "").equals("") && !(s.equals(mSettings.getString(String.valueOf(i-1), "")))){
                             editor.putString(String.valueOf(i), s);
                             isPut = true;
                             editor.apply();
                             editor.commit();
+
+                            searches = new String[6];
+                            for (int j = 6; j >= 1; j--) {
+                                searches[6-j]=mSettings.getString(String.valueOf(j), "");
+                            }
+                            adapterHistory.notifyDataSetChanged();
                             break;
                         }
                     }
@@ -615,6 +635,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
 
+    }
+    public void loadHistory() {
+        listSearches.setVisibility(View.VISIBLE);
     }
 
     public void onClick(View view) {
