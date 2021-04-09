@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+
+
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="rozetka_colour">#5A7164</color>
+    <color name="citrus_colour">#806748</color>
+    <color name="allo_colour">#7A5757</color>
+    <color name="loadmore_colour">#614791</color>
+
+    <color name="blue_800">#05172C</color>
+    <color name="grey_50">#FAFAFA</color>
+
+    <color name="bg_main">#232323</color>
+    <color name="search_field">#5A5A5A</color>
+    <color name="text_color">#BABABA</color>
+    <color name="header">#393939</color>
+    <color name="menu">#4C4C4C</color>
+    <color name="bg_spinner">#232323</color>
+
+</resources>

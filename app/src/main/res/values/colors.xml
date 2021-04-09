@@ -21,4 +21,12 @@
         <color name="blue_800">#1565C0</color>
         <color name="grey_50">#FAFAFA</color>
 
+
+        <color name="bg_main">#FFFFFF</color>
+        <color name="search_field">#FFCE3B</color>
+        <color name="text_color">#000000</color>
+        <color name="header">#B1D0FF</color>
+        <color name="menu">#CDE8FF</color>
+        <color name="bg_spinner">#F8F8F8</color>
+
 </resources>

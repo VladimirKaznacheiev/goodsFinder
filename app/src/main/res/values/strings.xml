@@ -35,4 +35,8 @@
     <string name="close">Close</string>
     <string name="settings_header">Settings</string>
     <string name="another">Another</string>
+    <string name="message_text">Changing the theme may reload the application. Continue?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
 </resources>

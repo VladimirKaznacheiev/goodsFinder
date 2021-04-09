@@ -23,7 +23,7 @@
         <activity android:name=".MainActivity" android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity android:name=".LoginActivity" />
-        <activity android:name=".ChosenGoodsActivity" />
+        <activity android:name=".ChosenGoodsActivity" android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

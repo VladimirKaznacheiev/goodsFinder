@@ -17,7 +17,7 @@
         android:textStyle="bold"
         android:text="Main Title"
         android:layout_marginRight="0dp"
-        android:textColor="#000"
+        android:textColor="@color/text_color"
         android:textSize="15sp"
 
         />

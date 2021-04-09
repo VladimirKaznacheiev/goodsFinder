@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.accessibilityservice.AccessibilityService;
 import android.annotation.SuppressLint;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -85,6 +87,9 @@ import java.util.logging.Logger;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+
+    DialogFragment dlg;
+    DialogFragment dlg2;
 
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
@@ -173,6 +178,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        dlg = new Dialog();
+        dlg2 = new Dialog2();
+
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = mSettings.edit();
@@ -181,6 +189,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         for (int i = 6; i >= 1; i--) {
             Log.d("SHAR", mSettings.getString(String.valueOf(i), ""));
         }
+
+        if (mSettings.getString("theme", "").equals("")){
+            editor.putString("theme", "light");
+            editor.apply();
+            editor.commit();
+        } else if (mSettings.getString("theme", "").equals("dark")){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }else if (mSettings.getString("theme", "").equals("light")){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
 
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -555,6 +574,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public boolean onQueryTextChange(String s) {
+
                 return false;
             }
 
@@ -830,10 +850,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 finish();
             }
         } else if (menuItem.getItemId() == R.id.theme_dark){
-
+            if(mSettings.getString("theme", "").equals("light")){
+                dlg.show(getFragmentManager(), "dlg");
+            }
         } else if (menuItem.getItemId() == R.id.theme_light){
+            if(mSettings.getString("theme", "").equals("dark")){
+                dlg2.show(getFragmentManager(), "dlg2");
+            }
+
+
 
         }
+
+        Log.d("THEME", "SETTED");
+
         return true;
     }
 
