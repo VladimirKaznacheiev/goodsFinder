@@ -637,7 +637,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
     public void loadHistory() {
-        listSearches.setVisibility(View.VISIBLE);
+        //listSearches.setVisibility(View.VISIBLE);
     }
 
     public void onClick(View view) {
