@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -86,7 +87,9 @@ import java.util.logging.Logger;
 
 
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class HomeFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener{
+
+    RecyclerView recyclerView;
 
     DialogFragment dlg;
     DialogFragment dlg2;
@@ -178,12 +181,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final String APP_PREFERENCES = "searches";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_home2,container,false);
+        recyclerView = view.findViewById(R.id.storeListView);
 
         dlg = new Dialog();
         dlg2 = new Dialog2();
 
-        mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        mSettings = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = mSettings.edit();
 
@@ -204,31 +213,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        if (FirebaseAuth.getInstance().getCurrentUser() == null){
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-        } else {
-            if(getSupportActionBar()!=null) getSupportActionBar().setTitle(String.valueOf(FirebaseAuth.getInstance().getCurrentUser().getEmail()));
-        }
-
-
 
         isFoundMoyo = false;
         isFoundCitrus = false;
         isFoundRozetka = false;
-        browser = new WebView(this);
-        browserMoyo = new WebView(this);
-        browserRozetka = new WebView(this);
+        browser = new WebView(getContext());
+        browserMoyo = new WebView(getContext());
+        browserRozetka = new WebView(getContext());
         currentStoreIndex = 0;
-        super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.activity_main);
         initRecyclerView();
 
 
 
-        listSearches = (ListView) findViewById(R.id.searchHistory);
+        listSearches = view.findViewById(R.id.searchHistory);
         listSearches.setVisibility(View.INVISIBLE);
 
         for (int i = 6; i >= 1; i--) {
@@ -238,20 +237,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
 
-        ArrayAdapter<String> adapterHistory = new ArrayAdapter<>(this,
+        ArrayAdapter<String> adapterHistory = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_list_item_1, searches);
 
         listSearches.setAdapter(adapterHistory);
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        toolbar = view.findViewById(R.id.toolbar);
+        //((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
-        drawerLayout = findViewById(R.id.drawer);
-        navigationView = findViewById(R.id.navigationView);
+        drawerLayout = view.findViewById(R.id.drawer);
+        navigationView = view.findViewById(R.id.navigationView);
         navigationView.bringToFront();
         navigationView.setNavigationItemSelectedListener(this);
 
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
         actionBarDrawerToggle.syncState();
@@ -259,15 +258,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-        errorTextMain = findViewById(R.id.errorTextMain);
+        errorTextMain = view.findViewById(R.id.errorTextMain);
         errorTextMain.setVisibility(View.INVISIBLE);
-        mySearchView = (SearchView) findViewById(R.id.goodsSearchView);
-        goodsListView = (ListView) findViewById(R.id.goodsList);
-        storeListView = (RecyclerView) findViewById(R.id.storeListView);
-        progressBar = findViewById(R.id.progressBar);
-        adapterCitrus = new MyAdapter(this, goodsNamesList, goodsPricesList, goodsOldPricesList, goodsImagesList,goodsColorsList,articleList);
-        adapterMoyo = new MyAdapter(this, goodsNamesListMoyo, goodsPricesListMoyo, goodsOldPricesListMoyo, goodsImagesListMoyo,goodsColorsMoyo,articleListMoyo);
-        adapterRozetka = new MyAdapter(this, goodsNamesListRozetka, goodsPricesListRozetka, goodsOldPricesListRozetka, goodsImagesListRozetka,goodsColorsRozetka,articleListRozetka);
+        mySearchView = (SearchView) view.findViewById(R.id.goodsSearchView);
+        goodsListView = (ListView) view.findViewById(R.id.goodsList);
+        storeListView = (RecyclerView) view.findViewById(R.id.storeListView);
+        progressBar = view.findViewById(R.id.progressBar);
+        adapterCitrus = new MyAdapter(getContext(), goodsNamesList, goodsPricesList, goodsOldPricesList, goodsImagesList,goodsColorsList,articleList);
+        adapterMoyo = new MyAdapter(getContext(), goodsNamesListMoyo, goodsPricesListMoyo, goodsOldPricesListMoyo, goodsImagesListMoyo,goodsColorsMoyo,articleListMoyo);
+        adapterRozetka = new MyAdapter(getContext(), goodsNamesListRozetka, goodsPricesListRozetka, goodsOldPricesListRozetka, goodsImagesListRozetka,goodsColorsRozetka,articleListRozetka);
         goodsListView.setAdapter(adapterMoyo);
 
 
@@ -302,7 +301,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         storeListView.addOnItemTouchListener(
-                new RecyclerItemClickListener(this, storeListView, new RecyclerItemClickListener.OnItemClickListener() {
+                new RecyclerItemClickListener(getContext(), storeListView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
 
@@ -329,8 +328,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 })
         );
-
-        findViewById(R.id.btn_to_chosen).setOnClickListener(this::onClick);
 
 
         goodsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -647,27 +644,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+    return view;
 
     }
     public void loadHistory() {
         //listSearches.setVisibility(View.VISIBLE);
     }
 
-    public void onClick(View view) {
-        if (view.getId() == R.id.btn_to_chosen){
-            Intent intent = new Intent(MainActivity.this, ChosenGoodsActivity.class);
-            startActivity(intent);
-            finish();
-        }
-    }
 
     private void initRecyclerView() {
         //Log.d(TAG, "initRecyclerView: init recyclerview");
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        RecyclerView recyclerView = findViewById(R.id.storeListView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, storeTitlesList, storeImagesList);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(getContext(), storeTitlesList, storeImagesList);
         recyclerView.setAdapter(adapter);
     }
 
@@ -675,9 +665,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+
+
     boolean isConnected() {
         boolean connected = false;
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
                 connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
             //we are connected to a network
@@ -779,7 +771,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     }
 
-                    runOnUiThread(new Runnable() {
+                    getActivity().runOnUiThread(new Runnable() {
 
                         @Override
                         public void run() {
@@ -878,21 +870,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (menuItem.getItemId() == R.id.logout){
             Log.d("TEST", "LOGOUT");
             FirebaseAuth.getInstance().signOut();
-            if(getSupportActionBar()!=null) getSupportActionBar().setTitle(String.valueOf(FirebaseAuth.getInstance().getCurrentUser()));
 
-            if (FirebaseAuth.getInstance().getCurrentUser() == null){
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
         } else if (menuItem.getItemId() == R.id.theme_dark){
             if(mSettings.getString("theme", "").equals("light")){
-                dlg.show(getFragmentManager(), "dlg");
+                dlg.show(getActivity().getFragmentManager(), "dlg");
                 Log.d("THEME", String.valueOf(articleList.size())+"- -");
             }
         } else if (menuItem.getItemId() == R.id.theme_light){
             if(mSettings.getString("theme", "").equals("dark")){
-                dlg2.show(getFragmentManager(), "dlg2");
+                dlg2.show(getActivity().getFragmentManager(), "dlg2");
             }
 
 
@@ -962,7 +948,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                             }
 
-                            runOnUiThread(new Runnable() {
+                            getActivity().runOnUiThread(new Runnable() {
 
                                 @Override
                                 public void run() {
@@ -1128,7 +1114,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                                 }
 
-                                runOnUiThread(new Runnable() {
+                                getActivity().runOnUiThread(new Runnable() {
 
                                     @Override
                                     public void run() {
@@ -1207,7 +1193,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            LayoutInflater layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater layoutInflater = (LayoutInflater) getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View goodsView = layoutInflater.inflate(R.layout.goods_view, parent, false);
             ImageView images = goodsView.findViewById(R.id.goodsImageMain);
             ImageView imageFavourite = goodsView.findViewById(R.id.goodsFavourite);
@@ -1309,7 +1295,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                         inChosen = true;
 
                                         imageFavourite.setImageResource(R.drawable.ic_baseline_star_border_24);
-                                        Toast.makeText(MainActivity.this, getString(R.string.goods_added_before), Toast.LENGTH_SHORT).show();
 
                                         mDatabase.child("Users").child(user.getUid()).child(childDataSnapshot.getKey()).setValue(null);
                                         mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
@@ -1339,7 +1324,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     }
                                     mDatabase.child("Users").child(user.getUid()).push().setValue(arrLIst.get(position).getUrl()+"SPLITFORBUY"+arrLIst.get(position).getImg()+"SPLITFORBUY"+arrLIst.get(position).getName()+"SPLITFORBUY"+str);
                                     mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
-                                    Toast.makeText(MainActivity.this, getString(R.string.goods_added), Toast.LENGTH_SHORT).show();
 
                                     return;
                                 }
@@ -1356,7 +1340,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             }
                         });
                     } else {
-                        Toast.makeText(MainActivity.this, getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(),getString(R.string.internet_error),Toast.LENGTH_SHORT).show();
                     }
                 }
             });
