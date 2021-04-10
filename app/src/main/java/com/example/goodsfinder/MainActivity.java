@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DialogFragment dlg;
     DialogFragment dlg2;
     ListView listSearches;
+    public ArrayList<String> searches = new ArrayList<>();
 
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
@@ -176,8 +177,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     SharedPreferences mSettings;
     public static final String APP_PREFERENCES = "searches";
 
-    public String[] searches = new String[6];
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -187,6 +186,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = mSettings.edit();
+
+/*        editor.clear();
+        editor.apply();*/
 
         if (mSettings.getString("theme", "").equals("")){
             editor.putString("theme", "light");
@@ -231,7 +233,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         for (int i = 6; i >= 1; i--) {
             Log.d("SHAR", mSettings.getString(String.valueOf(i), ""));
-            searches[6-i]=mSettings.getString(String.valueOf(i), "");
+            if (!mSettings.getString(String.valueOf(i), "").equals("")){
+                searches.add(mSettings.getString(String.valueOf(i), ""));
+            }
         }
 
         ArrayAdapter<String> adapterHistory = new ArrayAdapter<>(this,
@@ -547,17 +551,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     boolean isPut = false;
 
                     for (int i = 1; i <= 6; i++) {
-                        if (mSettings.getString(String.valueOf(i), "").equals("") && !(s.equals(mSettings.getString(String.valueOf(i-1), "")))){
+                        if (mSettings.getString(String.valueOf(i), "").equals("") && s.equals(mSettings.getString(String.valueOf(i-1), ""))){
+                            Log.d("SHAR1", mSettings.getString(String.valueOf(i-1), "")+" --- "+ s);
                             editor.putString(String.valueOf(i), s);
                             isPut = true;
                             editor.apply();
                             editor.commit();
-
-                            searches = new String[6];
-                            for (int j = 6; j >= 1; j--) {
-                                searches[6-j]=mSettings.getString(String.valueOf(j), "");
-                            }
-                            adapterHistory.notifyDataSetChanged();
                             break;
                         }
                     }
@@ -637,7 +636,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
     public void loadHistory() {
-        //listSearches.setVisibility(View.VISIBLE);
+        listSearches.setVisibility(View.VISIBLE);
     }
 
     public void onClick(View view) {
@@ -1294,7 +1293,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     if (goodsInfo[0].equals(str)){
                                         inChosen = true;
 
-                                         imageFavourite.setImageResource(R.drawable.ic_baseline_star_border_24);
+                                        imageFavourite.setImageResource(R.drawable.ic_baseline_star_border_24);
                                         Toast.makeText(MainActivity.this, getString(R.string.goods_added_before), Toast.LENGTH_SHORT).show();
 
                                         mDatabase.child("Users").child(user.getUid()).child(childDataSnapshot.getKey()).setValue(null);
@@ -1314,7 +1313,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
                                 if (!inChosen){
-                                      imageFavourite.setImageResource(R.drawable.ic_baseline_star_24);
+                                    imageFavourite.setImageResource(R.drawable.ic_baseline_star_24);
                                     String str = "";
                                     if (arrLIst.get(position).getUrl().contains("allo.ua")){
                                         str = "ALLO";

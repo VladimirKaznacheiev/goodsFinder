@@ -34,13 +34,14 @@ public class Dialog extends DialogFragment implements DialogInterface.OnClickLis
     public void onClick(View v) {
         if (((Button) v).getText().equals(getString(R.string.no))){
         } else if (((Button) v).getText().equals(getString(R.string.yes))){
-            mSettings = this.getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+            mSettings = getContext().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
             SharedPreferences.Editor editor = mSettings.edit();
 
             editor.putString("theme", "dark");
             editor.apply();
             editor.commit();
+            Log.d("SHAR", mSettings.getString("theme", ""));
 
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 
