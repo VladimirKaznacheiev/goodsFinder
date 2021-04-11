@@ -15,6 +15,6 @@
         android:id="@+id/navigation_dashboard"
         android:name="com.example.goodsfinder.FavouriteFragment"
         android:label="Favourite"
-        tools:layout="@layout/fragment_favourite" />
+        tools:layout="@layout/fragment_favourite2" />
 
 </navigation>

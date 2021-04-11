@@ -38,4 +38,6 @@
     <string name="message_text">Изменение темы  может перезагрузить приложение. Продолжить?</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
+    <string name="home">Главная</string>
+    <string name="favourites">Избранные</string>
 </resources>

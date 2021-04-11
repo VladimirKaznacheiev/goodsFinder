@@ -7,10 +7,11 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -87,7 +88,7 @@ import java.util.logging.Logger;
 
 
 
-public class HomeFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener{
+public class HomeFragment extends Fragment{
 
     RecyclerView recyclerView;
 
@@ -95,11 +96,6 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
     DialogFragment dlg2;
     ListView listSearches;
     public ArrayList<String> searches = new ArrayList<>();
-
-    DrawerLayout drawerLayout;
-    ActionBarDrawerToggle actionBarDrawerToggle;
-    Toolbar toolbar;
-    NavigationView navigationView;
 
     public boolean isCatch = false;
     private DatabaseReference mDatabase;
@@ -125,6 +121,14 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
     int goodsCountRozetka = 0;
 
     public String strForSearch;
+
+    private Context context;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
 
     List<Article> articleList = new ArrayList<>();
     List<Article> articleListMoyo = new ArrayList<>();
@@ -189,6 +193,7 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
         View view = inflater.inflate(R.layout.fragment_home2,container,false);
         recyclerView = view.findViewById(R.id.storeListView);
 
+
         dlg = new Dialog();
         dlg2 = new Dialog2();
 
@@ -242,21 +247,6 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
 
         listSearches.setAdapter(adapterHistory);
 
-        toolbar = view.findViewById(R.id.toolbar);
-        //((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-
-        drawerLayout = view.findViewById(R.id.drawer);
-        navigationView = view.findViewById(R.id.navigationView);
-        navigationView.bringToFront();
-        navigationView.setNavigationItemSelectedListener(this);
-
-        actionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.open, R.string.close);
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
-        actionBarDrawerToggle.syncState();
-
-
-
 
         errorTextMain = view.findViewById(R.id.errorTextMain);
         errorTextMain.setVisibility(View.INVISIBLE);
@@ -288,7 +278,7 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
             goodsNamesList.add(articleList.get(i).getName());
             goodsPricesList.add(articleList.get(i).getPrice());
             goodsOldPricesList.add(articleList.get(i).getOldPrice());
-            goodsColorsList.add(getResources().getColor(R.color.citrus_colour));
+            goodsColorsList.add(ContextCompat.getColor(context, R.color.citrus_colour));
 
             goodsImagesList.add(articleList.get(i).getImg());
 
@@ -742,8 +732,6 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
                             Log.d("CONNECT", "connected next except");
 
                         }
-
-
                     });
 
 
@@ -752,7 +740,7 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
                         goodsNamesList.add(articleList.get(i).getName());
                         goodsPricesList.add(articleList.get(i).getPrice());
                         goodsOldPricesList.add(articleList.get(i).getOldPrice());
-                        goodsColorsList.add(getResources().getColor(R.color.citrus_colour));
+                        goodsColorsList.add(ContextCompat.getColor(context, R.color.citrus_colour));
 
                         goodsImagesList.add(articleList.get(i).getImg());
 
@@ -764,7 +752,7 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
                         goodsNamesList.add(getString(R.string.load_more));
                         goodsPricesList.add("");
                         goodsOldPricesList.add("");
-                        goodsColorsList.add(getResources().getColor(R.color.loadmore_colour));
+                        goodsColorsList.add(ContextCompat.getColor(context, R.color.loadmore_colour));
 
                         goodsImagesList.add("https://image.flaticon.com/icons/png/512/16/16770.png");
                         articleList.add(new Article(" ", getString(R.string.load_more), "", "","https://image.flaticon.com/icons/png/512/16/16770.png"));
@@ -865,30 +853,7 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
 
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        if (menuItem.getItemId() == R.id.logout){
-            Log.d("TEST", "LOGOUT");
-            FirebaseAuth.getInstance().signOut();
 
-        } else if (menuItem.getItemId() == R.id.theme_dark){
-            if(mSettings.getString("theme", "").equals("light")){
-                dlg.show(getActivity().getFragmentManager(), "dlg");
-                Log.d("THEME", String.valueOf(articleList.size())+"- -");
-            }
-        } else if (menuItem.getItemId() == R.id.theme_light){
-            if(mSettings.getString("theme", "").equals("dark")){
-                dlg2.show(getActivity().getFragmentManager(), "dlg2");
-            }
-
-
-
-        }
-
-        Log.d("THEME", "SETTED");
-
-        return true;
-    }
 
 
 
@@ -958,7 +923,7 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
                                         goodsPricesListMoyo.add(articleListMoyo.get(i).getPrice());
                                         goodsOldPricesListMoyo.add(articleListMoyo.get(i).getOldPrice());
                                         goodsImagesListMoyo.add(articleListMoyo.get(i).getImg());
-                                        goodsColorsMoyo.add(getResources().getColor(R.color.rozetka_colour));
+                                        goodsColorsMoyo.add(ContextCompat.getColor(context,R.color.rozetka_colour));
 
                                     }
                                     goodsCountMoyo = articleListMoyo.size();
@@ -968,7 +933,7 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
                                         goodsNamesListMoyo.add(getString(R.string.load_more));
                                         goodsPricesListMoyo.add("");
                                         goodsOldPricesListMoyo.add("");
-                                        goodsColorsMoyo.add(getResources().getColor(R.color.loadmore_colour));
+                                        goodsColorsMoyo.add(ContextCompat.getColor(context,R.color.loadmore_colour));
 
                                         goodsImagesListMoyo.add("https://image.flaticon.com/icons/png/512/16/16770.png");
                                         articleListMoyo.add(new Article(" ", getString(R.string.load_more), "","", "https://image.flaticon.com/icons/png/512/16/16770.png"));
@@ -1123,7 +1088,7 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
                                             goodsNamesListRozetka.add(articleListRozetka.get(i).getName());
                                             goodsPricesListRozetka.add(articleListRozetka.get(i).getPrice());
                                             goodsOldPricesListRozetka.add(articleListRozetka.get(i).getOldPrice());
-                                            goodsColorsRozetka.add(getResources().getColor(R.color.allo_colour));
+                                            goodsColorsRozetka.add(ContextCompat.getColor(context,R.color.allo_colour));
 
                                             goodsImagesListRozetka.add(articleListRozetka.get(i).getImg());
                                             //Log.d(TAG, articleListRozetka.get(i).toString());
@@ -1136,7 +1101,7 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
                                             goodsNamesListRozetka.add(getString(R.string.load_more));
                                             goodsPricesListRozetka.add("");
                                             goodsOldPricesListRozetka.add("");
-                                            goodsColorsRozetka.add(getResources().getColor(R.color.loadmore_colour));
+                                            goodsColorsRozetka.add(ContextCompat.getColor(context,R.color.loadmore_colour));
 
                                             goodsImagesListRozetka.add("https://image.flaticon.com/icons/png/512/16/16770.png");
                                             articleListRozetka.add(new Article(" ", getString(R.string.load_more), "","", "https://image.flaticon.com/icons/png/512/16/16770.png"));
