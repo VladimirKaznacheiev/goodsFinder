@@ -7,7 +7,8 @@
             <item
                 android:id="@+id/theme_light"
                 android:icon="@drawable/ic_light_theme"
-                android:title="@string/theme_light" />
+                android:title="@string/theme_light"
+                />
 
             <item
                 android:id="@+id/theme_dark"
@@ -17,12 +18,15 @@
 
     </item>
 
-    <item android:title="@string/another">
+    <item android:title="@string/another"
+        >
         <menu>
             <item
                 android:id="@+id/about"
                 android:icon="@drawable/ic__about_description_help_info_information_notification"
-                android:title="@string/about" />
+                android:title="@string/about"
+
+                />
             <item
                 android:id="@+id/logout"
                 android:icon="@drawable/ic_baseline_logout"

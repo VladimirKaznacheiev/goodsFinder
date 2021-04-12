@@ -21,6 +21,8 @@
         android:id="@+id/navigationView"
         app:menu="@menu/drawer_menu"
         app:headerLayout="@layout/drawer_header"
+        app:itemTextColor="#FF0000"
+        app:itemIconTint="#FF0000"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         android:background="@color/menu"/>
