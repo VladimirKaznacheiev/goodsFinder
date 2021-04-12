@@ -226,8 +226,8 @@ public class FavouriteFragment extends Fragment {
                         urlsRozetka.add(goodsInfo[0]);
                         positionsRozetka.add(String.valueOf(counter));
 
-                        favouritesPricesList.add(counter,  getString(R.string.loading));
-                        favouritesOldPricesList.add(counter,  getString(R.string.loading));
+                        favouritesPricesList.add(counter, context.getString(R.string.loading));
+                        favouritesOldPricesList.add(counter,  context.getString(R.string.loading));
                         infoLoaded.add(goodsInfo[0]+"SPLITFORBUY"+goodsInfo[1]+"SPLITFORBUY"+goodsInfo[2]+"SPLITFORBUY"+goodsInfo[3]+"SPLITFORBUY");
 
                     } else if (goodsInfo[0].contains("citrus.ua")) {
