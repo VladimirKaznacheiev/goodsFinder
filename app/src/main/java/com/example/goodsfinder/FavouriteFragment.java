@@ -242,6 +242,8 @@ public class FavouriteFragment extends Fragment {
 
                             doc = Jsoup.connect(goodsInfo[0]).get();
                             Element elements = doc.getElementsByAttributeValue("class", "buy-section__new-price").last();
+
+                            Log.d("t", "test");
                             Element elements2 = doc.getElementsByAttributeValue("class", "buy-section__old-price").last();
 
 /*                                String price1 = elements.text().replace("₴", "").replace("грн", "").replace(" грн", "") + " грн";
