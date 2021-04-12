@@ -183,6 +183,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         dlg = new Dialog();
         dlg2 = new Dialog2();
 
+        Log.d("TEST","hellotest");
+
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = mSettings.edit();
@@ -396,8 +398,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
                     if (loadElement == null ^ i != articleListMoyo.size() - 1) {
+                        Log.d(TAG,"ROZETKA CLICKED");
                         //Log.d(TAG, articleListMoyo.size() - 1 + "------" + i);
                         Uri address = Uri.parse(articleListMoyo.get(i).getUrl());
+                        Log.d(TAG,articleListMoyo.get(i).getUrl());
                         Intent openlinkIntent = new Intent(Intent.ACTION_VIEW, address);
                         startActivity(openlinkIntent);
                     } else {
@@ -410,6 +414,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             goodsImagesListMoyo.remove(goodsImagesListMoyo.size() - 1);
                             goodsColorsMoyo.remove(goodsColorsMoyo.size() - 1);
                             pageCounterMoyo++;
+
 
                             getMoyoGoods("https://rozetka.com.ua/search/?page=" + pageCounterMoyo + "&text=" + currentRequestString);
                             progressBar.setVisibility(View.VISIBLE);
@@ -952,6 +957,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
                                 articleListMoyo.add(new Article(url, title, price, oldPrice, imgUrl));
+
 
                                 isLoadedRozetka = true;
 

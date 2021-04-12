@@ -379,11 +379,12 @@ public class HomeFragment extends Fragment{
                         }
                     }
                 } else if (currentStoreIndex == 0) {
-                    Element loadElement = doc1.getElementsByAttributeValue("class", "show-more__text").first();
+                   // Element loadElement = doc1.getElementsByAttributeValue("class", "show-more__text").first();
 
 
-                    if (loadElement == null ^ i != articleListMoyo.size() - 1) {
+                    if (i != articleListMoyo.size() - 1) {
                         //Log.d(TAG, articleListMoyo.size() - 1 + "------" + i);
+                        Log.d("TEST","goodclicked");
                         Uri address = Uri.parse(articleListMoyo.get(i).getUrl());
                         Intent openlinkIntent = new Intent(Intent.ACTION_VIEW, address);
                         startActivity(openlinkIntent);
@@ -399,6 +400,7 @@ public class HomeFragment extends Fragment{
                             pageCounterMoyo++;
 
                             getMoyoGoods("https://rozetka.com.ua/search/?page=" + pageCounterMoyo + "&text=" + currentRequestString);
+                            Log.d("TEST","loadCLicked");
                             progressBar.setVisibility(View.VISIBLE);
 
 
@@ -901,8 +903,21 @@ public class HomeFragment extends Fragment{
                                 String title = element.getElementsByAttributeValue("class", "goods-tile__heading").first().text();
                                 String imgUrl = element.getElementsByAttributeValue("class", "goods-tile__picture").first().child(1).attr("src");
 
+                                boolean isContains = false;
 
-                                articleListMoyo.add(new Article(url, title, price, oldPrice, imgUrl));
+                                for (int i = 0; i < articleListMoyo.size(); i++) {
+                                    if(articleListMoyo.get(i).getName().equals(title)){
+                                        isContains = true;
+                                    }
+                                }
+
+                                if(!isContains){
+
+                                    articleListMoyo.add(new Article(url, title, price, oldPrice, imgUrl));
+                                    Log.d("TEST",new Article(url, title, price, oldPrice, imgUrl).toString());
+
+                                }
+
 
                                 isLoadedRozetka = true;
 
@@ -983,6 +998,7 @@ public class HomeFragment extends Fragment{
 
             isFoundRozetka = false;
             Log.d(TAG,"Step 1");
+            Log.d(TAG,"TEST");
             browserRozetka.setWebChromeClient(new WebChromeClient());
             browserRozetka.setVisibility(View.INVISIBLE);
             browserRozetka.setLayerType(View.LAYER_TYPE_NONE,null);

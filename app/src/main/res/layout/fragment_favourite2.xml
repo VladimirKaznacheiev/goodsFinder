@@ -77,15 +77,15 @@
             android:textColor="@color/text_color"/>
 
 
-        <Button
-            android:id="@+id/btn_reload"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginBottom="90dp"
-            android:background="@drawable/ic_reload"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"></Button>
+    <Button
+        android:id="@+id/btn_reload"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/ic_reload"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"></Button>
 
 
 
