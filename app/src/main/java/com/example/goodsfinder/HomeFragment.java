@@ -264,6 +264,7 @@ public class HomeFragment extends Fragment{
         adapterRozetka = new MyAdapter(getContext(), goodsNamesListRozetka, goodsPricesListRozetka, goodsOldPricesListRozetka, goodsImagesListRozetka,goodsColorsRozetka,articleListRozetka);
         goodsListView.setAdapter(adapterMoyo);
 
+        progressBar.setVisibility(View.GONE); // to hide
 
         getMoyo();
         getRozetka();
@@ -302,25 +303,39 @@ public class HomeFragment extends Fragment{
                 new RecyclerItemClickListener(getContext(), storeListView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-
+                    if(isStoreLoaded) {
                         if (position == 0) {
                             isLoadedRozetka = false;
                             currentStoreIndex = 0;
                             goodsListView.setAdapter(adapterMoyo);
+                            if (!isLoadedRozetka) {
+                                progressBar.setVisibility(View.VISIBLE); // to hide
+                            } else {
+                                progressBar.setVisibility(View.GONE); // to hide
+                            }
 
                         } else if (position == 1) {
                             isLoadedCitrus = false;
                             currentStoreIndex = 1;
                             goodsListView.setAdapter(adapterCitrus);
+                            if (!isLoadedCitrus) {
+                                progressBar.setVisibility(View.VISIBLE); // to hide
+                            } else {
+                                progressBar.setVisibility(View.GONE); // to hide
+                            }
 
-                        }else if (position == 2) {
+                        } else if (position == 2) {
                             isLoadedAllo = false;
                             currentStoreIndex = 2;
                             goodsListView.setAdapter(adapterRozetka);
-
+                            if (!isLoadedAllo) {
+                                progressBar.setVisibility(View.VISIBLE); // to hide
+                            } else {
+                                progressBar.setVisibility(View.GONE); // to hide
+                            }
                         }
                         initRecyclerView();
-
+                    }
                     }
 
                     @Override
@@ -355,7 +370,7 @@ public class HomeFragment extends Fragment{
                             pageCounter++;
                             getCitrus(currentRequestString + "&page=" + pageCounter);
 
-                            progressBar.setVisibility(View.VISIBLE);
+
                         } else {
 
                             errorTextMain.setVisibility(View.VISIBLE);
@@ -412,7 +427,7 @@ public class HomeFragment extends Fragment{
 
                             getMoyoGoods("https://rozetka.com.ua/search/?page=" + pageCounterMoyo + "&text=" + currentRequestString);
                             Log.d("TEST","loadCLicked");
-                            progressBar.setVisibility(View.VISIBLE);
+
 
 
                         } else {
@@ -468,7 +483,7 @@ public class HomeFragment extends Fragment{
                             pageCounterRozerka++;
 
                             getRozetkaGoods("https://allo.ua/ru/catalogsearch/result/index/p-"+pageCounterRozerka+"/?q="+currentRequestString.replace("%20", "+").replace("айфон","iphone"));
-                            progressBar.setVisibility(View.VISIBLE);
+
 
 
                         } else {
@@ -512,7 +527,7 @@ public class HomeFragment extends Fragment{
         });
 
 
-        progressBar.setVisibility(View.GONE); // to hide
+
         mySearchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -524,6 +539,7 @@ public class HomeFragment extends Fragment{
         mySearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
+                progressBar.setVisibility(View.VISIBLE); // to hide
                 isStoreLoaded = false;
                 currentRequestString = "";
                 pageCounterMoyo = 1;
@@ -557,7 +573,7 @@ public class HomeFragment extends Fragment{
                     adapterMoyo.notifyDataSetChanged();
                     adapterRozetka.notifyDataSetChanged();
 
-                    progressBar.setVisibility(View.VISIBLE); //to show
+
 
                     getCitrus(s);
                     getMoyoGoods(s);
@@ -783,6 +799,7 @@ public class HomeFragment extends Fragment{
                     if(articleList.size()>0) {
                         isLoadedCitrus = true;
                         Log.d("TEST", "Citrus =>" + isLoadedCitrus);
+
                         if (!isStoreLoaded) {
 
                             currentStoreIndex = 1;
@@ -793,6 +810,7 @@ public class HomeFragment extends Fragment{
 
                                     goodsListView.setAdapter(adapterCitrus);
                                     initRecyclerView();
+                                    progressBar.setVisibility(View.GONE); // to hide
 
                                 }
 
@@ -805,7 +823,7 @@ public class HomeFragment extends Fragment{
 
                         @Override
                         public void run() {
-                            progressBar.setVisibility(View.GONE); // to hide
+                           // to hide
                             adapterCitrus.notifyDataSetChanged();
                             goodsListView.setEnabled(true);
 
@@ -994,7 +1012,7 @@ public class HomeFragment extends Fragment{
                                         articleListMoyo.add(new Article(" ", getString(R.string.load_more), "","", "https://image.flaticon.com/icons/png/512/16/16770.png"));
 
                                     }
-                                    progressBar.setVisibility(View.GONE); // to hide
+                                    // to hide
 
 
                                 }
@@ -1003,11 +1021,13 @@ public class HomeFragment extends Fragment{
                             if(articleListRozetka.size()>0) {
                                 isLoadedRozetka = true;
                                 Log.d("TEST", "Rozetka =>" + isLoadedRozetka);
+
                                 if(!isStoreLoaded) {
                                     currentStoreIndex = 0;
                                     goodsListView.setAdapter(adapterMoyo);
                                     initRecyclerView();
                                     isStoreLoaded = true;
+                                    progressBar.setVisibility(View.GONE); // to hide
                                 }
                               /*  if (!isLoadedCitrus && isLoadedRozetka && !isLoadedAllo) {
 
@@ -1190,7 +1210,7 @@ public class HomeFragment extends Fragment{
                                             articleListRozetka.add(new Article(" ", getString(R.string.load_more), "","", "https://image.flaticon.com/icons/png/512/16/16770.png"));
 
                                         }
-                                        progressBar.setVisibility(View.GONE); // to hide
+
 
 
                                     }
@@ -1205,6 +1225,7 @@ public class HomeFragment extends Fragment{
                                         goodsListView.setAdapter(adapterRozetka);
                                         initRecyclerView();
                                         isStoreLoaded = true;
+                                        progressBar.setVisibility(View.GONE); // to hide
                                     }
                                   /*  if (!isLoadedCitrus && !isLoadedRozetka && isLoadedAllo) {
                                         Log.d("TEST", "Allo => SHOW");
