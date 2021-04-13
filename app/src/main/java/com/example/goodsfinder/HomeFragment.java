@@ -120,6 +120,8 @@ public class HomeFragment extends Fragment{
     int goodsCountMoyo = 0;
     int goodsCountRozetka = 0;
 
+    boolean isStoreLoaded = false;
+
     public String strForSearch;
 
     private Context context;
@@ -150,6 +152,9 @@ public class HomeFragment extends Fragment{
     ArrayList<String> goodsOldPricesListRozetka = new ArrayList<>();
     ArrayList<String> goodsNamesListRozetka = new ArrayList<>();
     ArrayList<Integer> goodsColorsRozetka = new ArrayList<>();
+
+
+
 
 
 
@@ -290,20 +295,26 @@ public class HomeFragment extends Fragment{
 
 
 
+
+
+
         storeListView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getContext(), storeListView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
 
                         if (position == 0) {
+                            isLoadedRozetka = false;
                             currentStoreIndex = 0;
                             goodsListView.setAdapter(adapterMoyo);
 
                         } else if (position == 1) {
+                            isLoadedCitrus = false;
                             currentStoreIndex = 1;
                             goodsListView.setAdapter(adapterCitrus);
 
                         }else if (position == 2) {
+                            isLoadedAllo = false;
                             currentStoreIndex = 2;
                             goodsListView.setAdapter(adapterRozetka);
 
@@ -513,6 +524,7 @@ public class HomeFragment extends Fragment{
         mySearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
+                isStoreLoaded = false;
                 currentRequestString = "";
                 pageCounterMoyo = 1;
                 pageCounter = 1;
@@ -646,11 +658,19 @@ public class HomeFragment extends Fragment{
 
     private void initRecyclerView() {
         //Log.d(TAG, "initRecyclerView: init recyclerview");
+        getActivity().runOnUiThread(new Runnable() {
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(getContext(), storeTitlesList, storeImagesList);
-        recyclerView.setAdapter(adapter);
+            @Override
+            public void run() {
+
+                LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+                recyclerView.setLayoutManager(layoutManager);
+                RecyclerViewAdapter adapter = new RecyclerViewAdapter(getContext(), storeTitlesList, storeImagesList);
+                recyclerView.setAdapter(adapter);
+
+            }
+        });
+
     }
 
 
@@ -760,7 +780,27 @@ public class HomeFragment extends Fragment{
                         articleList.add(new Article(" ", getString(R.string.load_more), "", "","https://image.flaticon.com/icons/png/512/16/16770.png"));
 
                     }
+                    if(articleList.size()>0) {
+                        isLoadedCitrus = true;
+                        Log.d("TEST", "Citrus =>" + isLoadedCitrus);
+                        if (!isStoreLoaded) {
 
+                            currentStoreIndex = 1;
+                            getActivity().runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+
+                                    goodsListView.setAdapter(adapterCitrus);
+                                    initRecyclerView();
+
+                                }
+
+                            });
+                            isStoreLoaded = true;
+
+                        }
+                    }
                     getActivity().runOnUiThread(new Runnable() {
 
                         @Override
@@ -960,7 +1000,31 @@ public class HomeFragment extends Fragment{
                                 }
                             });
 
+                            if(articleListRozetka.size()>0) {
+                                isLoadedRozetka = true;
+                                Log.d("TEST", "Rozetka =>" + isLoadedRozetka);
+                                if(!isStoreLoaded) {
+                                    currentStoreIndex = 0;
+                                    goodsListView.setAdapter(adapterMoyo);
+                                    initRecyclerView();
+                                    isStoreLoaded = true;
+                                }
+                              /*  if (!isLoadedCitrus && isLoadedRozetka && !isLoadedAllo) {
+
+                                    currentStoreIndex = 0;
+                                    Log.d("TEST","RozetkaLoaded");
+                                    goodsListView.setAdapter(adapterMoyo);
+                                    // isLoadedRozetka = false;
+                                }*/
+                            }
+
+
+                            /*isLoadedRozetka = true;
+                            Log.d("TEST", "Rozetka =>" + isLoadedRozetka);*/
+
                             //Log.d(TAG, articleListMoyo.size() + "  " + goodsImagesListMoyo.size());
+
+
 
                             isFoundMoyo = true;
                             adapterMoyo.notifyDataSetChanged();
@@ -971,7 +1035,10 @@ public class HomeFragment extends Fragment{
                         }
                     }
             );
+
+
         }
+
     }
 
 
@@ -1128,6 +1195,26 @@ public class HomeFragment extends Fragment{
 
                                     }
                                 });
+
+
+                                if(articleListRozetka.size()>0) {
+                                    isLoadedAllo = true;
+                                    Log.d("TEST", "Allo =>" + isLoadedAllo);
+                                    if(!isStoreLoaded) {
+                                        currentStoreIndex = 2;
+                                        goodsListView.setAdapter(adapterRozetka);
+                                        initRecyclerView();
+                                        isStoreLoaded = true;
+                                    }
+                                  /*  if (!isLoadedCitrus && !isLoadedRozetka && isLoadedAllo) {
+                                        Log.d("TEST", "Allo => SHOW");
+
+
+                                        // isLoadedAllo = false;
+                                        initRecyclerView();
+                                    }*/
+                                }
+
 
 
                                 isFoundRozetka = true;
