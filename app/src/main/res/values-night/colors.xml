@@ -16,10 +16,13 @@
 
 
 
-    <color name="rozetka_colour">#5A7164</color>
-    <color name="citrus_colour">#806748</color>
-    <color name="allo_colour">#7A5757</color>
+    <color name="rozetka_colour">#29D675</color>
+    <color name="citrus_colour">#FFAE56</color>
+    <color name="allo_colour">#FF5D5D</color>
     <color name="loadmore_colour">#614791</color>
+
+    <color name="price_color">#007BFF</color>
+    <color name="oldprice_colour">#FF0000</color>
 
 
 

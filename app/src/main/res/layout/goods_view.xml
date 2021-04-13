@@ -34,7 +34,7 @@
             android:layout_marginBottom="5dp"
             android:scaleType="fitXY"
 
-            app:cardBackgroundColor="#B3F6FF"
+            app:cardBackgroundColor="@color/rozetka_colour"
             app:cardCornerRadius="15dp"
             app:cardElevation="10dp">
 
@@ -86,7 +86,7 @@
                     android:layout_marginStart="25dp"
                     android:paddingLeft="25dp"
                     android:text="Price"
-                    android:textColor="#4CAF50"
+                    android:textColor="@color/price_color"
                     android:textSize="25sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
@@ -101,7 +101,7 @@
 
 
                     android:text="Old Price"
-                    android:textColor="#A3A3A3"
+                    android:textColor="@color/oldprice_colour"
                     android:textSize="15sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/goodsTitleMain" />

@@ -24,6 +24,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -159,7 +160,7 @@ public class HomeFragment extends Fragment{
 
 
     ArrayList<String> storeTitlesList = new ArrayList<>();
-    ArrayList<String> storeImagesList = new ArrayList<>();
+    ArrayList<Integer> storeImagesList = new ArrayList<>();
     String currentRequestString = "";
     TextView errorTextMain;
 
@@ -195,7 +196,7 @@ public class HomeFragment extends Fragment{
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home2,container,false);
+        View view = inflater.inflate(R.layout.fragment_home2, container, false);
         recyclerView = view.findViewById(R.id.storeListView);
 
 
@@ -209,16 +210,15 @@ public class HomeFragment extends Fragment{
 /*        editor.clear();
         editor.apply();*/
 
-        if (mSettings.getString("theme", "").equals("")){
+        if (mSettings.getString("theme", "").equals("")) {
             editor.putString("theme", "light");
             editor.apply();
             editor.commit();
-        } else if (mSettings.getString("theme", "").equals("dark")){
+        } else if (mSettings.getString("theme", "").equals("dark")) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        }else if (mSettings.getString("theme", "").equals("light")){
+        } else if (mSettings.getString("theme", "").equals("light")) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
-
 
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -236,13 +236,12 @@ public class HomeFragment extends Fragment{
         initRecyclerView();
 
 
-
         listSearches = view.findViewById(R.id.searchHistory);
         listSearches.setVisibility(View.INVISIBLE);
 
         for (int i = 6; i >= 1; i--) {
             Log.d("SHAR", mSettings.getString(String.valueOf(i), ""));
-            if (!mSettings.getString(String.valueOf(i), "").equals("")){
+            if (!mSettings.getString(String.valueOf(i), "").equals("")) {
                 searches.add(mSettings.getString(String.valueOf(i), ""));
             }
         }
@@ -259,9 +258,9 @@ public class HomeFragment extends Fragment{
         goodsListView = (ListView) view.findViewById(R.id.goodsList);
         storeListView = (RecyclerView) view.findViewById(R.id.storeListView);
         progressBar = view.findViewById(R.id.progressBar);
-        adapterCitrus = new MyAdapter(getContext(), goodsNamesList, goodsPricesList, goodsOldPricesList, goodsImagesList,goodsColorsList,articleList);
-        adapterMoyo = new MyAdapter(getContext(), goodsNamesListMoyo, goodsPricesListMoyo, goodsOldPricesListMoyo, goodsImagesListMoyo,goodsColorsMoyo,articleListMoyo);
-        adapterRozetka = new MyAdapter(getContext(), goodsNamesListRozetka, goodsPricesListRozetka, goodsOldPricesListRozetka, goodsImagesListRozetka,goodsColorsRozetka,articleListRozetka);
+        adapterCitrus = new MyAdapter(getContext(), goodsNamesList, goodsPricesList, goodsOldPricesList, goodsImagesList, goodsColorsList, articleList);
+        adapterMoyo = new MyAdapter(getContext(), goodsNamesListMoyo, goodsPricesListMoyo, goodsOldPricesListMoyo, goodsImagesListMoyo, goodsColorsMoyo, articleListMoyo);
+        adapterRozetka = new MyAdapter(getContext(), goodsNamesListRozetka, goodsPricesListRozetka, goodsOldPricesListRozetka, goodsImagesListRozetka, goodsColorsRozetka, articleListRozetka);
         goodsListView.setAdapter(adapterMoyo);
 
         progressBar.setVisibility(View.GONE); // to hide
@@ -274,10 +273,10 @@ public class HomeFragment extends Fragment{
         storeTitlesList.add("Allo");
 
 
-        storeImagesList.add("https://mmr.ua/uploaded/materials/a2a89af751.png");
-        storeImagesList.add("https://yt3.ggpht.com/ytc/AAUvwnjVEgy0xS7qiFpem68qOwYiIBi4Fls8dZYw9EFm1A=s900-c-k-c0x00ffffff-no-rj");
-        storeImagesList.add("data:image/png;base64,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");
-        Log.d("THEME", String.valueOf(articleList.size())+"- -");
+        storeImagesList.add(R.drawable.rozetkalogo);
+        storeImagesList.add(R.drawable.citruslogo);
+        storeImagesList.add(R.drawable.allologo);
+        Log.d("THEME", String.valueOf(articleList.size()) + "- -");
 
 
         for (int i = goodsCount; i < articleList.size(); i++) {
@@ -295,47 +294,49 @@ public class HomeFragment extends Fragment{
         goodsListView.setEnabled(true);
 
 
-
-
-
-
         storeListView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getContext(), storeListView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                    if(isStoreLoaded) {
-                        if (position == 0) {
-                            isLoadedRozetka = false;
-                            currentStoreIndex = 0;
-                            goodsListView.setAdapter(adapterMoyo);
-                            if (!isLoadedRozetka) {
-                                progressBar.setVisibility(View.VISIBLE); // to hide
-                            } else {
-                                progressBar.setVisibility(View.GONE); // to hide
-                            }
+                        if (isStoreLoaded) {
+                            if (position == 0) {
 
-                        } else if (position == 1) {
-                            isLoadedCitrus = false;
-                            currentStoreIndex = 1;
-                            goodsListView.setAdapter(adapterCitrus);
-                            if (!isLoadedCitrus) {
-                                progressBar.setVisibility(View.VISIBLE); // to hide
-                            } else {
-                                progressBar.setVisibility(View.GONE); // to hide
-                            }
+                                currentStoreIndex = 0;
+                                goodsListView.setAdapter(adapterMoyo);
+                                Log.d("TEST", "Rozetka =>" + isLoadedRozetka);
+                                if (isLoadedRozetka) {
+                                    progressBar.setVisibility(View.GONE);
 
-                        } else if (position == 2) {
-                            isLoadedAllo = false;
-                            currentStoreIndex = 2;
-                            goodsListView.setAdapter(adapterRozetka);
-                            if (!isLoadedAllo) {
-                                progressBar.setVisibility(View.VISIBLE); // to hide
-                            } else {
-                                progressBar.setVisibility(View.GONE); // to hide
+                                } else {
+                                    progressBar.setVisibility(View.VISIBLE); // to hide
+                                }
+
+                            } else if (position == 1) {
+
+                                currentStoreIndex = 1;
+                                goodsListView.setAdapter(adapterCitrus);
+                                Log.d("TEST", "Citrus =>" + isLoadedCitrus);
+                                if (isLoadedCitrus) {
+                                    progressBar.setVisibility(View.GONE);
+
+                                } else {
+                                    progressBar.setVisibility(View.VISIBLE); // to hide
+                                }
+
+                            } else if (position == 2) {
+
+                                currentStoreIndex = 2;
+                                goodsListView.setAdapter(adapterRozetka);
+                                Log.d("TEST", "Allo =>" + isLoadedAllo);
+                                if (isLoadedAllo) {
+                                    progressBar.setVisibility(View.GONE);
+
+                                } else {
+                                    progressBar.setVisibility(View.VISIBLE); // to hide
+                                }
                             }
+                            initRecyclerView();
                         }
-                        initRecyclerView();
-                    }
                     }
 
                     @Override
@@ -938,13 +939,13 @@ public class HomeFragment extends Fragment{
                                 Element elprice = element.getElementsByAttributeValue("class", "goods-tile__price-value").first();
                                 Element elprice2 = element.getElementsByAttributeValue("class", "goods-tile__price--old price--gray").first();
 
-                                String  price = "";
-                                String  oldPrice = "";
+                                String price = "";
+                                String oldPrice = "";
 
-                                if (elprice.text()!=null){
+                                if (elprice.text() != null) {
                                     String price1 = elprice.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
 
-                                    if (elprice2.text()!=""){
+                                    if (elprice2.text() != "") {
                                         //Log.d("PRICE", elprice2.text());
                                         String price2 = elprice2.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
                                         price = price1;
@@ -964,22 +965,22 @@ public class HomeFragment extends Fragment{
                                 boolean isContains = false;
 
                                 for (int i = 0; i < articleListMoyo.size(); i++) {
-                                    if(articleListMoyo.get(i).getName().equals(title)){
+                                    if (articleListMoyo.get(i).getName().equals(title)) {
                                         isContains = true;
                                     }
                                 }
 
-                                if(!isContains){
+                                if (!isContains) {
 
                                     articleListMoyo.add(new Article(url, title, price, oldPrice, imgUrl));
-                                    Log.d("TEST",new Article(url, title, price, oldPrice, imgUrl).toString());
+                                    Log.d("TEST", new Article(url, title, price, oldPrice, imgUrl).toString());
 
                                 }
 
 
                                 isLoadedRozetka = true;
 
-                                if (currentStoreIndex==0){
+                                if (currentStoreIndex == 0) {
                                     errorTextMain.setVisibility(View.INVISIBLE);
                                 }
 
@@ -996,20 +997,20 @@ public class HomeFragment extends Fragment{
                                         goodsPricesListMoyo.add(articleListMoyo.get(i).getPrice());
                                         goodsOldPricesListMoyo.add(articleListMoyo.get(i).getOldPrice());
                                         goodsImagesListMoyo.add(articleListMoyo.get(i).getImg());
-                                        goodsColorsMoyo.add(ContextCompat.getColor(context,R.color.rozetka_colour));
+                                        goodsColorsMoyo.add(ContextCompat.getColor(context, R.color.rozetka_colour));
 
                                     }
                                     goodsCountMoyo = articleListMoyo.size();
                                     Element loadElement = doc1.getElementsByAttributeValue("class", "show-more__text").first();
 
-                                    if (loadElement != null  && goodsCount > 0) {
+                                    if (loadElement != null && goodsCount > 0) {
                                         goodsNamesListMoyo.add(getString(R.string.load_more));
                                         goodsPricesListMoyo.add("");
                                         goodsOldPricesListMoyo.add("");
-                                        goodsColorsMoyo.add(ContextCompat.getColor(context,R.color.loadmore_colour));
+                                        goodsColorsMoyo.add(ContextCompat.getColor(context, R.color.loadmore_colour));
 
                                         goodsImagesListMoyo.add("https://image.flaticon.com/icons/png/512/16/16770.png");
-                                        articleListMoyo.add(new Article(" ", getString(R.string.load_more), "","", "https://image.flaticon.com/icons/png/512/16/16770.png"));
+                                        articleListMoyo.add(new Article(" ", getString(R.string.load_more), "", "", "https://image.flaticon.com/icons/png/512/16/16770.png"));
 
                                     }
                                     // to hide
@@ -1018,24 +1019,18 @@ public class HomeFragment extends Fragment{
                                 }
                             });
 
-                            if(articleListRozetka.size()>0) {
+                            if (articleListRozetka.size() > 0) {
                                 isLoadedRozetka = true;
                                 Log.d("TEST", "Rozetka =>" + isLoadedRozetka);
 
-                                if(!isStoreLoaded) {
+                                if (!isStoreLoaded) {
                                     currentStoreIndex = 0;
                                     goodsListView.setAdapter(adapterMoyo);
                                     initRecyclerView();
                                     isStoreLoaded = true;
                                     progressBar.setVisibility(View.GONE); // to hide
                                 }
-                              /*  if (!isLoadedCitrus && isLoadedRozetka && !isLoadedAllo) {
 
-                                    currentStoreIndex = 0;
-                                    Log.d("TEST","RozetkaLoaded");
-                                    goodsListView.setAdapter(adapterMoyo);
-                                    // isLoadedRozetka = false;
-                                }*/
                             }
 
 
@@ -1557,10 +1552,10 @@ public class HomeFragment extends Fragment{
 
         //vars
         private ArrayList<String> mNames = new ArrayList<>();
-        private ArrayList<String> mImageUrls = new ArrayList<>();
+        private ArrayList<Integer> mImageUrls = new ArrayList<>();
         private Context mContext;
 
-        public RecyclerViewAdapter(Context context, ArrayList<String> names, ArrayList<String> imageUrls) {
+        public RecyclerViewAdapter(Context context, ArrayList<String> names, ArrayList<Integer> imageUrls) {
             mNames = names;
             mImageUrls = imageUrls;
             mContext = context;
@@ -1604,6 +1599,7 @@ public class HomeFragment extends Fragment{
                     .asBitmap()
                     .load(mImageUrls.get(position))
                     .into(holder.image);
+            holder.image.setImageResource(mImageUrls.get(position));
 
             holder.name.setText(mNames.get(position));
 
