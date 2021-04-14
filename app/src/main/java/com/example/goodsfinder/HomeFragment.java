@@ -161,6 +161,7 @@ public class HomeFragment extends Fragment{
 
     ArrayList<String> storeTitlesList = new ArrayList<>();
     ArrayList<Integer> storeImagesList = new ArrayList<>();
+    ArrayList<Integer> storeColorsList = new ArrayList<>();
     String currentRequestString = "";
     TextView errorTextMain;
 
@@ -230,7 +231,7 @@ public class HomeFragment extends Fragment{
         browser = new WebView(getContext());
         browserMoyo = new WebView(getContext());
         browserRozetka = new WebView(getContext());
-        currentStoreIndex = 0;
+        currentStoreIndex = -1;
 
         //setContentView(R.layout.activity_main);
         initRecyclerView();
@@ -276,6 +277,10 @@ public class HomeFragment extends Fragment{
         storeImagesList.add(R.drawable.rozetkalogo);
         storeImagesList.add(R.drawable.citruslogo);
         storeImagesList.add(R.drawable.allologo);
+
+        storeColorsList.add(ContextCompat.getColor(context, R.color.rozetka_colour));
+        storeColorsList.add(ContextCompat.getColor(context, R.color.citrus_colour));
+        storeColorsList.add(ContextCompat.getColor(context, R.color.allo_colour));
         Log.d("THEME", String.valueOf(articleList.size()) + "- -");
 
 
@@ -540,6 +545,7 @@ public class HomeFragment extends Fragment{
         mySearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
+                currentStoreIndex = -1;
                 progressBar.setVisibility(View.VISIBLE); // to hide
                 isStoreLoaded = false;
                 currentRequestString = "";
@@ -682,7 +688,7 @@ public class HomeFragment extends Fragment{
 
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
                 recyclerView.setLayoutManager(layoutManager);
-                RecyclerViewAdapter adapter = new RecyclerViewAdapter(getContext(), storeTitlesList, storeImagesList);
+                RecyclerViewAdapter adapter = new RecyclerViewAdapter(getContext(), storeTitlesList, storeImagesList,storeColorsList);
                 recyclerView.setAdapter(adapter);
 
             }
@@ -1553,12 +1559,14 @@ public class HomeFragment extends Fragment{
         //vars
         private ArrayList<String> mNames = new ArrayList<>();
         private ArrayList<Integer> mImageUrls = new ArrayList<>();
+        private ArrayList<Integer> mCardColors = new ArrayList<>();
         private Context mContext;
 
-        public RecyclerViewAdapter(Context context, ArrayList<String> names, ArrayList<Integer> imageUrls) {
+        public RecyclerViewAdapter(Context context, ArrayList<String> names, ArrayList<Integer> imageUrls, ArrayList<Integer> cardColors) {
             mNames = names;
             mImageUrls = imageUrls;
             mContext = context;
+            mCardColors = cardColors;
         }
 
         @Override
@@ -1595,20 +1603,19 @@ public class HomeFragment extends Fragment{
 
 
 
-            Glide.with(mContext)
-                    .asBitmap()
-                    .load(mImageUrls.get(position))
-                    .into(holder.image);
+
             holder.image.setImageResource(mImageUrls.get(position));
 
             holder.name.setText(mNames.get(position));
-
+            holder.card.setCardBackgroundColor(mCardColors.get(position));
 
             if(position == currentStoreIndex){
-                holder.name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                holder.name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
 
                 holder.image.getLayoutParams().height = (int) getResources().getDimension(R.dimen.imageview_height);
                 holder.image.getLayoutParams().width = (int) getResources().getDimension(R.dimen.imageview_width);
+
+
             }
             holder.image.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -1630,11 +1637,13 @@ public class HomeFragment extends Fragment{
 
             ImageView image;
             TextView name;
+            CardView card;
 
             public ViewHolder(View itemView) {
                 super(itemView);
                 image = itemView.findViewById(R.id.storeImageMain);
                 name = itemView.findViewById(R.id.storeTitleMain);
+                card = itemView.findViewById(R.id.storeCard);
             }
         }
     }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="imageview_width">28dp</dimen>
-    <dimen name="imageview_height">28dp</dimen>
+    <dimen name="imageview_width">33dp</dimen>
+    <dimen name="imageview_height">33dp</dimen>
     <!--
     Because the window insets on round devices are larger than 15dp, this padding only applies
     to square screens.
