@@ -103,6 +103,8 @@ public class HomeFragment extends Fragment{
     private FirebaseAuth mAuth;
     FirebaseUser user = mAuth.getInstance().getCurrentUser();
 
+    public boolean isFocusedSearch = false;
+
     private static final String TAG = "artFil";
 
     private final Handler uiHandler = new Handler();
@@ -192,7 +194,10 @@ public class HomeFragment extends Fragment{
     public static final String APP_PREFERENCES = "searches";
 
     @Override
-    public void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); }
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
 
     @Nullable
     @Override
@@ -534,40 +539,42 @@ public class HomeFragment extends Fragment{
 
 
 
+
         mySearchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mySearchView.setIconified(false);
-                loadHistory();
+
+                Log.d("FOCUS", "CLICK");
             }
         });
+
 
         mySearchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(final View view, boolean hasFocus) {
                 if (hasFocus) {
-                    view.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            Log.d("FOCUS", "FOCUSED");
-                            listSearches.setVisibility(View.VISIBLE);
-                        }
-                    }, 200);
+
+                    Log.d("FOCUS", "FOCUSED");
+
+                    listSearches.setVisibility(View.VISIBLE);
+                    isFocusedSearch = false;
+
                 } else {
-                    view.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            Log.d("FOCUS", "UNFOCUSED");
-                            listSearches.setVisibility(View.INVISIBLE);
-                        }
-                    }, 200);
+
+                    Log.d("FOCUS", "UNFOCUSED");
+                    listSearches.setVisibility(View.INVISIBLE);
+                    isFocusedSearch = true;
                 }
             }
         });
 
+        // WORKS, DON'T CHANGE!!!
+
         mySearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
+                listSearches.setVisibility(View.INVISIBLE);
                 currentStoreIndex = -1;
                 progressBar.setVisibility(View.VISIBLE); // to hide
                 isStoreLoaded = false;
@@ -697,25 +704,25 @@ public class HomeFragment extends Fragment{
     return view;
 
     }
-    public void loadHistory() {
-        //listSearches.setVisibility(View.VISIBLE);
-    }
+
 
 
     private void initRecyclerView() {
         //Log.d(TAG, "initRecyclerView: init recyclerview");
-        getActivity().runOnUiThread(new Runnable() {
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(new Runnable() {
 
-            @Override
-            public void run() {
+                @Override
+                public void run() {
 
-                LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-                recyclerView.setLayoutManager(layoutManager);
-                RecyclerViewAdapter adapter = new RecyclerViewAdapter(getContext(), storeTitlesList, storeImagesList,storeColorsList);
-                recyclerView.setAdapter(adapter);
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+                    recyclerView.setLayoutManager(layoutManager);
+                    RecyclerViewAdapter adapter = new RecyclerViewAdapter(getContext(), storeTitlesList, storeImagesList, storeColorsList);
+                    recyclerView.setAdapter(adapter);
 
-            }
-        });
+                }
+            });
+        }
 
     }
 
@@ -833,35 +840,38 @@ public class HomeFragment extends Fragment{
                         if (!isStoreLoaded) {
 
                             currentStoreIndex = 1;
-                            getActivity().runOnUiThread(new Runnable() {
+                            if (getActivity() != null) {
+                                getActivity().runOnUiThread(new Runnable() {
 
-                                @Override
-                                public void run() {
+                                    @Override
+                                    public void run() {
 
-                                    goodsListView.setAdapter(adapterCitrus);
-                                    initRecyclerView();
-                                    progressBar.setVisibility(View.GONE); // to hide
+                                        goodsListView.setAdapter(adapterCitrus);
+                                        initRecyclerView();
+                                        progressBar.setVisibility(View.GONE); // to hide
 
-                                }
+                                    }
 
-                            });
+                                });
+                            }
                             isStoreLoaded = true;
 
                         }
-                    }
-                    getActivity().runOnUiThread(new Runnable() {
+                    }if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
 
-                        @Override
-                        public void run() {
-                           // to hide
-                            adapterCitrus.notifyDataSetChanged();
-                            goodsListView.setEnabled(true);
+                            @Override
+                            public void run() {
+                                // to hide
+                                adapterCitrus.notifyDataSetChanged();
+                                goodsListView.setEnabled(true);
 
-                            if (!isConnected()) {
-                                errorTextMain.setVisibility(View.VISIBLE);
+                                if (!isConnected()) {
+                                    errorTextMain.setVisibility(View.VISIBLE);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
 
 
                 } catch (IOException e) {
@@ -1015,38 +1025,39 @@ public class HomeFragment extends Fragment{
 
 
                             }
+                            if (getActivity() != null) {
+                                getActivity().runOnUiThread(new Runnable() {
 
-                            getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
 
-                                @Override
-                                public void run() {
+                                        for (int i = goodsCountMoyo; i < articleListMoyo.size(); i++) {
+                                            goodsNamesListMoyo.add(articleListMoyo.get(i).getName());
+                                            goodsPricesListMoyo.add(articleListMoyo.get(i).getPrice());
+                                            goodsOldPricesListMoyo.add(articleListMoyo.get(i).getOldPrice());
+                                            goodsImagesListMoyo.add(articleListMoyo.get(i).getImg());
+                                            goodsColorsMoyo.add(ContextCompat.getColor(context, R.color.rozetka_colour));
 
-                                    for (int i = goodsCountMoyo; i < articleListMoyo.size(); i++) {
-                                        goodsNamesListMoyo.add(articleListMoyo.get(i).getName());
-                                        goodsPricesListMoyo.add(articleListMoyo.get(i).getPrice());
-                                        goodsOldPricesListMoyo.add(articleListMoyo.get(i).getOldPrice());
-                                        goodsImagesListMoyo.add(articleListMoyo.get(i).getImg());
-                                        goodsColorsMoyo.add(ContextCompat.getColor(context, R.color.rozetka_colour));
+                                        }
+                                        goodsCountMoyo = articleListMoyo.size();
+                                        Element loadElement = doc1.getElementsByAttributeValue("class", "show-more__text").first();
+
+                                        if (loadElement != null && goodsCount > 0) {
+                                            goodsNamesListMoyo.add(getString(R.string.load_more));
+                                            goodsPricesListMoyo.add("");
+                                            goodsOldPricesListMoyo.add("");
+                                            goodsColorsMoyo.add(ContextCompat.getColor(context, R.color.loadmore_colour));
+
+                                            goodsImagesListMoyo.add("https://image.flaticon.com/icons/png/512/16/16770.png");
+                                            articleListMoyo.add(new Article(" ", getString(R.string.load_more), "", "", "https://image.flaticon.com/icons/png/512/16/16770.png"));
+
+                                        }
+                                        // to hide
+
 
                                     }
-                                    goodsCountMoyo = articleListMoyo.size();
-                                    Element loadElement = doc1.getElementsByAttributeValue("class", "show-more__text").first();
-
-                                    if (loadElement != null && goodsCount > 0) {
-                                        goodsNamesListMoyo.add(getString(R.string.load_more));
-                                        goodsPricesListMoyo.add("");
-                                        goodsOldPricesListMoyo.add("");
-                                        goodsColorsMoyo.add(ContextCompat.getColor(context, R.color.loadmore_colour));
-
-                                        goodsImagesListMoyo.add("https://image.flaticon.com/icons/png/512/16/16770.png");
-                                        articleListMoyo.add(new Article(" ", getString(R.string.load_more), "", "", "https://image.flaticon.com/icons/png/512/16/16770.png"));
-
-                                    }
-                                    // to hide
-
-
-                                }
-                            });
+                                });
+                            }
 
                             if (articleListRozetka.size() > 0) {
                                 isLoadedRozetka = true;
@@ -1205,40 +1216,40 @@ public class HomeFragment extends Fragment{
 
 
                                 }
+                                if (getActivity() != null) {
+                                    getActivity().runOnUiThread(new Runnable() {
 
-                                getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
 
-                                    @Override
-                                    public void run() {
+                                            for (int i = goodsCountRozetka; i < articleListRozetka.size(); i++) {
+                                                goodsNamesListRozetka.add(articleListRozetka.get(i).getName());
+                                                goodsPricesListRozetka.add(articleListRozetka.get(i).getPrice());
+                                                goodsOldPricesListRozetka.add(articleListRozetka.get(i).getOldPrice());
+                                                goodsColorsRozetka.add(ContextCompat.getColor(context, R.color.allo_colour));
 
-                                        for (int i = goodsCountRozetka; i < articleListRozetka.size(); i++) {
-                                            goodsNamesListRozetka.add(articleListRozetka.get(i).getName());
-                                            goodsPricesListRozetka.add(articleListRozetka.get(i).getPrice());
-                                            goodsOldPricesListRozetka.add(articleListRozetka.get(i).getOldPrice());
-                                            goodsColorsRozetka.add(ContextCompat.getColor(context,R.color.allo_colour));
+                                                goodsImagesListRozetka.add(articleListRozetka.get(i).getImg());
+                                                //Log.d(TAG, articleListRozetka.get(i).toString());
 
-                                            goodsImagesListRozetka.add(articleListRozetka.get(i).getImg());
-                                            //Log.d(TAG, articleListRozetka.get(i).toString());
+                                            }
+                                            goodsCountRozetka = articleListRozetka.size();
+                                            Element loadElement = doc2.getElementsByAttributeValue("class", "pagination__next__link").first();
+
+                                            if (loadElement != null && goodsCount > 0) {
+                                                goodsNamesListRozetka.add(getString(R.string.load_more));
+                                                goodsPricesListRozetka.add("");
+                                                goodsOldPricesListRozetka.add("");
+                                                goodsColorsRozetka.add(ContextCompat.getColor(context, R.color.loadmore_colour));
+
+                                                goodsImagesListRozetka.add("https://image.flaticon.com/icons/png/512/16/16770.png");
+                                                articleListRozetka.add(new Article(" ", getString(R.string.load_more), "", "", "https://image.flaticon.com/icons/png/512/16/16770.png"));
+
+                                            }
+
 
                                         }
-                                        goodsCountRozetka = articleListRozetka.size();
-                                        Element loadElement = doc2.getElementsByAttributeValue("class", "pagination__next__link").first();
-
-                                        if (loadElement != null  && goodsCount > 0) {
-                                            goodsNamesListRozetka.add(getString(R.string.load_more));
-                                            goodsPricesListRozetka.add("");
-                                            goodsOldPricesListRozetka.add("");
-                                            goodsColorsRozetka.add(ContextCompat.getColor(context,R.color.loadmore_colour));
-
-                                            goodsImagesListRozetka.add("https://image.flaticon.com/icons/png/512/16/16770.png");
-                                            articleListRozetka.add(new Article(" ", getString(R.string.load_more), "","", "https://image.flaticon.com/icons/png/512/16/16770.png"));
-
-                                        }
-
-
-
-                                    }
-                                });
+                                    });
+                                }
 
 
                                 if(articleListRozetka.size()>0) {

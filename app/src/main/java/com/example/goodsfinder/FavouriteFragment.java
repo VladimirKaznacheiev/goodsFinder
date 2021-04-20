@@ -320,7 +320,7 @@ public class FavouriteFragment extends Fragment {
         super.onCreate(savedInstanceState);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-
+        setRetainInstance(true);
     }
 
     @Nullable

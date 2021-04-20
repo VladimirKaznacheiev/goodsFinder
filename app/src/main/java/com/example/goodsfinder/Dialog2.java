@@ -19,6 +19,8 @@ public class Dialog2 extends DialogFragment implements DialogInterface.OnClickLi
     SharedPreferences mSettings;
     public static final String APP_PREFERENCES = "searches";
 
+
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getDialog().setTitle(getString(R.string.theme));

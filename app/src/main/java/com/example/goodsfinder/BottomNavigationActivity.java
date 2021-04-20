@@ -67,6 +67,8 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
 
     }
 
+    View view;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,7 +112,7 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
             return true;
         });
 
-        View view = bottomNavigationView.findViewById(R.id.navigation_home);
+        view = bottomNavigationView.findViewById(R.id.navigation_home);
         view.performClick();
 
         //findViewById(R.id.navigation_dashboard).setSelected(true);
@@ -145,10 +147,12 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
 
         } else if (menuItem.getItemId() == R.id.theme_dark){
             if(mSettings.getString("theme", "").equals("light")){
+                view.performClick();
                 dlg.show(getFragmentManager(), "dlg");
             }
         } else if (menuItem.getItemId() == R.id.theme_light){
             if(mSettings.getString("theme", "").equals("dark")){
+                view.performClick();
                 dlg2.show(getFragmentManager(), "dlg2");
             }
 
