@@ -803,6 +803,8 @@ public class FavouriteFragment extends Fragment {
             // now set our resources on views
 
 
+            myDescription.setTextColor(ContextCompat.getColor(context,R.color.price_color));
+            myOldDescription.setTextColor(ContextCompat.getColor(context,R.color.oldprice_colour));
             Glide.with(context).load(rImgs.get(position)).into(images);
             storeImages.setImageResource(rStoreImgs.get(position));
             backgroundCard.setCardBackgroundColor(backgroundColour.get(position));

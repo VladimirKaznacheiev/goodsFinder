@@ -1327,7 +1327,8 @@ public class HomeFragment extends Fragment{
             CardView backgroundCard = goodsView.findViewById(R.id.backgroungCard);
 
 
-
+            myDescription.setTextColor(ContextCompat.getColor(context,R.color.price_color));
+            myDescription2.setTextColor(ContextCompat.getColor(context,R.color.oldprice_colour));
             // now set our resources on views
 
 
