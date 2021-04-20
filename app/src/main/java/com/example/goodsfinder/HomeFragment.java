@@ -542,6 +542,29 @@ public class HomeFragment extends Fragment{
             }
         });
 
+        mySearchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(final View view, boolean hasFocus) {
+                if (hasFocus) {
+                    view.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d("FOCUS", "FOCUSED");
+                            listSearches.setVisibility(View.VISIBLE);
+                        }
+                    }, 200);
+                } else {
+                    view.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d("FOCUS", "UNFOCUSED");
+                            listSearches.setVisibility(View.INVISIBLE);
+                        }
+                    }, 200);
+                }
+            }
+        });
+
         mySearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {

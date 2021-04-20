@@ -105,10 +105,16 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
         actionBarDrawerToggle.syncState();
 
         BottomNavigationView bottomNavigationView =  findViewById(R.id.nav_view);
-        bottomNavigationView.setOnNavigationItemSelectedListener(item -> { // using lamda
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             myClickItem(item); //call here
             return true;
         });
+
+        View view = bottomNavigationView.findViewById(R.id.navigation_home);
+        view.performClick();
+
+        //findViewById(R.id.navigation_dashboard).setSelected(true);
+        //findViewById(R.id.navigation_dashboard).setSelected(false);
 
 //        Intent intent = getIntent();
 //        if(intent!=null) {

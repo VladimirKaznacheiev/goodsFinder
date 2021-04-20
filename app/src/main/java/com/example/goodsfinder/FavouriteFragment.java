@@ -208,7 +208,7 @@ public class FavouriteFragment extends Fragment {
 
 
                             } else {
-                                favouritesPricesList.add(counter, getString(R.string.form_price));
+                                favouritesPricesList.add(counter, context.getString(R.string.form_price));
                                 favouritesOldPricesList.add(counter, " ");
                             }
 
@@ -226,7 +226,7 @@ public class FavouriteFragment extends Fragment {
                         urlsRozetka.add(goodsInfo[0]);
                         positionsRozetka.add(String.valueOf(counter));
 
-                        favouritesPricesList.add(counter, context.getString(R.string.loading));
+                        favouritesPricesList.add(counter,  context.getString(R.string.loading));
                         favouritesOldPricesList.add(counter,  context.getString(R.string.loading));
                         infoLoaded.add(goodsInfo[0]+"SPLITFORBUY"+goodsInfo[1]+"SPLITFORBUY"+goodsInfo[2]+"SPLITFORBUY"+goodsInfo[3]+"SPLITFORBUY");
 
@@ -242,8 +242,6 @@ public class FavouriteFragment extends Fragment {
 
                             doc = Jsoup.connect(goodsInfo[0]).get();
                             Element elements = doc.getElementsByAttributeValue("class", "buy-section__new-price").last();
-
-                            Log.d("t", "test");
                             Element elements2 = doc.getElementsByAttributeValue("class", "buy-section__old-price").last();
 
 /*                                String price1 = elements.text().replace("₴", "").replace("грн", "").replace(" грн", "") + " грн";
@@ -264,7 +262,7 @@ public class FavouriteFragment extends Fragment {
                                 }
 
                             } else {
-                                favouritesPricesList.add(counter, getString(R.string.form_price));
+                                favouritesPricesList.add(counter, context.getString(R.string.form_price));
                                 favouritesOldPricesList.add(counter, " ");
                                 infoLoaded.add(goodsInfo[0]+"SPLITFORBUY"+goodsInfo[1]+"SPLITFORBUY"+goodsInfo[2]+"SPLITFORBUY"+goodsInfo[3]+"SPLITFORBUY"+"0"+"SPLITFORBUY"+"0");
                             }
@@ -333,7 +331,7 @@ public class FavouriteFragment extends Fragment {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.chosen_goods_activity);
 
-        String[] filters = { getString(R.string.def),  getString(R.string.up), getString(R.string.down)};
+        String[] filters = { context.getString(R.string.def),  context.getString(R.string.up), context.getString(R.string.down)};
 
         Spinner spinner = (Spinner) view.findViewById(R.id.spinner);
         ArrayAdapter<String> adapterSpinner = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, filters);
@@ -346,13 +344,13 @@ public class FavouriteFragment extends Fragment {
 
                 String item = (String)parent.getItemAtPosition(position);
 
-                if (item.equals(getString(R.string.def)) && isLoadedRozetka){
+                if (item.equals(context.getString(R.string.def)) && isLoadedRozetka){
                     sortDefault();
                     Log.d("TETS", item);
-                } else if (item.equals(getString(R.string.up))){
+                } else if (item.equals(context.getString(R.string.up))){
                     sortUp();
                     Log.d("TETS", item);
-                } else if (item.equals(getString(R.string.down))){
+                } else if (item.equals(context.getString(R.string.down))){
                     sortDown();
                     Log.d("TETS", item);
                 }
@@ -487,7 +485,7 @@ public class FavouriteFragment extends Fragment {
 
 
                                 } else {
-                                    favouritesPricesList.set(Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)), getString(R.string.form_price));
+                                    favouritesPricesList.set(Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)), context.getString(R.string.form_price));
                                     favouritesOldPricesList.set(Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)),  " ");
                                 }
 
@@ -550,7 +548,7 @@ public class FavouriteFragment extends Fragment {
 
                 loadChoosen();
             } else {
-                Toast.makeText(getActivity(),getString(R.string.internet_error),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),context.getString(R.string.internet_error),Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -593,7 +591,7 @@ public class FavouriteFragment extends Fragment {
                         favouritesOldPricesList.add(i, " ");
                     }
                 } else {
-                    favouritesPricesList.add(i, getString(R.string.form_price));
+                    favouritesPricesList.add(i, context.getString(R.string.form_price));
                     favouritesOldPricesList.add(i, " ");
                 }
 
@@ -604,7 +602,7 @@ public class FavouriteFragment extends Fragment {
 
 
         }else{
-            Toast.makeText(getActivity(),getString(R.string.goods_no_loaded),Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),context.getString(R.string.goods_no_loaded),Toast.LENGTH_SHORT).show();
         }
     }
     public void sortDown(){
@@ -665,7 +663,7 @@ public class FavouriteFragment extends Fragment {
                         favouritesOldPricesList.add(i, " ");
                     }
                 }else {
-                    favouritesPricesList.add(i, getString(R.string.form_price));
+                    favouritesPricesList.add(i, context.getString(R.string.form_price));
                     favouritesOldPricesList.add(i, " ");
                 }
 
@@ -676,7 +674,7 @@ public class FavouriteFragment extends Fragment {
 
 
         }else{
-            Toast.makeText(getActivity(),getString(R.string.goods_no_loaded),Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),context.getString(R.string.goods_no_loaded),Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -744,7 +742,7 @@ public class FavouriteFragment extends Fragment {
                         favouritesOldPricesList.add(i, " ");
                     }
                 } else {
-                    favouritesPricesList.add(i, getString(R.string.form_price));
+                    favouritesPricesList.add(i, context.getString(R.string.form_price));
                     favouritesOldPricesList.add(i, " ");
                 }
 
@@ -756,7 +754,7 @@ public class FavouriteFragment extends Fragment {
 
 
         }else{
-            Toast.makeText(getActivity(),getString(R.string.goods_no_loaded),Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),context.getString(R.string.goods_no_loaded),Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -925,7 +923,7 @@ public class FavouriteFragment extends Fragment {
                                 }
                             });
                         } else{
-                            Toast.makeText(getActivity(),getString(R.string.internet_error),Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(),context.getString(R.string.internet_error),Toast.LENGTH_SHORT).show();
                         }
                     }
                     else{

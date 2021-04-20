@@ -4,12 +4,13 @@
         android:id="@+id/navigation_home"
         android:title="@string/home"
         android:enabled="true"
-        android:icon="@drawable/ic_baseline_home_24"/>
+        android:icon="@drawable/ic_baseline_home_24"
+        />
     <item
         android:id="@+id/navigation_dashboard"
         android:title="@string/favourites"
         android:enabled="true"
-        android:icon="@drawable/ic_baseline_logout"/>
+        android:icon="@drawable/ic_baseline_bookmarks_24"/>
 
 
 </menu>
