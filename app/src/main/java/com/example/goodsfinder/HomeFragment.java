@@ -66,6 +66,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 
@@ -176,6 +177,7 @@ public class HomeFragment extends Fragment{
     MyAdapter adapterCitrus;
     MyAdapter adapterMoyo;
     MyAdapter adapterRozetka;
+    HistoryAdapter adapterHistory;
 
     WebView browser;
     WebView browserMoyo;
@@ -252,10 +254,30 @@ public class HomeFragment extends Fragment{
             }
         }
 
-        ArrayAdapter<String> adapterHistory = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_list_item_1, searches);
+        adapterHistory = new HistoryAdapter(getContext(), searches);
 
         listSearches.setAdapter(adapterHistory);
+
+
+        listSearches.setOnItemClickListener(new AdapterView.OnItemClickListener()  {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+
+                String recentSearchString = searches.get(position);
+                Log.d("TEST1", "onItemClick: ");
+                mySearchView.setQuery(recentSearchString, false);
+            }
+        });
+
+
+
+
+
+
+
+
+
+
 
 
         errorTextMain = view.findViewById(R.id.errorTextMain);
@@ -1682,4 +1704,51 @@ public class HomeFragment extends Fragment{
             }
         }
     }
-}
+
+
+    class HistoryAdapter extends ArrayAdapter<String> {
+
+        Context context;
+        List<String> historyText = new ArrayList();
+
+
+
+
+        HistoryAdapter(Context c, List<String> searches) {
+            super(c, R.layout.favourite_view, R.id.historySearchString, searches);
+            this.context = c;
+            this.historyText = searches;
+
+
+        }
+
+
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            LayoutInflater layoutInflater = (LayoutInflater) getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View goodsView = layoutInflater.inflate(R.layout.favourite_view, parent, false);
+            TextView history = goodsView.findViewById(R.id.historySearchString);
+            ImageView search = goodsView.findViewById(R.id.historySearch);
+            ImageView historyIcon = goodsView.findViewById(R.id.historyIcon);
+
+
+            history.setText(historyText.get(position));
+            search.setImageResource(R.drawable.ic_baseline_search_24);
+            historyIcon.setImageResource(R.drawable.ic_baseline_history_24);
+
+            search.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    String recentSearchString = searches.get(position);
+                    Log.d("TEST1", "onItemClick: ");
+                    mySearchView.setQuery(recentSearchString, true);
+
+                }
+            });
+
+
+            return goodsView;
+        }}}

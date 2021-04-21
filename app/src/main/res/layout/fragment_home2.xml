@@ -9,18 +9,6 @@
     tools:context=".MainActivity">
 
 
-
-        <ListView
-            android:id="@+id/searchHistory"
-            android:layout_width="300dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@color/bg_searches"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/goodsSearchView" />
-
         <ProgressBar
             android:id="@+id/progressBar"
             style="@style/Widget.AppCompat.ProgressBar"
@@ -58,6 +46,7 @@
 
 
         <SearchView
+
             android:id="@+id/goodsSearchView"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -65,12 +54,12 @@
             android:layout_marginTop="40dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/ic_rectangle_1"
+            android:focusableInTouchMode="true"
             android:queryHint="@string/search_hint"
             app:iconifiedByDefault="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:focusableInTouchMode="true">
+            app:layout_constraintTop_toTopOf="parent">
 
         </SearchView>
 
@@ -78,12 +67,25 @@
             android:id="@+id/storeListView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="5dp"
             android:divider="@null"
             android:dividerHeight="0dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/goodsSearchView" />
+
+        <ListView
+            android:id="@+id/searchHistory"
+            android:layout_width="300dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/bg_searches"
+
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/goodsSearchView" />
 
