@@ -586,6 +586,8 @@ public class HomeFragment extends Fragment{
                         }
                     }
 
+                    adapterHistory.notifyDataSetChanged();
+
                     Log.d("FOCUS", "FOCUSED");
 
                     listSearches.setVisibility(View.VISIBLE);
@@ -798,51 +800,61 @@ public class HomeFragment extends Fragment{
                         elements.forEach(image -> {
                             if (!stopHandlers) {
 
-                                Element aElement = image.child(5);
-                                Element imgElement = image.child(2);
-                                Element priceElement2 = image.getElementsByAttributeValue("class", "old-price").last();
-                                Element priceElement = image.getElementsByAttributeValue("class", "price-number").last();
-                                String url = "https://www.citrus.ua" + aElement.attr("href");
-                                String title = aElement.child(0).text();
-                                String price = "";
-                                String oldPrice = "";
+                                try {
 
-                                if (priceElement != null) {
-                                    String price1 = priceElement.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
+                                    Element aElement = image.child(5);
+                                    Element imgElement = image.child(2);
+                                    Element priceElement2 = image.getElementsByAttributeValue("class", "old-price").last();
+                                    Element priceElement = image.getElementsByAttributeValue("class", "price-number").last();
+                                    String url = "https://www.citrus.ua" + aElement.attr("href");
+                                    String title = aElement.child(0).text();
+                                    String price = "";
+                                    String oldPrice = "";
 
-                                    if (priceElement2 != null) {
-                                        String price2 = priceElement2.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
-                                        price = price1;
-                                        oldPrice = price2;
+                                    if (priceElement != null) {
+                                        String price1 = priceElement.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
+
+                                        if (priceElement2 != null) {
+                                            String price2 = priceElement2.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
+                                            price = price1;
+                                            oldPrice = price2;
+                                        } else {
+                                            price = price1;
+                                            oldPrice = "";
+                                        }
+
                                     } else {
-                                        price = price1;
+                                        price = getString(R.string.form_price);
                                         oldPrice = "";
                                     }
 
-                                } else {
-                                    price = getString(R.string.form_price);
-                                    oldPrice = "";
-                                }
+                                    Document docCitrus = null;
+                                    try {
+                                        docCitrus = Jsoup.connect(url).timeout(0).get();
+                                        Log.d("CONNECT", "connected next try" + stopHandlers);
 
-                                Document docCitrus = null;
-                                try {
-                                    docCitrus = Jsoup.connect(url).timeout(0).get();
-                                    Log.d("CONNECT", "connected next try" + stopHandlers);
+                                        Elements images = docCitrus.getElementsByAttributeValue("class", "gallery").select("img");
+                                        String img = images.attr("src");
 
-                                    Elements images = docCitrus.getElementsByAttributeValue("class", "gallery").select("img");
-                                    String img = images.attr("src");
+                                        articleList.add(new Article(url, title, price, oldPrice, img));
+                                        if (currentStoreIndex == 1) {
+                                            errorTextMain.setVisibility(View.INVISIBLE);
+                                        }
 
-                                    articleList.add(new Article(url, title, price, oldPrice, img));
-                                    if (currentStoreIndex == 1) {
-                                        errorTextMain.setVisibility(View.INVISIBLE);
+                                        isLoadedCitrus = true;
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                        Log.d("CONNECT", "connected next except");
+
                                     }
-
-                                    isLoadedCitrus = true;
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                    Log.d("CONNECT", "connected next except");
-
                                 }
+                                catch (Exception e) {
+                                    e.printStackTrace();
+                                    Log.d(TAG, "Rozetka Error");
+                                    return;
+                                }
+                            } else {
+                                return;
                             }
                         });
 
@@ -1012,57 +1024,73 @@ public class HomeFragment extends Fragment{
                                 boolean isConsist = false;
                                 for (Element element : elements) {
                                     if (!stopHandlers) {
-                                    String url = element.getElementsByAttributeValue("class", "goods-tile__heading").first().attr("href");
-                                    Element elprice = element.getElementsByAttributeValue("class", "goods-tile__price-value").first();
-                                    Element elprice2 = element.getElementsByAttributeValue("class", "goods-tile__price--old price--gray").first();
+                                        try {
 
-                                    String price = "";
-                                    String oldPrice = "";
+                                            String url = element.getElementsByAttributeValue("class", "goods-tile__heading").first().attr("href");
+                                            Element elprice = element.getElementsByAttributeValue("class", "goods-tile__price-value").first();
+                                            Element elprice2 = element.getElementsByAttributeValue("class", "goods-tile__price--old price--gray").first();
 
-                                    if (elprice.text() != null) {
-                                        String price1 = elprice.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
+                                            String price = "";
+                                            String oldPrice = "";
 
-                                        if (elprice2.text() != "") {
-                                            //Log.d("PRICE", elprice2.text());
-                                            String price2 = elprice2.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
-                                            price = price1;
-                                            oldPrice = price2;
-                                        } else {
-                                            price = price1;
-                                            oldPrice = "";
+                                            if (elprice!=null) {
+
+                                                if (elprice.text() != null) {
+                                                    String price1 = elprice.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
+
+                                                    if (elprice2.text() != "") {
+                                                        //Log.d("PRICE", elprice2.text());
+                                                        String price2 = elprice2.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
+                                                        price = price1;
+                                                        oldPrice = price2;
+                                                    } else {
+                                                        price = price1;
+                                                        oldPrice = "";
+                                                    }
+
+                                                } else {
+                                                    price = getString(R.string.form_price);
+                                                    oldPrice = "";
+                                                }
+                                            } else {
+                                                price = getString(R.string.form_price);
+                                                oldPrice = "";
+                                            }
+                                            String title = element.getElementsByAttributeValue("class", "goods-tile__heading").first().text();
+                                            String imgUrl = element.getElementsByAttributeValue("class", "goods-tile__picture").first().child(1).attr("src");
+
+                                            boolean isContains = false;
+
+                                            for (int i = 0; i < articleListMoyo.size(); i++) {
+                                                if (articleListMoyo.get(i).getName().equals(title)) {
+                                                    isContains = true;
+                                                }
+                                            }
+
+                                            if (!isContains) {
+
+                                                articleListMoyo.add(new Article(url, title, price, oldPrice, imgUrl));
+                                                Log.d("TEST", new Article(url, title, price, oldPrice, imgUrl).toString());
+
+                                            }
+
+
+                                            isLoadedRozetka = true;
+
+                                            if (currentStoreIndex == 0) {
+                                                errorTextMain.setVisibility(View.INVISIBLE);
+                                            }
+
                                         }
-
-                                    } else {
-                                        price = getString(R.string.form_price);
-                                        oldPrice = "";
-                                    }
-                                    String title = element.getElementsByAttributeValue("class", "goods-tile__heading").first().text();
-                                    String imgUrl = element.getElementsByAttributeValue("class", "goods-tile__picture").first().child(1).attr("src");
-
-                                    boolean isContains = false;
-
-                                    for (int i = 0; i < articleListMoyo.size(); i++) {
-                                        if (articleListMoyo.get(i).getName().equals(title)) {
-                                            isContains = true;
+                                        catch (Exception e) {
+                                            e.printStackTrace();
+                                            Log.d(TAG, "Rozetka Error");
+                                            return;
                                         }
-                                    }
-
-                                    if (!isContains) {
-
-                                        articleListMoyo.add(new Article(url, title, price, oldPrice, imgUrl));
-                                        Log.d("TEST", new Article(url, title, price, oldPrice, imgUrl).toString());
-
-                                    }
-
-
-                                    isLoadedRozetka = true;
-
-                                    if (currentStoreIndex == 0) {
-                                        errorTextMain.setVisibility(View.INVISIBLE);
-                                    }
-
-
                                 }
+                                    else {
+                                        return;
+                                    }
                             }
                                 if (getActivity() != null) {
                                     getActivity().runOnUiThread(new Runnable() {
@@ -1218,42 +1246,50 @@ public class HomeFragment extends Fragment{
                                     Elements elements = doc2.getElementsByAttributeValue("class", "product-card");
                                     for (Element element : elements) {
                                         if (!stopHandlers) {
-                                        String title = element.getElementsByAttributeValue("class", "product-card__title").first().text();
-                                        String url = element.getElementsByAttributeValue("class", "product-card__title").first().attr("href");
-                                        Element el = element.getElementsByAttributeValue("class", "sum").last();
-                                        Element el2 = element.getElementsByAttributeValue("class", "sum").first();
-                                        String price;
-                                        String oldPrice;
-                                        if (el != null) {
-                                            String price1 = el.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
+                                            try {
+
+                                                String title = element.getElementsByAttributeValue("class", "product-card__title").first().text();
+                                                String url = element.getElementsByAttributeValue("class", "product-card__title").first().attr("href");
+                                                Element el = element.getElementsByAttributeValue("class", "sum").last();
+                                                Element el2 = element.getElementsByAttributeValue("class", "sum").first();
+                                                String price;
+                                                String oldPrice;
+                                                if (el != null) {
+                                                    String price1 = el.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
 
 
-                                            if (el2 != null && !el2.equals(el)) {
-                                                String price2 = el2.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
-                                                price = price1;
-                                                oldPrice = price2;
-                                            } else {
-                                                price = price1;
-                                                oldPrice = "";
+                                                    if (el2 != null && !el2.equals(el)) {
+                                                        String price2 = el2.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
+                                                        price = price1;
+                                                        oldPrice = price2;
+                                                    } else {
+                                                        price = price1;
+                                                        oldPrice = "";
+                                                    }
+
+                                                } else {
+                                                    price = getString(R.string.form_price);
+                                                    oldPrice = "";
+                                                }
+                                                // String imgUrl = String.valueOf(element.getElementsByAttributeValue("class", "goods-tile__picture").first().childrenSize());
+                                                String imgUrl = element.getElementsByAttributeValue("class", "gallery__img-wrapper").first().select("img").attr("data-src");
+
+                                                articleListRozetka.add(new Article(url, title, price, oldPrice, imgUrl));
+
+                                                isLoadedAllo = true;
+
+                                                if (currentStoreIndex == 2) {
+                                                    errorTextMain.setVisibility(View.INVISIBLE);
+                                                }
+
+                                            }catch (Exception e) {
+                                                e.printStackTrace();
+                                                Log.d(TAG, "Rozetka Error");
+                                                return;
                                             }
-
-                                        } else {
-                                            price = getString(R.string.form_price);
-                                            oldPrice = "";
+                                    } else {
+                                            return;
                                         }
-                                        // String imgUrl = String.valueOf(element.getElementsByAttributeValue("class", "goods-tile__picture").first().childrenSize());
-                                        String imgUrl = element.getElementsByAttributeValue("class", "gallery__img-wrapper").first().select("img").attr("data-src");
-
-                                        articleListRozetka.add(new Article(url, title, price, oldPrice, imgUrl));
-
-                                        isLoadedAllo = true;
-
-                                        if (currentStoreIndex == 2) {
-                                            errorTextMain.setVisibility(View.INVISIBLE);
-                                        }
-
-
-                                    }
                                 }
                                     if (getActivity() != null) {
                                         getActivity().runOnUiThread(new Runnable() {
@@ -1746,6 +1782,7 @@ public class HomeFragment extends Fragment{
             LayoutInflater layoutInflater = (LayoutInflater) getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View goodsView = layoutInflater.inflate(R.layout.favourite_view, parent, false);
             TextView history = goodsView.findViewById(R.id.historySearchString);
+            history.setTextColor(ContextCompat.getColor(context,R.color.text_searches));
             ImageView search = goodsView.findViewById(R.id.historySearch);
             ImageView historyIcon = goodsView.findViewById(R.id.historyIcon);
 

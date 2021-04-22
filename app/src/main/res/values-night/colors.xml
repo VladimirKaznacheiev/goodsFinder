@@ -24,14 +24,14 @@
     <color name="oldprice_colour">#CFCFCF</color>
 
 
-
     <color name="bg_main">#263238</color>
     <color name="search_field">#A38502</color>
     <color name="text_color">#FFD000</color>
+    <color name="text_searches">#C6B463</color>
     <color name="header">#182023</color>
     <color name="menu">#263238</color>
     <color name="bg_spinner">#D0263238</color>
-    <color name="bg_searches">#D0263238</color>
+    <color name="bg_searches">#D01F292E</color>
     <color name="toolbar">#182023</color>
     <color name="bg_bottom">#182023</color>
     <color name="active_item">#FFD000</color>

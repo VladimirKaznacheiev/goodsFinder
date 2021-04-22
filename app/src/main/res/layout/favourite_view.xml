@@ -36,5 +36,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/historySearch"
         app:layout_constraintStart_toEndOf="@+id/historyIcon"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@color/text_searches"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
