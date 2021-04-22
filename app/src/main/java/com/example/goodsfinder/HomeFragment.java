@@ -124,6 +124,8 @@ public class HomeFragment extends Fragment{
     int goodsCountMoyo = 0;
     int goodsCountRozetka = 0;
 
+    boolean stopHandlers = false;
+
     boolean isStoreLoaded = false;
 
     public String strForSearch;
@@ -247,7 +249,7 @@ public class HomeFragment extends Fragment{
         listSearches = view.findViewById(R.id.searchHistory);
         listSearches.setVisibility(View.INVISIBLE);
 
-        for (int i = 6; i >= 1; i--) {
+        for (int i = 4; i >= 1; i--) {
             Log.d("SHAR", mSettings.getString(String.valueOf(i), ""));
             if (!mSettings.getString(String.valueOf(i), "").equals("")) {
                 searches.add(mSettings.getString(String.valueOf(i), ""));
@@ -576,6 +578,13 @@ public class HomeFragment extends Fragment{
             @Override
             public void onFocusChange(final View view, boolean hasFocus) {
                 if (hasFocus) {
+                    searches.clear();
+                    for (int i = 4; i >= 1; i--) {
+                        Log.d("SHAR", mSettings.getString(String.valueOf(i), ""));
+                        if (!mSettings.getString(String.valueOf(i), "").equals("")) {
+                            searches.add(mSettings.getString(String.valueOf(i), ""));
+                        }
+                    }
 
                     Log.d("FOCUS", "FOCUSED");
 
@@ -596,6 +605,7 @@ public class HomeFragment extends Fragment{
         mySearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
+                stopHandlers = false;
                 listSearches.setVisibility(View.INVISIBLE);
                 currentStoreIndex = -1;
                 progressBar.setVisibility(View.VISIBLE); // to hide
@@ -640,7 +650,7 @@ public class HomeFragment extends Fragment{
 
                     boolean isPut = false;
 
-                    for (int i = 1; i <= 6; i++) {
+                    for (int i = 1; i <= 4; i++) {
                         if (mSettings.getString(String.valueOf(i), "").equals("") && s.equals(mSettings.getString(String.valueOf(i-1), ""))){
                             Log.d("SHAR1", mSettings.getString(String.valueOf(i-1), "")+" --- "+ s);
                             editor.putString(String.valueOf(i), s);
@@ -651,15 +661,15 @@ public class HomeFragment extends Fragment{
                         }
                     }
 
-                    String tmp = mSettings.getString("6", "");
+                    String tmp = mSettings.getString("4", "");
 
-                    if (!isPut && !(s.equals(mSettings.getString("6", "")))){
+                    if (!isPut && !(s.equals(mSettings.getString("4", "")))){
 
-                        editor.putString("6", s);
+                        editor.putString("4", s);
                         editor.apply();
                         editor.commit();
 
-                        for (int i = 5; i >=1; i--) {
+                        for (int i = 3; i >=1; i--) {
                             editor.putString(String.valueOf(i), tmp);
                             tmp = mSettings.getString(String.valueOf(i), "");
 
@@ -669,7 +679,7 @@ public class HomeFragment extends Fragment{
 
                     }
 
-                    for (int i = 6; i >= 1; i--) {
+                    for (int i = 4; i >= 1; i--) {
                         Log.d("SHAR", mSettings.getString(String.valueOf(i), ""));
                     }
 
@@ -692,6 +702,7 @@ public class HomeFragment extends Fragment{
         mySearchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
+                stopHandlers = true;
                 goodsNamesList.clear();
                 goodsImagesList.clear();
                 goodsPricesList.clear();
@@ -777,132 +788,136 @@ public class HomeFragment extends Fragment{
             @Override
             public void run() {
 
-                try {
-                    doc = Jsoup.connect("https://www.citrus.ua/search?query="+s.replace(" ", "%20")).get();
-                    Log.d("TEXT", doc.getElementsByAttributeValue("class", "product-img").attr("src"));
-                    Log.d("CONNECT", "connected main Citrus");
-                    Elements elements = doc.getElementsByAttributeValue("class", "short-itm-desc");
 
-                    elements.forEach(image-> {
-                        Element aElement = image.child(5);
-                        Element imgElement = image.child(2);
-                        Element priceElement2 = image.getElementsByAttributeValue("class", "old-price").last();
-                        Element priceElement = image.getElementsByAttributeValue("class", "price-number").last();
-                        String url = "https://www.citrus.ua"+aElement.attr("href");
-                        String title = aElement.child(0).text();
-                        String price = "";
-                        String oldPrice = "";
+                    try {
+                        doc = Jsoup.connect("https://www.citrus.ua/search?query=" + s.replace(" ", "%20")).get();
+                        Log.d("TEXT", doc.getElementsByAttributeValue("class", "product-img").attr("src"));
+                        Log.d("CONNECT", "connected main Citrus");
+                        Elements elements = doc.getElementsByAttributeValue("class", "short-itm-desc");
 
-                        if (priceElement!=null){
-                            String price1 = priceElement.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
+                        elements.forEach(image -> {
+                            if (!stopHandlers) {
 
-                            if (priceElement2!=null){
-                                String price2 = priceElement2.text().replace("₴", "").replace(" грн", "") .replace("грн", "")+ " грн";
-                                price = price1;
-                                oldPrice = price2;
-                            } else {
-                                price = price1;
-                                oldPrice = "";
-                            }
+                                Element aElement = image.child(5);
+                                Element imgElement = image.child(2);
+                                Element priceElement2 = image.getElementsByAttributeValue("class", "old-price").last();
+                                Element priceElement = image.getElementsByAttributeValue("class", "price-number").last();
+                                String url = "https://www.citrus.ua" + aElement.attr("href");
+                                String title = aElement.child(0).text();
+                                String price = "";
+                                String oldPrice = "";
 
-                        } else {
-                            price = getString(R.string.form_price);
-                            oldPrice = "";
-                        }
+                                if (priceElement != null) {
+                                    String price1 = priceElement.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
 
-                        Document docCitrus = null;
-                        try {
-                            docCitrus = Jsoup.connect(url).timeout(0).get();
-                            Log.d("CONNECT", "connected next try");
-
-                            Elements images = docCitrus.getElementsByAttributeValue("class", "gallery").select("img");
-                            String img = images.attr("src");
-
-                            articleList.add(new Article(url, title, price, oldPrice,  img));
-                            if (currentStoreIndex==1){
-                                errorTextMain.setVisibility(View.INVISIBLE);
-                            }
-
-                            isLoadedCitrus = true;
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            Log.d("CONNECT", "connected next except");
-
-                        }
-                    });
-
-
-
-                    for (int i = goodsCount; i < articleList.size(); i++) {
-                        goodsNamesList.add(articleList.get(i).getName());
-                        goodsPricesList.add(articleList.get(i).getPrice());
-                        goodsOldPricesList.add(articleList.get(i).getOldPrice());
-                        goodsColorsList.add(ContextCompat.getColor(context, R.color.citrus_colour));
-
-                        goodsImagesList.add(articleList.get(i).getImg());
-
-                    }
-                    goodsCount = articleList.size();
-                    Element loadElement = doc.getElementsByAttributeValue("class", "catalog-card-container more-items product-card product-card--mini").first();
-
-                    if (loadElement != null && goodsCount > 0) {
-                        goodsNamesList.add(getString(R.string.load_more));
-                        goodsPricesList.add("");
-                        goodsOldPricesList.add("");
-                        goodsColorsList.add(ContextCompat.getColor(context, R.color.loadmore_colour));
-
-                        goodsImagesList.add("https://image.flaticon.com/icons/png/512/16/16770.png");
-                        articleList.add(new Article(" ", getString(R.string.load_more), "", "","https://image.flaticon.com/icons/png/512/16/16770.png"));
-
-                    }
-                    if(articleList.size()>0) {
-                        isLoadedCitrus = true;
-                        Log.d("TEST", "Citrus =>" + isLoadedCitrus);
-
-                        if (!isStoreLoaded) {
-
-                            currentStoreIndex = 1;
-                            if (getActivity() != null) {
-                                getActivity().runOnUiThread(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-
-                                        goodsListView.setAdapter(adapterCitrus);
-                                        initRecyclerView();
-                                        progressBar.setVisibility(View.GONE); // to hide
-
+                                    if (priceElement2 != null) {
+                                        String price2 = priceElement2.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
+                                        price = price1;
+                                        oldPrice = price2;
+                                    } else {
+                                        price = price1;
+                                        oldPrice = "";
                                     }
 
-                                });
-                            }
-                            isStoreLoaded = true;
+                                } else {
+                                    price = getString(R.string.form_price);
+                                    oldPrice = "";
+                                }
 
-                        }
-                    }if (getActivity() != null) {
-                        getActivity().runOnUiThread(new Runnable() {
+                                Document docCitrus = null;
+                                try {
+                                    docCitrus = Jsoup.connect(url).timeout(0).get();
+                                    Log.d("CONNECT", "connected next try" + stopHandlers);
 
-                            @Override
-                            public void run() {
-                                // to hide
-                                adapterCitrus.notifyDataSetChanged();
-                                goodsListView.setEnabled(true);
+                                    Elements images = docCitrus.getElementsByAttributeValue("class", "gallery").select("img");
+                                    String img = images.attr("src");
 
-                                if (!isConnected()) {
-                                    errorTextMain.setVisibility(View.VISIBLE);
+                                    articleList.add(new Article(url, title, price, oldPrice, img));
+                                    if (currentStoreIndex == 1) {
+                                        errorTextMain.setVisibility(View.INVISIBLE);
+                                    }
+
+                                    isLoadedCitrus = true;
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                    Log.d("CONNECT", "connected next except");
+
                                 }
                             }
                         });
+
+
+                        for (int i = goodsCount; i < articleList.size(); i++) {
+                            goodsNamesList.add(articleList.get(i).getName());
+                            goodsPricesList.add(articleList.get(i).getPrice());
+                            goodsOldPricesList.add(articleList.get(i).getOldPrice());
+                            goodsColorsList.add(ContextCompat.getColor(context, R.color.citrus_colour));
+
+                            goodsImagesList.add(articleList.get(i).getImg());
+
+                        }
+                        goodsCount = articleList.size();
+                        Element loadElement = doc.getElementsByAttributeValue("class", "catalog-card-container more-items product-card product-card--mini").first();
+
+                        if (loadElement != null && goodsCount > 0 && !stopHandlers) {
+                            goodsNamesList.add(getString(R.string.load_more));
+                            goodsPricesList.add("");
+                            goodsOldPricesList.add("");
+                            goodsColorsList.add(ContextCompat.getColor(context, R.color.loadmore_colour));
+
+                            goodsImagesList.add("https://image.flaticon.com/icons/png/512/16/16770.png");
+                            articleList.add(new Article(" ", getString(R.string.load_more), "", "", "https://image.flaticon.com/icons/png/512/16/16770.png"));
+
+                        }
+                        if (articleList.size() > 0) {
+                            isLoadedCitrus = true;
+                            Log.d("TEST", "Citrus =>" + isLoadedCitrus);
+
+                            if (!isStoreLoaded) {
+
+                                currentStoreIndex = 1;
+                                if (getActivity() != null) {
+                                    getActivity().runOnUiThread(new Runnable() {
+
+                                        @Override
+                                        public void run() {
+
+                                            goodsListView.setAdapter(adapterCitrus);
+                                            initRecyclerView();
+                                            progressBar.setVisibility(View.GONE); // to hide
+
+                                        }
+
+                                    });
+                                }
+                                isStoreLoaded = true;
+
+                            }
+                        }
+                        if (getActivity() != null) {
+                            getActivity().runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    // to hide
+                                    adapterCitrus.notifyDataSetChanged();
+                                    goodsListView.setEnabled(true);
+
+                                    if (!isConnected()) {
+                                        errorTextMain.setVisibility(View.VISIBLE);
+                                    }
+                                }
+                            });
+                        }
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Log.d(TAG, "CITRUS ERROR");
                     }
 
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Log.d(TAG,"CITRUS ERROR");
                 }
-
-
-            }
         };
 
 
@@ -988,128 +1003,129 @@ public class HomeFragment extends Fragment{
                     new Runnable() {
                         @Override
                         public void run() {
-                            Log.d("CONNECT", "connected main Rozetka");
+                                Log.d("CONNECT", "connected main Rozetka");
 //                            if (!isFoundMoyo) {
 
-                            doc1 = Jsoup.parse(htmlContent);
-                            Elements elements = doc1.getElementsByAttributeValue("class", "goods-tile__inner");
+                                doc1 = Jsoup.parse(htmlContent);
+                                Elements elements = doc1.getElementsByAttributeValue("class", "goods-tile__inner");
 
-                            boolean isConsist = false;
-                            for (Element element : elements) {
-                                String url = element.getElementsByAttributeValue("class", "goods-tile__heading").first().attr("href");
-                                Element elprice = element.getElementsByAttributeValue("class", "goods-tile__price-value").first();
-                                Element elprice2 = element.getElementsByAttributeValue("class", "goods-tile__price--old price--gray").first();
+                                boolean isConsist = false;
+                                for (Element element : elements) {
+                                    if (!stopHandlers) {
+                                    String url = element.getElementsByAttributeValue("class", "goods-tile__heading").first().attr("href");
+                                    Element elprice = element.getElementsByAttributeValue("class", "goods-tile__price-value").first();
+                                    Element elprice2 = element.getElementsByAttributeValue("class", "goods-tile__price--old price--gray").first();
 
-                                String price = "";
-                                String oldPrice = "";
+                                    String price = "";
+                                    String oldPrice = "";
 
-                                if (elprice.text() != null) {
-                                    String price1 = elprice.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
+                                    if (elprice.text() != null) {
+                                        String price1 = elprice.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
 
-                                    if (elprice2.text() != "") {
-                                        //Log.d("PRICE", elprice2.text());
-                                        String price2 = elprice2.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
-                                        price = price1;
-                                        oldPrice = price2;
+                                        if (elprice2.text() != "") {
+                                            //Log.d("PRICE", elprice2.text());
+                                            String price2 = elprice2.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
+                                            price = price1;
+                                            oldPrice = price2;
+                                        } else {
+                                            price = price1;
+                                            oldPrice = "";
+                                        }
+
                                     } else {
-                                        price = price1;
+                                        price = getString(R.string.form_price);
                                         oldPrice = "";
                                     }
+                                    String title = element.getElementsByAttributeValue("class", "goods-tile__heading").first().text();
+                                    String imgUrl = element.getElementsByAttributeValue("class", "goods-tile__picture").first().child(1).attr("src");
 
-                                } else {
-                                    price = getString(R.string.form_price);
-                                    oldPrice = "";
-                                }
-                                String title = element.getElementsByAttributeValue("class", "goods-tile__heading").first().text();
-                                String imgUrl = element.getElementsByAttributeValue("class", "goods-tile__picture").first().child(1).attr("src");
+                                    boolean isContains = false;
 
-                                boolean isContains = false;
-
-                                for (int i = 0; i < articleListMoyo.size(); i++) {
-                                    if (articleListMoyo.get(i).getName().equals(title)) {
-                                        isContains = true;
+                                    for (int i = 0; i < articleListMoyo.size(); i++) {
+                                        if (articleListMoyo.get(i).getName().equals(title)) {
+                                            isContains = true;
+                                        }
                                     }
-                                }
 
-                                if (!isContains) {
+                                    if (!isContains) {
 
-                                    articleListMoyo.add(new Article(url, title, price, oldPrice, imgUrl));
-                                    Log.d("TEST", new Article(url, title, price, oldPrice, imgUrl).toString());
-
-                                }
-
-
-                                isLoadedRozetka = true;
-
-                                if (currentStoreIndex == 0) {
-                                    errorTextMain.setVisibility(View.INVISIBLE);
-                                }
-
-
-                            }
-                            if (getActivity() != null) {
-                                getActivity().runOnUiThread(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-
-                                        for (int i = goodsCountMoyo; i < articleListMoyo.size(); i++) {
-                                            goodsNamesListMoyo.add(articleListMoyo.get(i).getName());
-                                            goodsPricesListMoyo.add(articleListMoyo.get(i).getPrice());
-                                            goodsOldPricesListMoyo.add(articleListMoyo.get(i).getOldPrice());
-                                            goodsImagesListMoyo.add(articleListMoyo.get(i).getImg());
-                                            goodsColorsMoyo.add(ContextCompat.getColor(context, R.color.rozetka_colour));
-
-                                        }
-                                        goodsCountMoyo = articleListMoyo.size();
-                                        Element loadElement = doc1.getElementsByAttributeValue("class", "show-more__text").first();
-
-                                        if (loadElement != null && goodsCount > 0) {
-                                            goodsNamesListMoyo.add(getString(R.string.load_more));
-                                            goodsPricesListMoyo.add("");
-                                            goodsOldPricesListMoyo.add("");
-                                            goodsColorsMoyo.add(ContextCompat.getColor(context, R.color.loadmore_colour));
-
-                                            goodsImagesListMoyo.add("https://image.flaticon.com/icons/png/512/16/16770.png");
-                                            articleListMoyo.add(new Article(" ", getString(R.string.load_more), "", "", "https://image.flaticon.com/icons/png/512/16/16770.png"));
-
-                                        }
-                                        // to hide
-
+                                        articleListMoyo.add(new Article(url, title, price, oldPrice, imgUrl));
+                                        Log.d("TEST", new Article(url, title, price, oldPrice, imgUrl).toString());
 
                                     }
-                                });
+
+
+                                    isLoadedRozetka = true;
+
+                                    if (currentStoreIndex == 0) {
+                                        errorTextMain.setVisibility(View.INVISIBLE);
+                                    }
+
+
+                                }
                             }
+                                if (getActivity() != null) {
+                                    getActivity().runOnUiThread(new Runnable() {
 
-                            if (articleListRozetka.size() > 0) {
-                                isLoadedRozetka = true;
-                                Log.d("TEST", "Rozetka =>" + isLoadedRozetka);
+                                        @Override
+                                        public void run() {
 
-                                if (!isStoreLoaded) {
-                                    currentStoreIndex = 0;
-                                    goodsListView.setAdapter(adapterMoyo);
-                                    initRecyclerView();
-                                    isStoreLoaded = true;
-                                    progressBar.setVisibility(View.GONE); // to hide
+                                            for (int i = goodsCountMoyo; i < articleListMoyo.size(); i++) {
+                                                goodsNamesListMoyo.add(articleListMoyo.get(i).getName());
+                                                goodsPricesListMoyo.add(articleListMoyo.get(i).getPrice());
+                                                goodsOldPricesListMoyo.add(articleListMoyo.get(i).getOldPrice());
+                                                goodsImagesListMoyo.add(articleListMoyo.get(i).getImg());
+                                                goodsColorsMoyo.add(ContextCompat.getColor(context, R.color.rozetka_colour));
+
+                                            }
+                                            goodsCountMoyo = articleListMoyo.size();
+                                            Element loadElement = doc1.getElementsByAttributeValue("class", "show-more__text").first();
+
+                                            if (loadElement != null && goodsCount > 0 && !stopHandlers) {
+                                                goodsNamesListMoyo.add(getString(R.string.load_more));
+                                                goodsPricesListMoyo.add("");
+                                                goodsOldPricesListMoyo.add("");
+                                                goodsColorsMoyo.add(ContextCompat.getColor(context, R.color.loadmore_colour));
+
+                                                goodsImagesListMoyo.add("https://image.flaticon.com/icons/png/512/16/16770.png");
+                                                articleListMoyo.add(new Article(" ", getString(R.string.load_more), "", "", "https://image.flaticon.com/icons/png/512/16/16770.png"));
+
+                                            }
+                                            // to hide
+
+
+                                        }
+                                    });
                                 }
 
-                            }
+                                if (articleListRozetka.size() > 0) {
+                                    isLoadedRozetka = true;
+                                    Log.d("TEST", "Rozetka =>" + isLoadedRozetka);
+
+                                    if (!isStoreLoaded) {
+                                        currentStoreIndex = 0;
+                                        goodsListView.setAdapter(adapterMoyo);
+                                        initRecyclerView();
+                                        isStoreLoaded = true;
+                                        progressBar.setVisibility(View.GONE); // to hide
+                                    }
+
+                                }
 
 
                             /*isLoadedRozetka = true;
                             Log.d("TEST", "Rozetka =>" + isLoadedRozetka);*/
 
-                            //Log.d(TAG, articleListMoyo.size() + "  " + goodsImagesListMoyo.size());
+                                //Log.d(TAG, articleListMoyo.size() + "  " + goodsImagesListMoyo.size());
 
 
-
-                            isFoundMoyo = true;
-                            adapterMoyo.notifyDataSetChanged();
-                            goodsListView.setEnabled(true);
+                                isFoundMoyo = true;
+                                adapterMoyo.notifyDataSetChanged();
+                                goodsListView.setEnabled(true);
 //                            }
 
-                            //Log.d("TEST", doc.html());
-                        }
+                                //Log.d("TEST", doc.html());
+                            }
                     }
             );
 
@@ -1193,97 +1209,98 @@ public class HomeFragment extends Fragment{
                     new Runnable() {
                         @Override
                         public void run() {
+                                Log.d("CONNECT", "connected main Allo");
 
-                            Log.d("CONNECT", "connected main Allo");
+                                if (!isFoundRozetka) {
+                                    Log.d(TAG, "Step 3");
+                                    //Log.d(TAG, htmlContent);
+                                    doc2 = Jsoup.parse(htmlContent);
+                                    Elements elements = doc2.getElementsByAttributeValue("class", "product-card");
+                                    for (Element element : elements) {
+                                        if (!stopHandlers) {
+                                        String title = element.getElementsByAttributeValue("class", "product-card__title").first().text();
+                                        String url = element.getElementsByAttributeValue("class", "product-card__title").first().attr("href");
+                                        Element el = element.getElementsByAttributeValue("class", "sum").last();
+                                        Element el2 = element.getElementsByAttributeValue("class", "sum").first();
+                                        String price;
+                                        String oldPrice;
+                                        if (el != null) {
+                                            String price1 = el.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
 
-                            if (!isFoundRozetka) {
-                                Log.d(TAG, "Step 3");
-                                //Log.d(TAG, htmlContent);
-                                doc2 = Jsoup.parse(htmlContent);
-                                Elements elements = doc2.getElementsByAttributeValue("class", "product-card");
-                                for (Element element : elements) {
-                                    String title = element.getElementsByAttributeValue("class", "product-card__title").first().text();
-                                    String url = element.getElementsByAttributeValue("class", "product-card__title").first().attr("href");
-                                    Element el = element.getElementsByAttributeValue("class", "sum").last();
-                                    Element el2 = element.getElementsByAttributeValue("class", "sum").first();
-                                    String price;
-                                    String oldPrice;
-                                    if (el!=null){
-                                        String price1 = el.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
 
+                                            if (el2 != null && !el2.equals(el)) {
+                                                String price2 = el2.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
+                                                price = price1;
+                                                oldPrice = price2;
+                                            } else {
+                                                price = price1;
+                                                oldPrice = "";
+                                            }
 
-                                        if (el2!=null && !el2.equals(el)){
-                                            String price2 = el2.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
-                                            price = price1;
-                                            oldPrice = price2;
                                         } else {
-                                            price =  price1;
-                                            oldPrice =  "";
+                                            price = getString(R.string.form_price);
+                                            oldPrice = "";
+                                        }
+                                        // String imgUrl = String.valueOf(element.getElementsByAttributeValue("class", "goods-tile__picture").first().childrenSize());
+                                        String imgUrl = element.getElementsByAttributeValue("class", "gallery__img-wrapper").first().select("img").attr("data-src");
+
+                                        articleListRozetka.add(new Article(url, title, price, oldPrice, imgUrl));
+
+                                        isLoadedAllo = true;
+
+                                        if (currentStoreIndex == 2) {
+                                            errorTextMain.setVisibility(View.INVISIBLE);
                                         }
 
-                                    } else {
-                                        price = getString(R.string.form_price);
-                                        oldPrice = "";
+
                                     }
-                                    // String imgUrl = String.valueOf(element.getElementsByAttributeValue("class", "goods-tile__picture").first().childrenSize());
-                                    String imgUrl = element.getElementsByAttributeValue("class", "gallery__img-wrapper").first().select("img").attr("data-src");
-
-                                    articleListRozetka.add(new Article(url, title, price, oldPrice, imgUrl));
-
-                                    isLoadedAllo = true;
-
-                                    if (currentStoreIndex==2){
-                                        errorTextMain.setVisibility(View.INVISIBLE);
-                                    }
-
-
                                 }
-                                if (getActivity() != null) {
-                                    getActivity().runOnUiThread(new Runnable() {
+                                    if (getActivity() != null) {
+                                        getActivity().runOnUiThread(new Runnable() {
 
-                                        @Override
-                                        public void run() {
+                                            @Override
+                                            public void run() {
 
-                                            for (int i = goodsCountRozetka; i < articleListRozetka.size(); i++) {
-                                                goodsNamesListRozetka.add(articleListRozetka.get(i).getName());
-                                                goodsPricesListRozetka.add(articleListRozetka.get(i).getPrice());
-                                                goodsOldPricesListRozetka.add(articleListRozetka.get(i).getOldPrice());
-                                                goodsColorsRozetka.add(ContextCompat.getColor(context, R.color.allo_colour));
+                                                for (int i = goodsCountRozetka; i < articleListRozetka.size(); i++) {
+                                                    goodsNamesListRozetka.add(articleListRozetka.get(i).getName());
+                                                    goodsPricesListRozetka.add(articleListRozetka.get(i).getPrice());
+                                                    goodsOldPricesListRozetka.add(articleListRozetka.get(i).getOldPrice());
+                                                    goodsColorsRozetka.add(ContextCompat.getColor(context, R.color.allo_colour));
 
-                                                goodsImagesListRozetka.add(articleListRozetka.get(i).getImg());
-                                                //Log.d(TAG, articleListRozetka.get(i).toString());
+                                                    goodsImagesListRozetka.add(articleListRozetka.get(i).getImg());
+                                                    //Log.d(TAG, articleListRozetka.get(i).toString());
+
+                                                }
+                                                goodsCountRozetka = articleListRozetka.size();
+                                                Element loadElement = doc2.getElementsByAttributeValue("class", "pagination__next__link").first();
+
+                                                if (loadElement != null && goodsCount > 0 && !stopHandlers) {
+                                                    goodsNamesListRozetka.add(getString(R.string.load_more));
+                                                    goodsPricesListRozetka.add("");
+                                                    goodsOldPricesListRozetka.add("");
+                                                    goodsColorsRozetka.add(ContextCompat.getColor(context, R.color.loadmore_colour));
+
+                                                    goodsImagesListRozetka.add("https://image.flaticon.com/icons/png/512/16/16770.png");
+                                                    articleListRozetka.add(new Article(" ", getString(R.string.load_more), "", "", "https://image.flaticon.com/icons/png/512/16/16770.png"));
+
+                                                }
+
 
                                             }
-                                            goodsCountRozetka = articleListRozetka.size();
-                                            Element loadElement = doc2.getElementsByAttributeValue("class", "pagination__next__link").first();
-
-                                            if (loadElement != null && goodsCount > 0) {
-                                                goodsNamesListRozetka.add(getString(R.string.load_more));
-                                                goodsPricesListRozetka.add("");
-                                                goodsOldPricesListRozetka.add("");
-                                                goodsColorsRozetka.add(ContextCompat.getColor(context, R.color.loadmore_colour));
-
-                                                goodsImagesListRozetka.add("https://image.flaticon.com/icons/png/512/16/16770.png");
-                                                articleListRozetka.add(new Article(" ", getString(R.string.load_more), "", "", "https://image.flaticon.com/icons/png/512/16/16770.png"));
-
-                                            }
+                                        });
+                                    }
 
 
+                                    if (articleListRozetka.size() > 0) {
+                                        isLoadedAllo = true;
+                                        Log.d("TEST", "Allo =>" + isLoadedAllo);
+                                        if (!isStoreLoaded) {
+                                            currentStoreIndex = 2;
+                                            goodsListView.setAdapter(adapterRozetka);
+                                            initRecyclerView();
+                                            isStoreLoaded = true;
+                                            progressBar.setVisibility(View.GONE); // to hide
                                         }
-                                    });
-                                }
-
-
-                                if(articleListRozetka.size()>0) {
-                                    isLoadedAllo = true;
-                                    Log.d("TEST", "Allo =>" + isLoadedAllo);
-                                    if(!isStoreLoaded) {
-                                        currentStoreIndex = 2;
-                                        goodsListView.setAdapter(adapterRozetka);
-                                        initRecyclerView();
-                                        isStoreLoaded = true;
-                                        progressBar.setVisibility(View.GONE); // to hide
-                                    }
                                   /*  if (!isLoadedCitrus && !isLoadedRozetka && isLoadedAllo) {
                                         Log.d("TEST", "Allo => SHOW");
 
@@ -1291,15 +1308,14 @@ public class HomeFragment extends Fragment{
                                         // isLoadedAllo = false;
                                         initRecyclerView();
                                     }*/
+                                    }
+
+
+                                    isFoundRozetka = true;
+                                    adapterRozetka.notifyDataSetChanged();
+                                    goodsListView.setEnabled(true);
                                 }
-
-
-
-                                isFoundRozetka = true;
-                                adapterRozetka.notifyDataSetChanged();
-                                goodsListView.setEnabled(true);
                             }
-                        }
                     }
             );
         }
