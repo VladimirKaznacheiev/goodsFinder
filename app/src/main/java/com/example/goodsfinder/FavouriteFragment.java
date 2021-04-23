@@ -464,11 +464,23 @@ public class FavouriteFragment extends Fragment {
 
                             try {
                                 doc1 = Jsoup.parse(htmlContent);
-                                priceRozetka = doc1.getElementsByAttributeValue("class", "product-prices__inner").last().child(0).text();
+                                Element tmpEl2 = doc1.getElementsByAttributeValue("class", "product-prices__inner").last();
+                                Element tmpEl = doc1.getElementsByAttributeValue("class", "product-trade").last();
+                                if (tmpEl!= null && tmpEl2==null){
+                                    priceRozetka = context.getString(R.string.form_price);
+                                } else {
+                                    priceRozetka = doc1.getElementsByAttributeValue("class", "product-prices__inner").last().child(0).text();
+                                }
                                 Element oldPriceRozetka = doc1.getElementsByAttributeValue("class", "product-prices__small").last();
 
                                 if (priceRozetka!=null){
-                                    String price1 = priceRozetka.replace("₴", "").replace("грн", "").replace(" грн", "") + " грн";
+                                    String price1;
+                                    if (!priceRozetka.contains(context.getString(R.string.form_price))){
+                                        price1 = priceRozetka.replace("₴", "").replace("грн", "").replace(" грн", "") + " грн";
+                                    } else {
+                                        price1 = priceRozetka;
+                                    }
+
 
                                     if (oldPriceRozetka!=null){
                                         String price2 = oldPriceRozetka.text().replace("₴", "").replace("грн", "").replace(" грн", "") + " грн";

@@ -12,7 +12,7 @@
     <string name="auth_fail">Authorization failed. Check the entered data</string>
     <string name="register_success">Registration successful</string>
     <string name="register_fail">Registration failed, it is possible that such mail is already registered</string>
-    <string name="form_price">The price is forming</string>
+    <string name="form_price">Forming</string>
     <string name="load_more">Load more</string>
     <string name="goods_added_before">The product removed from the favorites</string>
     <string name="goods_added">The product is added to favorites</string>

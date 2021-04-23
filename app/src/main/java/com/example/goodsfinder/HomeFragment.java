@@ -94,6 +94,31 @@ public class HomeFragment extends Fragment{
 
     RecyclerView recyclerView;
 
+
+    String BlockAlloClass;
+    String TitleAlloClass;
+    String UrlAlloClass;
+    String PriceAlloClass;
+    String OldPriceAlloClass;
+    String ImageAlloClass;
+    String LoadMoreAlloClass;
+
+    String BlockRozetkaClass;
+    String TitleRozetkaClass;
+    String UrlRozetkaClass;
+    String PriceRozetkaClass;
+    String OldPriceRozetkaClass;
+    String ImageRozetkaClass;
+    String LoadMoreRozetkaClass;
+
+    String BlockCitrusClass;
+    String TitleCitrusClass;
+    String UrlCitrusClass;
+    String PriceCitrusClass;
+    String OldPriceCitrusClass;
+    String ImageCitrusClass;
+    String LoadMoreCitrusClass;
+
     DialogFragment dlg;
     DialogFragment dlg2;
     ListView listSearches;
@@ -232,6 +257,149 @@ public class HomeFragment extends Fragment{
 
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+
+        mDatabase.child("Class").child("PageProduct").child("Allo").addValueEventListener(new ValueEventListener() {
+            public boolean inChosen;
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Map<String, Object> td = (HashMap<String,Object>) snapshot.getValue();
+                Log.d("DATA", "DATA1");
+
+                for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
+
+                    DatabaseReference objRef = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid()).child( childDataSnapshot.getKey());
+                    Map<String,Object> taskMap = new HashMap<String,Object>();
+                    objRef.updateChildren(taskMap);
+
+                    String tmp = String.valueOf(childDataSnapshot.getValue());
+                    String tmp2 = String.valueOf(childDataSnapshot.getKey());
+                    if (tmp2.equals("Block")){
+                        BlockAlloClass = tmp;
+                    } else if (tmp2.equals("Title")){
+                        TitleAlloClass = tmp;
+                    } else if (tmp2.equals("Url")){
+                        UrlAlloClass = tmp;
+                    } else if (tmp2.equals("OldPrice")){
+                        OldPriceAlloClass = tmp;
+                    } else if (tmp2.equals("Image")){
+                        ImageAlloClass = tmp;
+                    } else if (tmp2.equals("LoadMore")){
+                        LoadMoreAlloClass = tmp;
+                    } else if (tmp2.equals("Price")){
+                        PriceAlloClass = tmp;
+                    }
+                }
+                Log.d("DATA", BlockAlloClass);
+                Log.d("DATA", TitleAlloClass);
+                Log.d("DATA", UrlAlloClass);
+                Log.d("DATA", OldPriceAlloClass);
+                Log.d("DATA", ImageAlloClass);
+                Log.d("DATA", LoadMoreAlloClass);
+                Log.d("DATA", PriceAlloClass);
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        mDatabase.child("Class").child("PageProduct").child("Citrus").addValueEventListener(new ValueEventListener() {
+            public boolean inChosen;
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Map<String, Object> td = (HashMap<String,Object>) snapshot.getValue();
+                Log.d("DATA", "DATA2");
+
+                for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
+
+                    DatabaseReference objRef = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid()).child( childDataSnapshot.getKey());
+                    Map<String,Object> taskMap = new HashMap<String,Object>();
+                    objRef.updateChildren(taskMap);
+
+                    String tmp = String.valueOf(childDataSnapshot.getValue());
+                    String tmp2 = String.valueOf(childDataSnapshot.getKey());
+                    if (tmp2.equals("Block")){
+                        BlockCitrusClass = tmp;
+                    } else if (tmp2.equals("Title")){
+                        TitleCitrusClass = tmp;
+                    } else if (tmp2.equals("Url")){
+                        UrlCitrusClass = tmp;
+                    } else if (tmp2.equals("OldPrice")){
+                        OldPriceCitrusClass = tmp;
+                    } else if (tmp2.equals("Image")){
+                        ImageCitrusClass = tmp;
+                    } else if (tmp2.equals("LoadMore")){
+                        LoadMoreCitrusClass = tmp;
+                    } else if (tmp2.equals("Price")){
+                        PriceCitrusClass = tmp;
+                    }
+                }
+                Log.d("DATA", BlockCitrusClass);
+                Log.d("DATA", TitleCitrusClass);
+                Log.d("DATA", UrlCitrusClass);
+                Log.d("DATA", OldPriceCitrusClass);
+                Log.d("DATA", ImageCitrusClass);
+                Log.d("DATA", LoadMoreCitrusClass);
+                Log.d("DATA", PriceCitrusClass);
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+        mDatabase.child("Class").child("PageProduct").child("Rozetka").addValueEventListener(new ValueEventListener() {
+            public boolean inChosen;
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Map<String, Object> td = (HashMap<String,Object>) snapshot.getValue();
+                Log.d("DATA", "DATA3");
+
+                for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
+
+                    DatabaseReference objRef = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUid()).child( childDataSnapshot.getKey());
+                    Map<String,Object> taskMap = new HashMap<String,Object>();
+                    objRef.updateChildren(taskMap);
+
+                    String tmp = String.valueOf(childDataSnapshot.getValue());
+                    String tmp2 = String.valueOf(childDataSnapshot.getKey());
+                    if (tmp2.equals("Block")){
+                        BlockRozetkaClass = tmp;
+                    } else if (tmp2.equals("Title")){
+                        TitleRozetkaClass = tmp;
+                    } else if (tmp2.equals("Url")){
+                        UrlRozetkaClass = tmp;
+                    } else if (tmp2.equals("OldPrice")){
+                        OldPriceRozetkaClass = tmp;
+                    } else if (tmp2.equals("Image")){
+                        ImageRozetkaClass = tmp;
+                    } else if (tmp2.equals("LoadMore")){
+                        LoadMoreRozetkaClass = tmp;
+                    } else if (tmp2.equals("Price")){
+                        PriceRozetkaClass = tmp;
+                    }
+                }
+                Log.d("DATA", BlockRozetkaClass);
+                Log.d("DATA", TitleRozetkaClass);
+                Log.d("DATA", UrlRozetkaClass);
+                Log.d("DATA", OldPriceRozetkaClass);
+                Log.d("DATA", ImageRozetkaClass);
+                Log.d("DATA", LoadMoreRozetkaClass);
+                Log.d("DATA", PriceRozetkaClass);
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
 
         isFoundMoyo = false;
@@ -795,19 +963,18 @@ public class HomeFragment extends Fragment{
                         doc = Jsoup.connect("https://www.citrus.ua/search?query=" + s.replace(" ", "%20")).get();
                         Log.d("TEXT", doc.getElementsByAttributeValue("class", "product-img").attr("src"));
                         Log.d("CONNECT", "connected main Citrus");
-                        Elements elements = doc.getElementsByAttributeValue("class", "short-itm-desc");
+                        Elements elements = doc.getElementsByAttributeValue("class", BlockCitrusClass);
 
                         elements.forEach(image -> {
                             if (!stopHandlers) {
 
                                 try {
 
-                                    Element aElement = image.child(5);
-                                    Element imgElement = image.child(2);
-                                    Element priceElement2 = image.getElementsByAttributeValue("class", "old-price").last();
-                                    Element priceElement = image.getElementsByAttributeValue("class", "price-number").last();
+                                    Element aElement = image.getElementsByAttributeValue("class", UrlCitrusClass).last();
+                                    Element priceElement2 = image.getElementsByAttributeValue("class", OldPriceCitrusClass).last();
+                                    Element priceElement = image.getElementsByAttributeValue("class", PriceCitrusClass).last();
                                     String url = "https://www.citrus.ua" + aElement.attr("href");
-                                    String title = aElement.child(0).text();
+                                    String title = image.getElementsByAttributeValue("class", TitleCitrusClass).last().text();
                                     String price = "";
                                     String oldPrice = "";
 
@@ -833,15 +1000,13 @@ public class HomeFragment extends Fragment{
                                         docCitrus = Jsoup.connect(url).timeout(0).get();
                                         Log.d("CONNECT", "connected next try" + stopHandlers);
 
-                                        Elements images = docCitrus.getElementsByAttributeValue("class", "gallery").select("img");
+                                        Elements images = docCitrus.getElementsByAttributeValue("class", ImageCitrusClass).select("img");
                                         String img = images.attr("src");
 
                                         articleList.add(new Article(url, title, price, oldPrice, img));
                                         if (currentStoreIndex == 1) {
                                             errorTextMain.setVisibility(View.INVISIBLE);
                                         }
-
-                                        isLoadedCitrus = true;
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                         Log.d("CONNECT", "connected next except");
@@ -858,6 +1023,8 @@ public class HomeFragment extends Fragment{
                             }
                         });
 
+                        isLoadedCitrus = true;
+
 
                         for (int i = goodsCount; i < articleList.size(); i++) {
                             goodsNamesList.add(articleList.get(i).getName());
@@ -869,7 +1036,7 @@ public class HomeFragment extends Fragment{
 
                         }
                         goodsCount = articleList.size();
-                        Element loadElement = doc.getElementsByAttributeValue("class", "catalog-card-container more-items product-card product-card--mini").first();
+                        Element loadElement = doc.getElementsByAttributeValue("class", LoadMoreCitrusClass).first();
 
                         if (loadElement != null && goodsCount > 0 && !stopHandlers) {
                             goodsNamesList.add(getString(R.string.load_more));
@@ -882,7 +1049,6 @@ public class HomeFragment extends Fragment{
 
                         }
                         if (articleList.size() > 0) {
-                            isLoadedCitrus = true;
                             Log.d("TEST", "Citrus =>" + isLoadedCitrus);
 
                             if (!isStoreLoaded) {
@@ -1019,16 +1185,16 @@ public class HomeFragment extends Fragment{
 //                            if (!isFoundMoyo) {
 
                                 doc1 = Jsoup.parse(htmlContent);
-                                Elements elements = doc1.getElementsByAttributeValue("class", "goods-tile__inner");
+                                Elements elements = doc1.getElementsByAttributeValue("class", BlockRozetkaClass);
 
                                 boolean isConsist = false;
                                 for (Element element : elements) {
                                     if (!stopHandlers) {
                                         try {
 
-                                            String url = element.getElementsByAttributeValue("class", "goods-tile__heading").first().attr("href");
-                                            Element elprice = element.getElementsByAttributeValue("class", "goods-tile__price-value").first();
-                                            Element elprice2 = element.getElementsByAttributeValue("class", "goods-tile__price--old price--gray").first();
+                                            String url = element.getElementsByAttributeValue("class", UrlRozetkaClass).first().attr("href");
+                                            Element elprice = element.getElementsByAttributeValue("class", PriceRozetkaClass).first();
+                                                Element elprice2 = element.getElementsByAttributeValue("class", OldPriceRozetkaClass).first();
 
                                             String price = "";
                                             String oldPrice = "";
@@ -1056,8 +1222,8 @@ public class HomeFragment extends Fragment{
                                                 price = getString(R.string.form_price);
                                                 oldPrice = "";
                                             }
-                                            String title = element.getElementsByAttributeValue("class", "goods-tile__heading").first().text();
-                                            String imgUrl = element.getElementsByAttributeValue("class", "goods-tile__picture").first().child(1).attr("src");
+                                            String title = element.getElementsByAttributeValue("class", TitleRozetkaClass).first().text();
+                                            String imgUrl = element.getElementsByAttributeValue("class", ImageRozetkaClass).first().child(1).attr("src");
 
                                             boolean isContains = false;
 
@@ -1107,7 +1273,7 @@ public class HomeFragment extends Fragment{
 
                                             }
                                             goodsCountMoyo = articleListMoyo.size();
-                                            Element loadElement = doc1.getElementsByAttributeValue("class", "show-more__text").first();
+                                            Element loadElement = doc1.getElementsByAttributeValue("class", LoadMoreRozetkaClass).first();
 
                                             if (loadElement != null && goodsCount > 0 && !stopHandlers) {
                                                 goodsNamesListMoyo.add(getString(R.string.load_more));
@@ -1243,15 +1409,15 @@ public class HomeFragment extends Fragment{
                                     Log.d(TAG, "Step 3");
                                     //Log.d(TAG, htmlContent);
                                     doc2 = Jsoup.parse(htmlContent);
-                                    Elements elements = doc2.getElementsByAttributeValue("class", "product-card");
+                                    Elements elements = doc2.getElementsByAttributeValue("class", BlockAlloClass);
                                     for (Element element : elements) {
                                         if (!stopHandlers) {
                                             try {
 
-                                                String title = element.getElementsByAttributeValue("class", "product-card__title").first().text();
-                                                String url = element.getElementsByAttributeValue("class", "product-card__title").first().attr("href");
-                                                Element el = element.getElementsByAttributeValue("class", "sum").last();
-                                                Element el2 = element.getElementsByAttributeValue("class", "sum").first();
+                                                String title = element.getElementsByAttributeValue("class", TitleAlloClass).first().text();
+                                                String url = element.getElementsByAttributeValue("class", UrlAlloClass).first().attr("href");
+                                                Element el = element.getElementsByAttributeValue("class", PriceAlloClass).last();
+                                                Element el2 = element.getElementsByAttributeValue("class", OldPriceAlloClass).first();
                                                 String price;
                                                 String oldPrice;
                                                 if (el != null) {
@@ -1272,7 +1438,7 @@ public class HomeFragment extends Fragment{
                                                     oldPrice = "";
                                                 }
                                                 // String imgUrl = String.valueOf(element.getElementsByAttributeValue("class", "goods-tile__picture").first().childrenSize());
-                                                String imgUrl = element.getElementsByAttributeValue("class", "gallery__img-wrapper").first().select("img").attr("data-src");
+                                                String imgUrl = element.getElementsByAttributeValue("class", ImageAlloClass).first().select("img").attr("data-src");
 
                                                 articleListRozetka.add(new Article(url, title, price, oldPrice, imgUrl));
 
@@ -1308,7 +1474,7 @@ public class HomeFragment extends Fragment{
 
                                                 }
                                                 goodsCountRozetka = articleListRozetka.size();
-                                                Element loadElement = doc2.getElementsByAttributeValue("class", "pagination__next__link").first();
+                                                Element loadElement = doc2.getElementsByAttributeValue("class", LoadMoreAlloClass).last();
 
                                                 if (loadElement != null && goodsCount > 0 && !stopHandlers) {
                                                     goodsNamesListRozetka.add(getString(R.string.load_more));

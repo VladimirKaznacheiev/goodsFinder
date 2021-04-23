@@ -12,7 +12,7 @@
     <string name="auth_fail">Aвторизація не вдалася. Перевірте введені дані</string>
     <string name="register_success">Реєстрація успішна</string>
     <string name="register_fail">Реєстрація не вдалася, можливо, така пошта вже зареєстрована</string>
-    <string name="form_price">Ціна формується</string>
+    <string name="form_price">Формується</string>
     <string name="load_more">Завантажити ще</string>
     <string name="goods_added_before">Товар видалений з обраних</string>
     <string name="goods_added">Товар доданий в обрані</string>

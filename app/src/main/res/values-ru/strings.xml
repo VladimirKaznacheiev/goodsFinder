@@ -12,7 +12,7 @@
     <string name="auth_fail">Авторизация не успешна. Проверте введённые данные</string>
     <string name="register_success">Регистрация успешна</string>
     <string name="register_fail">Регистрация не успешна, возможно, такая почта уже зарегистрирована</string>
-    <string name="form_price">Цена формируется</string>
+    <string name="form_price">Формируется</string>
     <string name="load_more">Загрузить ещё</string>
     <string name="goods_added_before">Товар удалён из избранных</string>
     <string name="goods_added">Товар добавлен в избранные</string>
