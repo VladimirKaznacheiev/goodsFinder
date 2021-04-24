@@ -166,8 +166,8 @@ public class FavouriteFragment extends Fragment {
                     favouritesNamesList.add(counter, goodsInfo[2]);
 
 
-                    if(goodsInfo[3].equals("ROZETKA")){
-                        favouritesStoreImagesList.add(counter,R.drawable.rozetkalogo);
+                    if(goodsInfo[3].equals("ELDORADO")){
+                        favouritesStoreImagesList.add(counter,R.drawable.eldoradologo);
                         favouritesColourList.add(counter,ContextCompat.getColor(context,R.color.rozetka_colour));
                     }else if(goodsInfo[3].equals("ALLO")){
                         favouritesStoreImagesList.add(counter,R.drawable.allologo);
@@ -216,8 +216,9 @@ public class FavouriteFragment extends Fragment {
                             mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
                             e.printStackTrace();
                         }
-                    } else if (goodsInfo[0].contains("rozetka.com.ua")) {
+                    } else if (goodsInfo[0].contains("https://eldorado.ua")) {
                         mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
+
 
 
                         for (int i = 0; i < positionsRozetka.size(); i++) {
@@ -348,6 +349,7 @@ public class FavouriteFragment extends Fragment {
                     sortDefault();
                     Log.d("TETS", item);
                 } else if (item.equals(context.getString(R.string.up))){
+                    Log.d("ELDORADO", String.valueOf(isLoadedRozetka));
                     sortUp();
                     Log.d("TETS", item);
                 } else if (item.equals(context.getString(R.string.down))){
@@ -425,6 +427,7 @@ public class FavouriteFragment extends Fragment {
             browserRozetka.getSettings().setDefaultTextEncodingName("utf-8");
             //browserRozetka.getSettings().setLoadWithOverviewMode(true);
 
+
             browserRozetka.addJavascriptInterface(new JSHtmlInterfaceMoyo(), "JSBridge");
 
             browserRozetka.setWebViewClient(
@@ -463,27 +466,28 @@ public class FavouriteFragment extends Fragment {
                         public void run() {
 
                             try {
+
                                 doc1 = Jsoup.parse(htmlContent);
-                                Element tmpEl2 = doc1.getElementsByAttributeValue("class", "product-prices__inner").last();
-                                Element tmpEl = doc1.getElementsByAttributeValue("class", "product-trade").last();
-                                if (tmpEl!= null && tmpEl2==null){
-                                    priceRozetka = context.getString(R.string.form_price);
-                                } else {
-                                    priceRozetka = doc1.getElementsByAttributeValue("class", "product-prices__inner").last().child(0).text();
-                                }
-                                Element oldPriceRozetka = doc1.getElementsByAttributeValue("class", "product-prices__small").last();
+                                Log.d("ELDORADO", doc1.getElementsByAttributeValue("class", "price-value").last().text());
+                                //Log.d("ELDORADO", doc1.getElementsByAttributeValue("class", "base-slick slick-slide-item").last().html());
+                                priceRozetka = doc1.getElementsByAttributeValue("class", "price-value ").last().text();
+                                Element oldPriceRozetka = doc1.getElementsByAttributeValue("class", "old-price-value").last();
+
+
+
 
                                 if (priceRozetka!=null){
                                     String price1;
                                     if (!priceRozetka.contains(context.getString(R.string.form_price))){
-                                        price1 = priceRozetka.replace("₴", "").replace("грн", "").replace(" грн", "") + " грн";
+                                        price1 = priceRozetka.replace("₴", "").replace("грн", "").replace(" грн", "").replace(".", "") + " грн";
                                     } else {
                                         price1 = priceRozetka;
                                     }
 
 
                                     if (oldPriceRozetka!=null){
-                                        String price2 = oldPriceRozetka.text().replace("₴", "").replace("грн", "").replace(" грн", "") + " грн";
+                                        String price2 = oldPriceRozetka.text().replace("₴", "").replace("грн", "").replace(" грн", "").replace(".", "") + " грн";
+                                        Log.d("ELDORADOLOG", String.valueOf(positionsRozetka+", "+iRozetka));
                                         favouritesPricesList.set(Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)), price1);
                                         favouritesOldPricesList.set(Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)),  price2);
                                         infoLoaded.set(infoLoaded.size()-1-Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)),  infoLoaded.get(infoLoaded.size()-1-Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)))+price2+"SPLITFORBUY"+price1);
@@ -516,7 +520,9 @@ public class FavouriteFragment extends Fragment {
                                                 infoLoadedUp.set(i, infoLoaded.get(i));
                                             }
 
+                                            Log.d("ELDORADO", "TRUE");
                                             isLoadedRozetka = true;
+
 
                                             return;
                                         }
@@ -528,6 +534,7 @@ public class FavouriteFragment extends Fragment {
 
 
                                 //favouritesPricesList.add(Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)), priceRozetka.replace("₴", ""));
+
 
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -555,8 +562,11 @@ public class FavouriteFragment extends Fragment {
                 favouritesPricesList.clear();
                 favouritesOldPricesList.clear();
                 favouritesColourList.clear();
-
+                isLoadedRozetka = false;
+                positionsRozetka.clear();
+                iRozetka = 0;
                 adapter1.notifyDataSetChanged();
+                infoLoaded.clear();
 
                 loadChoosen();
             } else {
@@ -582,8 +592,8 @@ public class FavouriteFragment extends Fragment {
                 favouritesUrlList.add(i, goodsInfo[0]);
                 favouritesImagesList.add(i, goodsInfo[1]);
                 favouritesNamesList.add(i, goodsInfo[2]);
-                if(goodsInfo[3].equals("ROZETKA")){
-                    favouritesStoreImagesList.add(i,R.drawable.rozetkalogo);                    favouritesColourList.add(i,ContextCompat.getColor(context,R.color.rozetka_colour));
+                if(goodsInfo[3].equals("ELDORADO")){
+                    favouritesStoreImagesList.add(i,R.drawable.eldoradologo);                    favouritesColourList.add(i,ContextCompat.getColor(context,R.color.rozetka_colour));
                 }else if(goodsInfo[3].equals("ALLO")){
                     favouritesStoreImagesList.add(i,R.drawable.allologo);
                     favouritesColourList.add(i,ContextCompat.getColor(context,R.color.allo_colour));
@@ -653,8 +663,8 @@ public class FavouriteFragment extends Fragment {
                 favouritesUrlList.add(i, goodsInfo[0]);
                 favouritesImagesList.add(i, goodsInfo[1]);
                 favouritesNamesList.add(i, goodsInfo[2]);
-                if(goodsInfo[3].equals("ROZETKA")){
-                    favouritesStoreImagesList.add(i,R.drawable.rozetkalogo);
+                if(goodsInfo[3].equals("ELDORADO")){
+                    favouritesStoreImagesList.add(i,R.drawable.eldoradologo);
                     favouritesColourList.add(i,ContextCompat.getColor(context,R.color.rozetka_colour));
                 }else if(goodsInfo[3].equals("ALLO")){
                     favouritesStoreImagesList.add(i,R.drawable.allologo);
@@ -732,8 +742,8 @@ public class FavouriteFragment extends Fragment {
                 favouritesUrlList.add(i, goodsInfo[0]);
                 favouritesImagesList.add(i, goodsInfo[1]);
                 favouritesNamesList.add(i, goodsInfo[2]);
-                if(goodsInfo[3].equals("ROZETKA")){
-                    favouritesStoreImagesList.add(i,R.drawable.rozetkalogo);
+                if(goodsInfo[3].equals("ELDORADO")){
+                    favouritesStoreImagesList.add(i,R.drawable.eldoradologo);
                     favouritesColourList.add(i,ContextCompat.getColor(context,R.color.rozetka_colour));
                 }else if(goodsInfo[3].equals("ALLO")){
                     favouritesStoreImagesList.add(i,R.drawable.allologo);
@@ -856,14 +866,14 @@ public class FavouriteFragment extends Fragment {
 
 
                                         try {
-                                            String str = favouritesNamesList.get(position).replace("\nCITRUS", "").replace("\nALLO", "").replace("\nROZETKA", "");
+                                            String str = favouritesNamesList.get(position).replace("\nCITRUS", "").replace("\nALLO", "").replace("\nELDORADO", "");
 
                                             if (String.valueOf(childDataSnapshot.getValue()).contains(str)){
 
 
                                                 for (int i = 0; i < infoLoaded.size(); i++) {
-                                                    str1 = infoLoaded.get(i).split("SPLITFORBUY", 6)[2].replace("CITRUS", "").replace("ALLO", "").replace("ROZETKA", "");
-                                                    str2 = favouritesNamesList.get(position).replace("CITRUS", "").replace("ALLO", "").replace("ROZETKA", "");
+                                                    str1 = infoLoaded.get(i).split("SPLITFORBUY", 6)[2].replace("CITRUS", "").replace("ALLO", "").replace("ELDORADO", "");
+                                                    str2 = favouritesNamesList.get(position).replace("CITRUS", "").replace("ALLO", "").replace("ELDORADO", "");
 
                                                     Log.d("TEST1", str1);
 

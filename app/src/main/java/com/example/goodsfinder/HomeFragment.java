@@ -466,12 +466,12 @@ public class HomeFragment extends Fragment{
         getMoyo();
         getRozetka();
 
-        storeTitlesList.add("Rozetka");
+        storeTitlesList.add("Eldorado");
         storeTitlesList.add("Citrus");
         storeTitlesList.add("Allo");
 
 
-        storeImagesList.add(R.drawable.rozetkalogo);
+        storeImagesList.add(R.drawable.eldoradologo);
         storeImagesList.add(R.drawable.citruslogo);
         storeImagesList.add(R.drawable.allologo);
 
@@ -628,7 +628,7 @@ public class HomeFragment extends Fragment{
                             goodsColorsMoyo.remove(goodsColorsMoyo.size() - 1);
                             pageCounterMoyo++;
 
-                            getMoyoGoods("https://rozetka.com.ua/search/?page=" + pageCounterMoyo + "&text=" + currentRequestString);
+                            getMoyoGoods("https://eldorado.ua/search/?q="+currentRequestString);
                             Log.d("TEST","loadCLicked");
 
 
@@ -1116,11 +1116,9 @@ public class HomeFragment extends Fragment{
             public void run() {
                 String search1 = "";
                 search1 = search.replace(" ", "+");
-                if (search.contains("page=")){
-                    browserMoyo.loadUrl(search1);
-                }else{
-                    browserMoyo.loadUrl("https://rozetka.com.ua/search/?text=" + search1);
-                }
+
+                    browserMoyo.loadUrl("https://eldorado.ua/search/?q="+search1);
+
 
             }
         });
@@ -1191,10 +1189,11 @@ public class HomeFragment extends Fragment{
                                 for (Element element : elements) {
                                     if (!stopHandlers) {
                                         try {
+                                            String url = "https://eldorado.ua"+element.getElementsByAttributeValue("class", UrlRozetkaClass).first().child(0).attr("href");
+                                            Element elprice = element.getElementsByAttributeValue("class", PriceRozetkaClass).first().child(0);
+                                            Element elprice2 = element.getElementsByAttributeValue("class", OldPriceRozetkaClass).first();
 
-                                            String url = element.getElementsByAttributeValue("class", UrlRozetkaClass).first().attr("href");
-                                            Element elprice = element.getElementsByAttributeValue("class", PriceRozetkaClass).first();
-                                                Element elprice2 = element.getElementsByAttributeValue("class", OldPriceRozetkaClass).first();
+
 
                                             String price = "";
                                             String oldPrice = "";
@@ -1202,11 +1201,11 @@ public class HomeFragment extends Fragment{
                                             if (elprice!=null) {
 
                                                 if (elprice.text() != null) {
-                                                    String price1 = elprice.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
+                                                    String price1 = elprice.text().replace("₴", "").replace(" грн", "").replace("грн", "").replace(".", "") + " грн";
 
                                                     if (elprice2.text() != "") {
                                                         //Log.d("PRICE", elprice2.text());
-                                                        String price2 = elprice2.text().replace("₴", "").replace(" грн", "").replace("грн", "") + " грн";
+                                                        String price2 = elprice2.text().replace("₴", "").replace(".", "").replace(" грн", "").replace("грн", "") + " грн";
                                                         price = price1;
                                                         oldPrice = price2;
                                                     } else {
@@ -1222,8 +1221,9 @@ public class HomeFragment extends Fragment{
                                                 price = getString(R.string.form_price);
                                                 oldPrice = "";
                                             }
-                                            String title = element.getElementsByAttributeValue("class", TitleRozetkaClass).first().text();
-                                            String imgUrl = element.getElementsByAttributeValue("class", ImageRozetkaClass).first().child(1).attr("src");
+                                            String title = element.getElementsByAttributeValue("class", TitleRozetkaClass).first().child(0).child(0).text();
+                                            //String imgUrl = element.getElementsByAttributeValue("class", ImageRozetkaClass).first().attr("src");
+                                            String imgUrl = "https://cdn.icon-icons.com/icons2/2440/PNG/512/do_not_disturb_icon_148542.png";
 
                                             boolean isContains = false;
 
@@ -1273,18 +1273,7 @@ public class HomeFragment extends Fragment{
 
                                             }
                                             goodsCountMoyo = articleListMoyo.size();
-                                            Element loadElement = doc1.getElementsByAttributeValue("class", LoadMoreRozetkaClass).first();
 
-                                            if (loadElement != null && goodsCount > 0 && !stopHandlers) {
-                                                goodsNamesListMoyo.add(getString(R.string.load_more));
-                                                goodsPricesListMoyo.add("");
-                                                goodsOldPricesListMoyo.add("");
-                                                goodsColorsMoyo.add(ContextCompat.getColor(context, R.color.loadmore_colour));
-
-                                                goodsImagesListMoyo.add("https://image.flaticon.com/icons/png/512/16/16770.png");
-                                                articleListMoyo.add(new Article(" ", getString(R.string.load_more), "", "", "https://image.flaticon.com/icons/png/512/16/16770.png"));
-
-                                            }
                                             // to hide
 
 
@@ -1684,8 +1673,8 @@ public class HomeFragment extends Fragment{
                                         str = "ALLO";
                                     } else if (arrLIst.get(position).getUrl().contains("citrus.ua")){
                                         str = "CITRUS";
-                                    } else if (arrLIst.get(position).getUrl().contains("rozetka.com.ua")){
-                                        str = "ROZETKA";
+                                    } else if (arrLIst.get(position).getUrl().contains("eldorado.ua")){
+                                        str = "ELDORADO";
                                     }
                                     mDatabase.child("Users").child(user.getUid()).push().setValue(arrLIst.get(position).getUrl()+"SPLITFORBUY"+arrLIst.get(position).getImg()+"SPLITFORBUY"+arrLIst.get(position).getName()+"SPLITFORBUY"+str);
                                     mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
