@@ -144,6 +144,7 @@ public class FavouriteFragment extends Fragment {
                 infoLoaded.clear();
                 infoLoadedUp.clear();
                 favouritesList.clear();
+                urlsRozetka.clear();
 
                 boolean isNotEmpty = false;
 
@@ -487,7 +488,7 @@ public class FavouriteFragment extends Fragment {
 
                                     if (oldPriceRozetka!=null){
                                         String price2 = oldPriceRozetka.text().replace("₴", "").replace("грн", "").replace(" грн", "").replace(".", "") + " грн";
-                                        Log.d("ELDORADOLOG", String.valueOf(positionsRozetka+", "+iRozetka));
+                                        Log.d("ELDORADOLOG", String.valueOf(positionsRozetka+", "+iRozetka+", "+favouritesPricesList.size()));
                                         favouritesPricesList.set(Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)), price1);
                                         favouritesOldPricesList.set(Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)),  price2);
                                         infoLoaded.set(infoLoaded.size()-1-Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)),  infoLoaded.get(infoLoaded.size()-1-Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)))+price2+"SPLITFORBUY"+price1);
@@ -526,9 +527,10 @@ public class FavouriteFragment extends Fragment {
 
                                             return;
                                         }
+                                            iRozetka ++;
+                                            browserRozetka.loadUrl(urlsRozetka.get(urlsRozetka.size()-1-iRozetka));
 
-                                        iRozetka ++;
-                                        browserRozetka.loadUrl(urlsRozetka.get(urlsRozetka.size()-1-iRozetka));
+
                                     }
                                 });
 
@@ -550,7 +552,9 @@ public class FavouriteFragment extends Fragment {
     public void onClick(View view) {
 
         if(view.getId() == R.id.btn_reload) {
+
             if (isConnected()){
+
                 errorTextChoosen.setVisibility(View.INVISIBLE);
                 emptyTextChoosen.setVisibility(View.INVISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
@@ -567,6 +571,10 @@ public class FavouriteFragment extends Fragment {
                 iRozetka = 0;
                 adapter1.notifyDataSetChanged();
                 infoLoaded.clear();
+
+
+                infoLoadedUp.clear();
+                favouritesList.clear();
 
                 loadChoosen();
             } else {
