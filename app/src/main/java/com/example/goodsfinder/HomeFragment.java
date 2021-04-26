@@ -68,6 +68,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.skydoves.balloon.ArrowOrientation;
+import com.skydoves.balloon.Balloon;
+import com.skydoves.balloon.BalloonAnimation;
+import com.skydoves.balloon.BalloonSizeSpec;
+import com.skydoves.balloon.OnBalloonDismissListener;
 
 
 import org.jsoup.Jsoup;
@@ -94,6 +99,9 @@ public class HomeFragment extends Fragment{
 
     RecyclerView recyclerView;
 
+    Balloon balloon1;
+    Balloon balloon2;
+    Balloon balloon3;
 
     String BlockAlloClass;
     String TitleAlloClass;
@@ -156,6 +164,7 @@ public class HomeFragment extends Fragment{
     public String strForSearch;
 
     private Context context;
+
 
     @Override
     public void onAttach(Context context) {
@@ -225,22 +234,96 @@ public class HomeFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home2, container, false);
-        recyclerView = view.findViewById(R.id.storeListView);
+        recyclerView = (RecyclerView) view.findViewById(R.id.storeListView);
 
+        balloon1 = new Balloon.Builder(context)
+                .setArrowSize(10)
+                .setArrowOrientation(ArrowOrientation.TOP)
+                .setArrowPosition(0.3f)
+                .setWidth(BalloonSizeSpec.WRAP)
+                .setHeight(65)
+                .setTextSize(15f)
+                .setCornerRadius(4f)
+                .setText("В это поле нужно вводить название товара, который вы хотите найти.")
+                .setTextColor(ContextCompat.getColor(context, R.color.white))
+                .setTextIsHtml(true)
+                .setBackgroundColor(ContextCompat.getColor(context, R.color.bg_learn))
+                .setBalloonAnimation(BalloonAnimation.OVERSHOOT)
+                .setArrowAlignAnchorPadding(10)
+                .setOnBalloonDismissListener(new OnBalloonDismissListener() {
+                    @Override
+                    public void onBalloonDismiss() {
+                        balloon2.showAlignBottom(storeListView);
+                    }
+                })
+                .build();
+
+        balloon2 = new Balloon.Builder(context)
+                .setArrowSize(10)
+                .setArrowOrientation(ArrowOrientation.TOP)
+                .setArrowPosition(0.7f)
+                .setWidth(BalloonSizeSpec.WRAP)
+                .setHeight(65)
+                .setTextSize(15f)
+                .setCornerRadius(4f)
+                .setText("Тут можно выбрать магазин, когда они загрузятся.")
+                .setTextColor(ContextCompat.getColor(context, R.color.white))
+                .setTextIsHtml(true)
+                .setBackgroundColor(ContextCompat.getColor(context, R.color.bg_learn))
+                .setBalloonAnimation(BalloonAnimation.OVERSHOOT)
+                .setArrowAlignAnchorPadding(10)
+                .setOnBalloonDismissListener(new OnBalloonDismissListener() {
+                    @Override
+                    public void onBalloonDismiss() {
+                        balloon3.showAlignTop(errorTextMain);
+                    }
+                })
+                .build();
+
+        mSettings = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mSettings.edit();
+
+/*        editor.putString("give_enter1", "0");
+        editor.apply();
+        editor.commit();*/
+
+
+        balloon3 = new Balloon.Builder(context)
+                .setArrowSize(10)
+                .setArrowOrientation(ArrowOrientation.TOP)
+                .setArrowPosition(0.5f)
+                .setWidth(BalloonSizeSpec.WRAP)
+                .setHeight(65)
+                .setTextSize(15f)
+                .setCornerRadius(4f)
+                .setText("Тут будут отображаться товары, которые найдены в магазине")
+                .setTextColor(ContextCompat.getColor(context, R.color.white))
+                .setTextIsHtml(true)
+                .setBackgroundColor(ContextCompat.getColor(context, R.color.bg_learn))
+                .setBalloonAnimation(BalloonAnimation.OVERSHOOT)
+                .setArrowAlignAnchorPadding(10)
+                .setOnBalloonDismissListener(new OnBalloonDismissListener() {
+                    @Override
+                    public void onBalloonDismiss() {
+                        /*editor.putString("give_enter1", "1");
+                        editor.apply();
+                        editor.commit();*/
+                    }
+                })
+                .build();
 
         dlg = new Dialog();
         dlg2 = new Dialog2();
 
-        mSettings = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
-        SharedPreferences.Editor editor = mSettings.edit();
+
+
 
 /*        editor.clear();
         editor.apply();*/
@@ -494,6 +577,8 @@ public class HomeFragment extends Fragment{
 
         adapterCitrus.notifyDataSetChanged();
         goodsListView.setEnabled(true);
+
+        balloon1.showAlignBottom(mySearchView);
 
 
         storeListView.addOnItemTouchListener(

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,6 +49,10 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
 
     FrameLayout fragmentLayout;
     FrameLayout fragmentLayout2;
+
+    private final Handler uiHandler = new Handler();
+
+
 
 
 
@@ -114,6 +119,21 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
 
         view = bottomNavigationView.findViewById(R.id.navigation_home);
         view.performClick();
+
+
+        uiHandler.post(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        boolean tmp = true;
+                        ///while (tmp){
+                            if(mSettings.getString("give_enter1", "").equals("1")){
+                                Log.d("ENTER", "ENTER");
+                                tmp = false;
+                            }
+                        //}
+                    }
+                });
 
         //findViewById(R.id.navigation_dashboard).setSelected(true);
         //findViewById(R.id.navigation_dashboard).setSelected(false);
