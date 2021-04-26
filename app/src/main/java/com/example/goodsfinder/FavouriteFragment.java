@@ -84,6 +84,9 @@ public class FavouriteFragment extends Fragment {
 
     private Context context;
 
+
+
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -559,6 +562,9 @@ public class FavouriteFragment extends Fragment {
                 emptyTextChoosen.setVisibility(View.INVISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
 
+
+
+
                 favouritesUrlList.clear();
                 favouritesImagesList.clear();
                 favouritesStoreImagesList.clear();
@@ -566,15 +572,15 @@ public class FavouriteFragment extends Fragment {
                 favouritesPricesList.clear();
                 favouritesOldPricesList.clear();
                 favouritesColourList.clear();
-                isLoadedRozetka = false;
                 positionsRozetka.clear();
+                isLoadedRozetka = false;
                 iRozetka = 0;
                 adapter1.notifyDataSetChanged();
                 infoLoaded.clear();
-
-
                 infoLoadedUp.clear();
                 favouritesList.clear();
+                urlsRozetka.clear();
+
 
                 loadChoosen();
             } else {

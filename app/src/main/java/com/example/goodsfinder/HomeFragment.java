@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -59,6 +60,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -102,6 +104,7 @@ public class HomeFragment extends Fragment{
     Balloon balloon1;
     Balloon balloon2;
     Balloon balloon3;
+
 
     String BlockAlloClass;
     String TitleAlloClass;
@@ -223,10 +226,13 @@ public class HomeFragment extends Fragment{
     public boolean isLoadedRozetka = false;
     public boolean isLoadedAllo = false;
 
+    BottomNavigationView bottomNavigationView;
 
     public int getCurrentStoreIndex() {
         return currentStoreIndex;
     }
+
+View view1;
 
     SharedPreferences mSettings;
     public static final String APP_PREFERENCES = "searches";
@@ -241,6 +247,8 @@ public class HomeFragment extends Fragment{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home2, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.storeListView);
+
+
 
         balloon1 = new Balloon.Builder(context)
                 .setArrowSize(10)
@@ -289,9 +297,7 @@ public class HomeFragment extends Fragment{
         mSettings = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = mSettings.edit();
 
-/*        editor.putString("give_enter1", "0");
-        editor.apply();
-        editor.commit();*/
+
 
 
         balloon3 = new Balloon.Builder(context)
@@ -311,20 +317,24 @@ public class HomeFragment extends Fragment{
                 .setOnBalloonDismissListener(new OnBalloonDismissListener() {
                     @Override
                     public void onBalloonDismiss() {
-                        /*editor.putString("give_enter1", "1");
-                        editor.apply();
-                        editor.commit();*/
+
+                        BottomNavigationView navigationView = ((BottomNavigationActivity)getContext()).findViewById(R.id.nav_view);
+
+                        ((BottomNavigationActivity)getContext()).balloon4.showAlignTop(navigationView);
+
+
+
                     }
                 })
                 .build();
 
+
+
+
+
+
         dlg = new Dialog();
         dlg2 = new Dialog2();
-
-
-
-
-
 /*        editor.clear();
         editor.apply();*/
 

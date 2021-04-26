@@ -20,9 +20,15 @@ import com.example.goodsfinder.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.skydoves.balloon.ArrowOrientation;
+import com.skydoves.balloon.Balloon;
+import com.skydoves.balloon.BalloonAnimation;
+import com.skydoves.balloon.BalloonSizeSpec;
+import com.skydoves.balloon.OnBalloonDismissListener;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
@@ -34,6 +40,8 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
 
     DialogFragment dlg;
     DialogFragment dlg2;
+
+    Balloon balloon4;
 
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
@@ -73,6 +81,7 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
     }
 
     View view;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +127,39 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
         });
 
         view = bottomNavigationView.findViewById(R.id.navigation_home);
+
         view.performClick();
+
+
+        balloon4 = new Balloon.Builder(this)
+                .setArrowSize(10)
+                .setArrowOrientation(ArrowOrientation.TOP)
+                .setArrowPosition(0.5f)
+                .setWidth(BalloonSizeSpec.WRAP)
+                .setHeight(65)
+                .setTextSize(15f)
+                .setCornerRadius(4f)
+                .setText("Я нахуй прігаю ему по бошке нахуй НАААА ПИДОРАС АААААААААА")
+                .setTextColor(ContextCompat.getColor(this, R.color.white))
+                .setTextIsHtml(true)
+                .setBackgroundColor(ContextCompat.getColor(this, R.color.bg_learn))
+                .setBalloonAnimation(BalloonAnimation.OVERSHOOT)
+                .setArrowAlignAnchorPadding(10)
+                .setOnBalloonDismissListener(new OnBalloonDismissListener() {
+                    @Override
+                    public void onBalloonDismiss() {
+                        View view1 = bottomNavigationView.findViewById(R.id.navigation_dashboard);
+
+                        view1.performClick();
+
+
+                    }
+                })
+                .build();
+
+
+
+
 
 
         uiHandler.post(
