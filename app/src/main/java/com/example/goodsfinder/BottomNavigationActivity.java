@@ -106,6 +106,7 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
         String APP_PREFERENCES = "searches";
 
 
+
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
 
@@ -113,6 +114,7 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
         dlg2 = new Dialog2();
 
         toolbar = findViewById(R.id.toolbar);
+        toolbar.findViewById(R.id.help_btn).setOnClickListener(this::onClick);
         //((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
         drawerLayout = findViewById(R.id.drawer);
@@ -181,7 +183,7 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
                 .setOnBalloonDismissListener(new OnBalloonDismissListener() {
                     @Override
                     public void onBalloonDismiss() {
-                        //тут вукажу на виджет
+                        balloon9.showAlignBottom(toolbar.findViewById(R.id.help_btn));
                     }
                 })
                 .build();
@@ -269,11 +271,17 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
             }
 
 
-
         }
 
         Log.d("THEME", "SETTED");
 
         return true;
+    }
+
+    public void onClick(View view) {
+
+        if(view.getId() == R.id.help_btn) {
+            Log.d("LEARN", "LEARN");
+        }
     }
 }

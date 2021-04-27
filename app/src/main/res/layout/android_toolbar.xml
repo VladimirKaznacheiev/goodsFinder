@@ -8,6 +8,14 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/toolbar"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark"/>
+        android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    <Button
+        android:id="@+id/help_btn"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:background="@drawable/ic_baseline_help_outline_24"/>
+
+
+    </androidx.appcompat.widget.Toolbar>
 
 </LinearLayout>

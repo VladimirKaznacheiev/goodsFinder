@@ -41,7 +41,7 @@
     <string name="home">Главная</string>
     <string name="favourites">Избранные</string>
 
-    <string name="balloon1">У це поле потрібно вводити назву товару, який ви хочете знайти.</string>
+    <string name="balloon1">В это поле ввода можно вводить название товара, который вы хотите найти.</string>
     <string name="balloon2">Здесь можно переключаться между магазинами.</string>
     <string name="balloon3">Тут будут отображаться найденные товары.</string>
     <string name="balloon4">С помощью это панели можно переключаться между "Главная" и "Избранные".</string>
