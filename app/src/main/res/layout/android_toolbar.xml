@@ -13,7 +13,9 @@
         android:id="@+id/help_btn"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:background="@drawable/ic_baseline_help_outline_24"/>
+        android:background="@drawable/ic_baseline_help_outline_24"
+        android:layout_gravity="end"
+        android:layout_marginRight="10dp"/>
 
 
     </androidx.appcompat.widget.Toolbar>
