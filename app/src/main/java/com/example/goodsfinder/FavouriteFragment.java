@@ -35,6 +35,7 @@ import android.widget.AdapterView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -42,6 +43,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.skydoves.balloon.ArrowOrientation;
+import com.skydoves.balloon.Balloon;
+import com.skydoves.balloon.BalloonAnimation;
+import com.skydoves.balloon.BalloonSizeSpec;
+import com.skydoves.balloon.OnBalloonDismissListener;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -54,6 +60,10 @@ import java.util.List;
 import java.util.Map;
 
 public class FavouriteFragment extends Fragment {
+
+
+
+
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();;
     private List<String> DiscrTasks;
@@ -105,6 +115,11 @@ public class FavouriteFragment extends Fragment {
     ArrayList<String> favouritesNamesList = new ArrayList<>();
     ArrayList<String> favouritesUrlList = new ArrayList<>();
     ArrayList<Integer> favouritesColourList = new ArrayList<>();
+
+    Balloon balloon5;
+    Balloon balloon6;
+    Balloon balloon7;
+
 
 
 
@@ -342,6 +357,76 @@ public class FavouriteFragment extends Fragment {
         ArrayAdapter<String> adapterSpinner = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, filters);
         adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapterSpinner);
+
+        balloon5 = new Balloon.Builder(context)
+                .setArrowSize(10)
+                .setArrowOrientation(ArrowOrientation.TOP)
+                .setArrowPosition(0.5f)
+                .setWidth(BalloonSizeSpec.WRAP)
+                .setHeight(65)
+                .setTextSize(15f)
+                .setCornerRadius(4f)
+                .setText(context.getResources().getString((R.string.balloon5)))
+                .setTextColor(ContextCompat.getColor(context, R.color.white))
+                .setTextIsHtml(true)
+                .setBackgroundColor(ContextCompat.getColor(context, R.color.bg_learn))
+                .setBalloonAnimation(BalloonAnimation.OVERSHOOT)
+                .setArrowAlignAnchorPadding(10)
+                .setOnBalloonDismissListener(new OnBalloonDismissListener() {
+                    @Override
+                    public void onBalloonDismiss() {
+                        balloon6.showAlignBottom(spinner);
+                    }
+                })
+                .build();
+
+        balloon6 = new Balloon.Builder(context)
+                .setArrowSize(10)
+                .setArrowOrientation(ArrowOrientation.TOP)
+                .setArrowPosition(0.5f)
+                .setWidth(BalloonSizeSpec.WRAP)
+                .setHeight(65)
+                .setTextSize(15f)
+                .setCornerRadius(4f)
+                .setText(context.getResources().getString((R.string.balloon6)))
+                .setTextColor(ContextCompat.getColor(context, R.color.white))
+                .setTextIsHtml(true)
+                .setBackgroundColor(ContextCompat.getColor(context, R.color.bg_learn))
+                .setBalloonAnimation(BalloonAnimation.OVERSHOOT)
+                .setArrowAlignAnchorPadding(10)
+                .setOnBalloonDismissListener(new OnBalloonDismissListener() {
+                    @Override
+                    public void onBalloonDismiss() {
+                        balloon7.showAlignBottom(view.findViewById(R.id.btn_reload));
+                    }
+                })
+                .build();
+
+        balloon7 = new Balloon.Builder(context)
+                .setArrowSize(10)
+                .setArrowOrientation(ArrowOrientation.TOP)
+                .setArrowPosition(0.5f)
+                .setWidth(BalloonSizeSpec.WRAP)
+                .setHeight(65)
+                .setTextSize(15f)
+                .setCornerRadius(4f)
+                .setText(context.getResources().getString((R.string.balloon7)))
+                .setTextColor(ContextCompat.getColor(context, R.color.white))
+                .setTextIsHtml(true)
+                .setBackgroundColor(ContextCompat.getColor(context, R.color.bg_learn))
+                .setBalloonAnimation(BalloonAnimation.OVERSHOOT)
+                .setArrowAlignAnchorPadding(10)
+                .setOnBalloonDismissListener(new OnBalloonDismissListener() {
+                    @Override
+                    public void onBalloonDismiss() {
+                        BottomNavigationView navigationView = ((BottomNavigationActivity)getContext()).findViewById(R.id.drawer);
+
+                        ((BottomNavigationActivity)getContext()).balloon8.showAlignRight(navigationView);
+                    }
+                })
+                .build();
+
+
 
         AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
             @Override

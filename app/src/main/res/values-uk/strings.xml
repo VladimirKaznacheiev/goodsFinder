@@ -40,4 +40,14 @@
     <string name="no">Ні</string>
     <string name="home">Головна</string>
     <string name="favourites">Улюблені</string>
+
+    <string name="balloon1">В это поле нужно вводить название товара, который вы хотите найти.</string>
+    <string name="balloon2">Тут можна перемикатися магазини.</string>
+    <string name="balloon3">Тут будуть відображатися знайдені товари.</string>
+    <string name="balloon4">За допомогою це панелі можна переключатися між "Головна" і "Обрані".</string>
+    <string name="balloon5">Тут будуть відображатися обрані товари.</string>
+    <string name="balloon6">Тут можна вибрати, як сортувати обрані товари.</string>
+    <string name="balloon7">За допомогою цієї кнопки можна оновити список обраних товарів.</string>
+    <string name="balloon8">Змінити тему та інші налаштування можна тут.</string>
+    <string name="balloon9">Якщо виникнуть питання, натисніть сюди, щоб пройти навчання. Успіхів!</string>
 </resources>

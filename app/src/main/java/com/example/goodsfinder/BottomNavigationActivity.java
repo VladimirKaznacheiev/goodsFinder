@@ -36,6 +36,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import static java.security.AccessController.getContext;
+
 public class BottomNavigationActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     DialogFragment dlg;
@@ -59,6 +61,9 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
     FrameLayout fragmentLayout2;
 
     private final Handler uiHandler = new Handler();
+
+    Balloon balloon8;
+    Balloon balloon9;
 
 
 
@@ -139,7 +144,7 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
                 .setHeight(65)
                 .setTextSize(15f)
                 .setCornerRadius(4f)
-                .setText("Я нахуй прігаю ему по бошке нахуй НАААА ПИДОРАС АААААААААА")
+                .setText(this.getResources().getString((R.string.balloon4)))
                 .setTextColor(ContextCompat.getColor(this, R.color.white))
                 .setTextIsHtml(true)
                 .setBackgroundColor(ContextCompat.getColor(this, R.color.bg_learn))
@@ -149,10 +154,56 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
                     @Override
                     public void onBalloonDismiss() {
                         View view1 = bottomNavigationView.findViewById(R.id.navigation_dashboard);
-
                         view1.performClick();
 
+                        //запустить 5 шарик надо
+                    }
+                })
+                .build();
 
+
+        //ЭТО УКАЖЕТ НА 3 ПОЛОСКИ И ВИДЖЕТ ОБУЧЕНИЯ
+
+        balloon8 = new Balloon.Builder(this)
+                .setArrowSize(10)
+                .setArrowOrientation(ArrowOrientation.TOP)
+                .setArrowPosition(0.5f)
+                .setWidth(BalloonSizeSpec.WRAP)
+                .setHeight(65)
+                .setTextSize(15f)
+                .setCornerRadius(4f)
+                .setText(this.getResources().getString((R.string.balloon8)))
+                .setTextColor(ContextCompat.getColor(this, R.color.white))
+                .setTextIsHtml(true)
+                .setBackgroundColor(ContextCompat.getColor(this, R.color.bg_learn))
+                .setBalloonAnimation(BalloonAnimation.OVERSHOOT)
+                .setArrowAlignAnchorPadding(10)
+                .setOnBalloonDismissListener(new OnBalloonDismissListener() {
+                    @Override
+                    public void onBalloonDismiss() {
+                        //тут вукажу на виджет
+                    }
+                })
+                .build();
+
+        balloon9 = new Balloon.Builder(this)
+                .setArrowSize(10)
+                .setArrowOrientation(ArrowOrientation.TOP)
+                .setArrowPosition(0.5f)
+                .setWidth(BalloonSizeSpec.WRAP)
+                .setHeight(65)
+                .setTextSize(15f)
+                .setCornerRadius(4f)
+                .setText(this.getResources().getString((R.string.balloon9)))
+                .setTextColor(ContextCompat.getColor(this, R.color.white))
+                .setTextIsHtml(true)
+                .setBackgroundColor(ContextCompat.getColor(this, R.color.bg_learn))
+                .setBalloonAnimation(BalloonAnimation.OVERSHOOT)
+                .setArrowAlignAnchorPadding(10)
+                .setOnBalloonDismissListener(new OnBalloonDismissListener() {
+                    @Override
+                    public void onBalloonDismiss() {
+                        //тут я запишу, что юзер обучился в шаред
                     }
                 })
                 .build();

@@ -40,4 +40,14 @@
     <string name="no">No</string>
     <string name="home">Home</string>
     <string name="favourites">Favourites</string>
+
+    <string name="balloon1">In this field you need to enter the name of the product that you want to find.</string>
+    <string name="balloon2">Here you can switch between stores.</string>
+    <string name="balloon3">Found products will be displayed here.</string>
+    <string name="balloon4">Using this panel, you can switch between "Home" and "Favorites".</string>
+    <string name="balloon5">Favorite products will be displayed here.</string>
+    <string name="balloon6">Here you can choose how to sort your favorites.</string>
+    <string name="balloon7">This button can be used to update the list of favorites.</string>
+    <string name="balloon8">You can change the theme and other settings here.</string>
+    <string name="balloon9">If you have any questions, please click here to get training. Good luck!</string>
 </resources>
