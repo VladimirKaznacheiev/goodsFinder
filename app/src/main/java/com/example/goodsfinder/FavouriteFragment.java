@@ -358,6 +358,8 @@ public class FavouriteFragment extends Fragment {
         adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapterSpinner);
 
+        //BALOONS
+
         balloon5 = new Balloon.Builder(context)
                 .setArrowSize(10)
                 .setArrowOrientation(ArrowOrientation.TOP)
