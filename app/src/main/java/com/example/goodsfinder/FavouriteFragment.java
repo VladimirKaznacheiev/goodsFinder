@@ -3,6 +3,7 @@ package com.example.goodsfinder;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -36,6 +37,7 @@ import android.widget.AdapterView;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -60,10 +62,7 @@ import java.util.List;
 import java.util.Map;
 
 public class FavouriteFragment extends Fragment {
-
-
-
-
+    Balloon balloon1;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();;
     private List<String> DiscrTasks;
@@ -119,9 +118,6 @@ public class FavouriteFragment extends Fragment {
     Balloon balloon5;
     Balloon balloon6;
     Balloon balloon7;
-
-
-
 
     ArrayList<String> favouritesList = new ArrayList<>();
 
@@ -360,6 +356,7 @@ public class FavouriteFragment extends Fragment {
 
         //BALOONS
 
+
         balloon5 = new Balloon.Builder(context)
                 .setArrowSize(10)
                 .setArrowOrientation(ArrowOrientation.TOP)
@@ -407,7 +404,7 @@ public class FavouriteFragment extends Fragment {
         balloon7 = new Balloon.Builder(context)
                 .setArrowSize(10)
                 .setArrowOrientation(ArrowOrientation.TOP)
-                .setArrowPosition(0.5f)
+                .setArrowPosition(0.13f)
                 .setWidth(BalloonSizeSpec.WRAP)
                 .setHeight(65)
                 .setTextSize(15f)
@@ -421,14 +418,12 @@ public class FavouriteFragment extends Fragment {
                 .setOnBalloonDismissListener(new OnBalloonDismissListener() {
                     @Override
                     public void onBalloonDismiss() {
-                        BottomNavigationView navigationView = ((BottomNavigationActivity)getContext()).findViewById(R.id.drawer);
+                        Toolbar tb = ((BottomNavigationActivity)getContext()).toolbar;
 
-                        ((BottomNavigationActivity)getContext()).balloon8.showAlignRight(navigationView);
+                        ((BottomNavigationActivity)getContext()).balloon8.showAlignRight(((BottomNavigationActivity) getContext()).toolbar.findViewById(R.id.ghostTxt));
                     }
                 })
                 .build();
-
-
 
         AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
             @Override
@@ -1064,6 +1059,11 @@ public class FavouriteFragment extends Fragment {
             return goodsView;
         }
     }
+
+    public void learning1(){
+        balloon5.showAlignBottom(errorTextChoosen);
+    }
+
 
 
 

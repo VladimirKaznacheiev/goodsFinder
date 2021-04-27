@@ -548,6 +548,7 @@ View view1;
         mySearchView = (SearchView) view.findViewById(R.id.goodsSearchView);
         goodsListView = (ListView) view.findViewById(R.id.goodsList);
         storeListView = (RecyclerView) view.findViewById(R.id.storeListView);
+
         progressBar = view.findViewById(R.id.progressBar);
         adapterCitrus = new MyAdapter(getContext(), goodsNamesList, goodsPricesList, goodsOldPricesList, goodsImagesList, goodsColorsList, articleList);
         adapterMoyo = new MyAdapter(getContext(), goodsNamesListMoyo, goodsPricesListMoyo, goodsOldPricesListMoyo, goodsImagesListMoyo, goodsColorsMoyo, articleListMoyo);

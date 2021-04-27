@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
 import android.app.DialogFragment;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.goodsfinder.R;
@@ -30,6 +32,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -159,19 +162,30 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
                         view1.performClick();
 
                         //запустить 5 шарик надо
+
+
+                        FragmentManager fm = getSupportFragmentManager();
+                        FavouriteFragment f = (FavouriteFragment) fm.findFragmentById(R.id.fragment_layout2);
+                        f.learning1();
                     }
                 })
                 .build();
 
 
+
+
+
+
+                      // balloon4.showAlignBottom(favFrag.getView().findViewById(R.id.spinner));
+
         //ЭТО УКАЖЕТ НА 3 ПОЛОСКИ И ВИДЖЕТ ОБУЧЕНИЯ
 
         balloon8 = new Balloon.Builder(this)
                 .setArrowSize(10)
-                .setArrowOrientation(ArrowOrientation.TOP)
+                .setArrowOrientation(ArrowOrientation.LEFT)
                 .setArrowPosition(0.5f)
                 .setWidth(BalloonSizeSpec.WRAP)
-                .setHeight(65)
+                .setHeight(40)
                 .setTextSize(15f)
                 .setCornerRadius(4f)
                 .setText(this.getResources().getString((R.string.balloon8)))
@@ -191,7 +205,7 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
         balloon9 = new Balloon.Builder(this)
                 .setArrowSize(10)
                 .setArrowOrientation(ArrowOrientation.TOP)
-                .setArrowPosition(1f)
+                .setArrowPosition(0.95f)
                 .setWidth(BalloonSizeSpec.WRAP)
                 .setHeight(65)
                 .setTextSize(15f)
