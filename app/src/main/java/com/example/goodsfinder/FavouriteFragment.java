@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
@@ -119,6 +120,8 @@ public class FavouriteFragment extends Fragment {
     Balloon balloon6;
     Balloon balloon7;
 
+
+
     ArrayList<String> favouritesList = new ArrayList<>();
 
     ListView goodsListView;
@@ -141,7 +144,7 @@ public class FavouriteFragment extends Fragment {
     }
 
 
-    private void loadChoosen(){
+    public void loadChoosen(){
 
         mDatabase.child("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
@@ -161,7 +164,7 @@ public class FavouriteFragment extends Fragment {
                 urlsRozetka.clear();
 
                 boolean isNotEmpty = false;
-
+                Log.d("RELOADING", "reloading");
                 for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
 
                     isNotEmpty = true;
@@ -638,36 +641,8 @@ public class FavouriteFragment extends Fragment {
 
         if(view.getId() == R.id.btn_reload) {
 
-            if (isConnected()){
+            reload();
 
-                errorTextChoosen.setVisibility(View.INVISIBLE);
-                emptyTextChoosen.setVisibility(View.INVISIBLE);
-                progressBar.setVisibility(View.VISIBLE);
-
-
-
-
-                favouritesUrlList.clear();
-                favouritesImagesList.clear();
-                favouritesStoreImagesList.clear();
-                favouritesNamesList.clear();
-                favouritesPricesList.clear();
-                favouritesOldPricesList.clear();
-                favouritesColourList.clear();
-                positionsRozetka.clear();
-                isLoadedRozetka = false;
-                iRozetka = 0;
-                adapter1.notifyDataSetChanged();
-                infoLoaded.clear();
-                infoLoadedUp.clear();
-                favouritesList.clear();
-                urlsRozetka.clear();
-
-
-                loadChoosen();
-            } else {
-                Toast.makeText(getActivity(),context.getString(R.string.internet_error),Toast.LENGTH_SHORT).show();
-            }
         }
     }
     public void sortDefault(){
@@ -1064,7 +1039,38 @@ public class FavouriteFragment extends Fragment {
         balloon5.showAlignBottom(errorTextChoosen);
     }
 
+    public void reload() {
 
 
+        if (isConnected()) {
+
+            errorTextChoosen.setVisibility(View.INVISIBLE);
+            emptyTextChoosen.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+
+
+            favouritesUrlList.clear();
+            favouritesImagesList.clear();
+            favouritesStoreImagesList.clear();
+            favouritesNamesList.clear();
+            favouritesPricesList.clear();
+            favouritesOldPricesList.clear();
+            favouritesColourList.clear();
+            positionsRozetka.clear();
+            isLoadedRozetka = false;
+            iRozetka = 0;
+
+            infoLoaded.clear();
+            infoLoadedUp.clear();
+            favouritesList.clear();
+            urlsRozetka.clear();
+            adapter1.notifyDataSetChanged();
+
+
+            loadChoosen();
+        } else {
+            Toast.makeText(getActivity(), context.getString(R.string.internet_error), Toast.LENGTH_SHORT).show();
+        }
+    }
 
 }

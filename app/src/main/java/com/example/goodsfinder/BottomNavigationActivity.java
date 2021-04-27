@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -38,6 +39,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
+import java.io.IOException;
 
 import static java.security.AccessController.getContext;
 
@@ -83,6 +86,11 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
             case R.id.navigation_dashboard:
                 fragmentLayout.setVisibility(View.INVISIBLE);
                 fragmentLayout2.setVisibility(View.VISIBLE);
+
+                FragmentManager fm = getSupportFragmentManager();
+                FavouriteFragment f = (FavouriteFragment) fm.findFragmentById(R.id.fragment_layout2);
+                f.reload();
+
                 break;
         }
 
@@ -95,7 +103,7 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom_navigation);
-
+        toolbar = findViewById(R.id.toolbar);
         fragmentLayout = findViewById(R.id.fragment_layout);
         fragmentLayout2 = findViewById(R.id.fragment_layout2);
 
@@ -111,13 +119,13 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
 
 
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mSettings.edit();
 
 
         dlg = new Dialog();
         dlg2 = new Dialog2();
 
-        toolbar = findViewById(R.id.toolbar);
-        toolbar.findViewById(R.id.help_btn).setOnClickListener(this::onClick);
+
         //((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
         drawerLayout = findViewById(R.id.drawer);
@@ -137,9 +145,26 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
         });
 
         view = bottomNavigationView.findViewById(R.id.navigation_home);
+        View view1 = bottomNavigationView.findViewById(R.id.navigation_dashboard);
 
         view.performClick();
 
+
+
+        toolbar.findViewById(R.id.help_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                view = bottomNavigationView.findViewById(R.id.navigation_home);
+                view.performClick();
+                FragmentManager fm = getSupportFragmentManager();
+                HomeFragment f = (HomeFragment) fm.findFragmentById(R.id.fragment_layout);
+
+                f.balloon1.showAlignBottom(f.mySearchView);
+
+
+            }
+        });
 
         balloon4 = new Balloon.Builder(this)
                 .setArrowSize(10)
@@ -158,7 +183,7 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
                 .setOnBalloonDismissListener(new OnBalloonDismissListener() {
                     @Override
                     public void onBalloonDismiss() {
-                        View view1 = bottomNavigationView.findViewById(R.id.navigation_dashboard);
+
                         view1.performClick();
 
                         //запустить 5 шарик надо
@@ -220,6 +245,12 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
                     @Override
                     public void onBalloonDismiss() {
                         //тут я запишу, что юзер обучился в шаред
+
+                        view.performClick();
+                        editor.putString("isTrained","1");
+                        editor.apply();
+                        editor.commit();
+
                     }
                 })
                 .build();
@@ -292,10 +323,5 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
         return true;
     }
 
-    public void onClick(View view) {
 
-        if(view.getId() == R.id.help_btn) {
-            Log.d("LEARN", "LEARN");
-        }
-    }
 }

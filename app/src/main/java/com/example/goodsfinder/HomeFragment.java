@@ -149,7 +149,7 @@ public class HomeFragment extends Fragment{
     boolean isFoundCitrus = false;
     boolean isFoundRozetka = false;
     int currentStoreIndex;
-    SearchView mySearchView;
+    public SearchView mySearchView;
     ListView goodsListView;
     RecyclerView storeListView;
     ProgressBar progressBar;
@@ -589,7 +589,10 @@ View view1;
         adapterCitrus.notifyDataSetChanged();
         goodsListView.setEnabled(true);
 
-        balloon1.showAlignBottom(mySearchView);
+        if(mSettings.getString("isTrained","").equals("")){
+            balloon1.showAlignBottom(mySearchView);
+        }
+
 
 
         storeListView.addOnItemTouchListener(
@@ -1725,12 +1728,15 @@ View view1;
                     // Log.d(TAG,arrLIst.get(position).getPrice());
 
 
+
                     if (isConnected()){
                         mDatabase.child("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
                             public boolean inChosen;
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 Map<String, Object> td = (HashMap<String,Object>) snapshot.getValue();
+
+
 
                                 for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
 
@@ -1776,10 +1782,8 @@ View view1;
                                     mDatabase.child("Users").child(user.getUid()).removeEventListener(this);
 
                                     return;
+
                                 }
-
-
-
 
                             }
 
@@ -1792,7 +1796,12 @@ View view1;
                     } else {
                         Toast.makeText(getActivity(),getString(R.string.internet_error),Toast.LENGTH_SHORT).show();
                     }
+
+
+
+
                 }
+
             });
 
             return goodsView;
