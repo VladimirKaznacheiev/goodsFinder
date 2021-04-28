@@ -554,7 +554,7 @@ View view1;
         adapterCitrus = new MyAdapter(getContext(), goodsNamesList, goodsPricesList, goodsOldPricesList, goodsImagesList, goodsColorsList, articleList);
         adapterMoyo = new MyAdapter(getContext(), goodsNamesListMoyo, goodsPricesListMoyo, goodsOldPricesListMoyo, goodsImagesListMoyo, goodsColorsMoyo, articleListMoyo);
         adapterRozetka = new MyAdapter(getContext(), goodsNamesListRozetka, goodsPricesListRozetka, goodsOldPricesListRozetka, goodsImagesListRozetka, goodsColorsRozetka, articleListRozetka);
-        goodsListView.setAdapter(adapterMoyo);
+        goodsListView.setAdapter(adapterCitrus);
 
         progressBar.setVisibility(View.GONE); // to hide
 
@@ -591,6 +591,9 @@ View view1;
         goodsListView.setEnabled(true);
 
         if(mSettings.getString("isTrained","").equals("")){
+            BottomNavigationView navigationView = ((BottomNavigationActivity)getContext()).findViewById(R.id.nav_view);
+
+            ((BottomNavigationActivity)getContext()).view.performClick();
             balloon1.showAlignBottom(mySearchView);
         }
 
@@ -664,6 +667,7 @@ View view1;
 
                         if (isConnected()) {
                             progressBar.setVisibility(View.VISIBLE);
+                            storeListView.setEnabled(false);
                             articleList.remove(articleList.size() - 1);
                             goodsPricesList.remove(goodsPricesList.size() - 1);
                             goodsOldPricesList.remove(goodsOldPricesList.size() - 1);
@@ -720,7 +724,8 @@ View view1;
                     } else {
 
                         if (isConnected()) {
-                            errorTextMain.setVisibility(View.VISIBLE);
+                            storeListView.setEnabled(false);
+                            progressBar.setVisibility(View.VISIBLE);
                             articleListMoyo.remove(articleListMoyo.size() - 1);
                             goodsPricesListMoyo.remove(goodsPricesListMoyo.size() - 1);
                             goodsOldPricesListMoyo.remove(goodsOldPricesListMoyo.size() - 1);
@@ -778,7 +783,8 @@ View view1;
                     } else {
 
                         if (isConnected()) {
-                            errorTextMain.setVisibility(View.VISIBLE);
+                            storeListView.setEnabled(false);
+                            progressBar.setVisibility(View.VISIBLE);
                             articleListRozetka.remove(articleListRozetka.size() - 1);
                             goodsPricesListRozetka.remove(goodsPricesListRozetka.size() - 1);
                             goodsOldPricesListRozetka.remove(goodsOldPricesListRozetka.size() - 1);
@@ -970,6 +976,8 @@ View view1;
         mySearchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
+                currentStoreIndex = -1;
+                goodsListView.setAdapter(adapterCitrus);
                 stopHandlers = true;
                 goodsNamesList.clear();
                 goodsImagesList.clear();
@@ -1157,6 +1165,7 @@ View view1;
 
                                     if(isStoreLoaded){
                                         progressBar.setVisibility(View.GONE);
+                                        storeListView.setEnabled(true);
                                     }
 
                                 }
@@ -1422,6 +1431,7 @@ View view1;
                                 adapterMoyo.notifyDataSetChanged();
                                 goodsListView.setEnabled(true);
                             progressBar.setVisibility(View.GONE);
+                            storeListView.setEnabled(true);
 //                            }
 
                                 //Log.d("TEST", doc.html());
@@ -1580,9 +1590,9 @@ View view1;
 
                                                 }
                                                 goodsCountRozetka = articleListRozetka.size();
-                                                Element loadElement = doc2.getElementsByAttributeValue("class", LoadMoreAlloClass).last();
+                                                Element loadElement = doc2.getElementsByAttributeValue("class", LoadMoreAlloClass).first();
 
-                                                if (loadElement != null && goodsCount > 0 && !stopHandlers) {
+                                                if (loadElement != null && goodsCountRozetka > 0 && !stopHandlers) {
                                                     goodsNamesListRozetka.add(getString(R.string.load_more));
                                                     goodsPricesListRozetka.add("");
                                                     goodsOldPricesListRozetka.add("");
@@ -1603,7 +1613,7 @@ View view1;
 
 
 
-                                    if (articleListRozetka.size() > 0) {
+       /*                             if (articleListRozetka.size() > 0) {
                                         isLoadedAllo = true;
                                         Log.d("TEST", "Allo =>" + isLoadedAllo);
                                         if (!isStoreLoaded) {
@@ -1613,20 +1623,21 @@ View view1;
                                             isStoreLoaded = true;
                                             progressBar.setVisibility(View.GONE); // to hide
                                         }
-                                  /*  if (!isLoadedCitrus && !isLoadedRozetka && isLoadedAllo) {
+                                  *//*  if (!isLoadedCitrus && !isLoadedRozetka && isLoadedAllo) {
                                         Log.d("TEST", "Allo => SHOW");
 
 
                                         // isLoadedAllo = false;
                                         initRecyclerView();
+                                    }*//*
                                     }*/
-                                    }
 
 
                                     isFoundRozetka = true;
                                     adapterRozetka.notifyDataSetChanged();
                                     goodsListView.setEnabled(true);
                                     progressBar.setVisibility(View.GONE);
+                                    storeListView.setEnabled(true);
                                 }
                             }
                     }
