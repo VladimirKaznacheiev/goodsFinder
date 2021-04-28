@@ -247,6 +247,7 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
                         //тут я запишу, что юзер обучился в шаред
 
                         view.performClick();
+                        
                         editor.putString("isTrained","1");
                         editor.apply();
                         editor.commit();
