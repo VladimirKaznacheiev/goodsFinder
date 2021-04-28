@@ -178,6 +178,7 @@ public class HomeFragment extends Fragment{
     List<Article> articleList = new ArrayList<>();
     List<Article> articleListMoyo = new ArrayList<>();
     List<Article> articleListRozetka = new ArrayList<>();
+
     ArrayList<String> goodsNamesList = new ArrayList<>();
     ArrayList<String> goodsPricesList = new ArrayList<>();
     ArrayList<String> goodsOldPricesList = new ArrayList<>();
@@ -662,7 +663,7 @@ View view1;
                     } else {
 
                         if (isConnected()) {
-
+                            progressBar.setVisibility(View.VISIBLE);
                             articleList.remove(articleList.size() - 1);
                             goodsPricesList.remove(goodsPricesList.size() - 1);
                             goodsOldPricesList.remove(goodsOldPricesList.size() - 1);
@@ -719,6 +720,7 @@ View view1;
                     } else {
 
                         if (isConnected()) {
+                            errorTextMain.setVisibility(View.VISIBLE);
                             articleListMoyo.remove(articleListMoyo.size() - 1);
                             goodsPricesListMoyo.remove(goodsPricesListMoyo.size() - 1);
                             goodsOldPricesListMoyo.remove(goodsOldPricesListMoyo.size() - 1);
@@ -776,6 +778,7 @@ View view1;
                     } else {
 
                         if (isConnected()) {
+                            errorTextMain.setVisibility(View.VISIBLE);
                             articleListRozetka.remove(articleListRozetka.size() - 1);
                             goodsPricesListRozetka.remove(goodsPricesListRozetka.size() - 1);
                             goodsOldPricesListRozetka.remove(goodsOldPricesListRozetka.size() - 1);
@@ -783,11 +786,7 @@ View view1;
                             goodsImagesListRozetka.remove(goodsImagesListRozetka.size() - 1);
                             goodsColorsRozetka.remove(goodsColorsRozetka.size() - 1);
                             pageCounterRozerka++;
-
                             getRozetkaGoods("https://allo.ua/ru/catalogsearch/result/index/p-"+pageCounterRozerka+"/?q="+currentRequestString.replace("%20", "+").replace("айфон","iphone"));
-
-
-
                         } else {
 
                             errorTextMain.setVisibility(View.VISIBLE);
@@ -1052,6 +1051,7 @@ View view1;
 
     void getCitrus(String s){
         errorTextMain.setVisibility(View.INVISIBLE);
+        goodsListView.setEnabled(false);
 
         runnable = new Runnable() {
             @Override
@@ -1137,6 +1137,7 @@ View view1;
                         goodsCount = articleList.size();
                         Element loadElement = doc.getElementsByAttributeValue("class", LoadMoreCitrusClass).first();
 
+
                         if (loadElement != null && goodsCount > 0 && !stopHandlers) {
                             goodsNamesList.add(getString(R.string.load_more));
                             goodsPricesList.add("");
@@ -1149,6 +1150,20 @@ View view1;
                         }
                         if (articleList.size() > 0) {
                             Log.d("TEST", "Citrus =>" + isLoadedCitrus);
+                            getActivity().runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+
+                                    if(isStoreLoaded){
+                                        progressBar.setVisibility(View.GONE);
+                                    }
+
+                                }
+
+                            });
+
+
 
                             if (!isStoreLoaded) {
 
@@ -1200,6 +1215,8 @@ View view1;
 
         webThread = new Thread(runnable);
         webThread.start();
+
+
 
     }
 
@@ -1404,6 +1421,7 @@ View view1;
                                 isFoundMoyo = true;
                                 adapterMoyo.notifyDataSetChanged();
                                 goodsListView.setEnabled(true);
+                            progressBar.setVisibility(View.GONE);
 //                            }
 
                                 //Log.d("TEST", doc.html());
@@ -1581,6 +1599,10 @@ View view1;
                                     }
 
 
+
+
+
+
                                     if (articleListRozetka.size() > 0) {
                                         isLoadedAllo = true;
                                         Log.d("TEST", "Allo =>" + isLoadedAllo);
@@ -1604,6 +1626,7 @@ View view1;
                                     isFoundRozetka = true;
                                     adapterRozetka.notifyDataSetChanged();
                                     goodsListView.setEnabled(true);
+                                    progressBar.setVisibility(View.GONE);
                                 }
                             }
                     }
