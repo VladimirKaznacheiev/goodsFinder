@@ -228,6 +228,7 @@ public class FavouriteFragment extends Fragment {
                             } else {
                                 favouritesPricesList.add(counter, context.getString(R.string.form_price));
                                 favouritesOldPricesList.add(counter, " ");
+                                infoLoaded.add(goodsInfo[0]+"SPLITFORBUY"+goodsInfo[1]+"SPLITFORBUY"+goodsInfo[2]+"SPLITFORBUY"+goodsInfo[3]+"SPLITFORBUY"+"0"+"SPLITFORBUY"+"0");
                             }
 
                         } catch (IOException e) {

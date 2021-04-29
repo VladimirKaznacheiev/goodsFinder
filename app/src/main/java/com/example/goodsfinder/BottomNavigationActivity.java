@@ -8,6 +8,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -71,7 +72,8 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
     Balloon balloon8;
     Balloon balloon9;
 
-
+    View view;
+    View view1;
 
 
 
@@ -96,7 +98,7 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
 
     }
 
-    View view;
+
 
 
     @Override
@@ -145,9 +147,11 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
         });
 
         view = bottomNavigationView.findViewById(R.id.navigation_home);
-        View view1 = bottomNavigationView.findViewById(R.id.navigation_dashboard);
+        view1 = bottomNavigationView.findViewById(R.id.navigation_dashboard);
 
         view.performClick();
+        view.setEnabled(false);
+        view1.setEnabled(false);
 
 
 
@@ -315,6 +319,10 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
                 view.performClick();
                 dlg2.show(getFragmentManager(), "dlg2");
             }
+        }else if(menuItem.getItemId() == R.id.about){
+                Uri address = Uri.parse("http://forbuy.cf/main.html");
+                Intent openlinkIntent = new Intent(Intent.ACTION_VIEW, address);
+                startActivity(openlinkIntent);
 
 
         }
