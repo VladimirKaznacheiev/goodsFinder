@@ -327,6 +327,7 @@ View view1;
 
 
 
+
                     }
                 })
                 .build();
@@ -1708,6 +1709,8 @@ View view1;
 
 
                     if (isConnected()){
+
+
                         mDatabase.child("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
                             public boolean inChosen;
                             @Override
@@ -1774,6 +1777,16 @@ View view1;
                     } else {
                         Toast.makeText(getActivity(),getString(R.string.internet_error),Toast.LENGTH_SHORT).show();
                     }
+
+                    uiHandler.postDelayed(
+                            new Runnable() {
+                                @Override
+                                public void run() {
+
+
+                                    ((BottomNavigationActivity) getContext()).onClickUpdate();
+                                }
+                            }, 500);
 
 
 

@@ -89,14 +89,14 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
                 fragmentLayout.setVisibility(View.INVISIBLE);
                 fragmentLayout2.setVisibility(View.VISIBLE);
 
-                FragmentManager fm = getSupportFragmentManager();
-                FavouriteFragment f = (FavouriteFragment) fm.findFragmentById(R.id.fragment_layout2);
-                f.reload();
+
 
                 break;
         }
 
     }
+
+
 
 
 
@@ -279,6 +279,10 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
                     }
                 });
 
+
+
+
+
         //findViewById(R.id.navigation_dashboard).setSelected(true);
         //findViewById(R.id.navigation_dashboard).setSelected(false);
 
@@ -330,6 +334,12 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
         Log.d("THEME", "SETTED");
 
         return true;
+    }
+
+    public void onClickUpdate(){
+        FragmentManager fm = getSupportFragmentManager();
+        FavouriteFragment f = (FavouriteFragment) fm.findFragmentById(R.id.fragment_layout2);
+        f.reload();
     }
 
 
