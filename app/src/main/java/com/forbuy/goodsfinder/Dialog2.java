@@ -1,4 +1,4 @@
-package com.example.goodsfinder;
+package com.forbuy.goodsfinder;
 
 import android.app.DialogFragment;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package com.example.goodsfinder;
+package com.forbuy.goodsfinder;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -191,7 +191,7 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
 
 
 
-                      // balloon4.showAlignBottom(favFrag.getView().findViewById(R.id.spinner));
+        // balloon4.showAlignBottom(favFrag.getView().findViewById(R.id.spinner));
 
         //ЭТО УКАЖЕТ НА 3 ПОЛОСКИ И ВИДЖЕТ ОБУЧЕНИЯ
 

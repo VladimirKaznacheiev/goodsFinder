@@ -1,4 +1,4 @@
-package com.example.goodsfinder;
+package com.forbuy.goodsfinder;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -611,8 +611,8 @@ public class FavouriteFragment extends Fragment {
 
                                             return;
                                         }
-                                            iRozetka ++;
-                                            browserRozetka.loadUrl(urlsRozetka.get(urlsRozetka.size()-1-iRozetka));
+                                        iRozetka ++;
+                                        browserRozetka.loadUrl(urlsRozetka.get(urlsRozetka.size()-1-iRozetka));
 
 
                                     }

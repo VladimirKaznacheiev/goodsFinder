@@ -1,4 +1,4 @@
-package com.example.goodsfinder;
+package com.forbuy.goodsfinder;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

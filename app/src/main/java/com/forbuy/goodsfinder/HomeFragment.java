@@ -1,4 +1,4 @@
-package com.example.goodsfinder;
+package com.forbuy.goodsfinder;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -150,7 +150,6 @@ public class HomeFragment extends Fragment{
     List<Article> articleList = new ArrayList<>();
     List<Article> articleListMoyo = new ArrayList<>();
     List<Article> articleListRozetka = new ArrayList<>();
-
     ArrayList<String> goodsNamesList = new ArrayList<>();
     ArrayList<String> goodsPricesList = new ArrayList<>();
     ArrayList<String> goodsOldPricesList = new ArrayList<>();
@@ -291,12 +290,9 @@ View view1;
                     @Override
                     public void onBalloonDismiss() {
 
-                        ((BottomNavigationActivity)getContext()).view.setEnabled(true);
-                        ((BottomNavigationActivity)getContext()).view1.setEnabled(true);
                         BottomNavigationView navigationView = ((BottomNavigationActivity)getContext()).findViewById(R.id.nav_view);
 
                         ((BottomNavigationActivity)getContext()).balloon4.showAlignTop(navigationView);
-
 
 
 
@@ -529,7 +525,7 @@ View view1;
         adapterCitrus = new MyAdapter(getContext(), goodsNamesList, goodsPricesList, goodsOldPricesList, goodsImagesList, goodsColorsList, articleList);
         adapterMoyo = new MyAdapter(getContext(), goodsNamesListMoyo, goodsPricesListMoyo, goodsOldPricesListMoyo, goodsImagesListMoyo, goodsColorsMoyo, articleListMoyo);
         adapterRozetka = new MyAdapter(getContext(), goodsNamesListRozetka, goodsPricesListRozetka, goodsOldPricesListRozetka, goodsImagesListRozetka, goodsColorsRozetka, articleListRozetka);
-        goodsListView.setAdapter(adapterCitrus);
+        goodsListView.setAdapter(adapterMoyo);
 
         progressBar.setVisibility(View.GONE); // to hide
 
@@ -566,13 +562,7 @@ View view1;
         goodsListView.setEnabled(true);
 
         if(mSettings.getString("isTrained","").equals("")){
-            BottomNavigationView navigationView = ((BottomNavigationActivity)getContext()).findViewById(R.id.nav_view);
-
-            ((BottomNavigationActivity)getContext()).view.performClick();
             balloon1.showAlignBottom(mySearchView);
-        }else{
-            ((BottomNavigationActivity)getContext()).view.setEnabled(true);
-            ((BottomNavigationActivity)getContext()).view1.setEnabled(true);
         }
 
 
@@ -645,8 +635,6 @@ View view1;
 
                         if (isConnected()) {
 
-                            storeListView.setEnabled(false);
-                            progressBar.setVisibility(View.VISIBLE);
                             articleList.remove(articleList.size() - 1);
                             goodsPricesList.remove(goodsPricesList.size() - 1);
                             goodsOldPricesList.remove(goodsOldPricesList.size() - 1);
@@ -654,7 +642,6 @@ View view1;
                             goodsImagesList.remove(goodsImagesList.size() - 1);
                             goodsColorsList.remove(goodsColorsList.size() - 1);
                             pageCounter++;
-                            adapterCitrus.notifyDataSetChanged();
                             getCitrus(currentRequestString + "&page=" + pageCounter);
 
 
@@ -694,11 +681,62 @@ View view1;
                 } else if (currentStoreIndex == 0) {
                    // Element loadElement = doc1.getElementsByAttributeValue("class", "show-more__text").first();
 
-                    Log.d("TEST","goodclicked");
-                    Uri address = Uri.parse(articleListMoyo.get(i).getUrl());
-                    Intent openlinkIntent = new Intent(Intent.ACTION_VIEW, address);
-                    startActivity(openlinkIntent);
 
+                    if (i != articleListMoyo.size() - 1) {
+                        //Log.d(TAG, articleListMoyo.size() - 1 + "------" + i);
+                        Log.d("TEST","goodclicked");
+                        Uri address = Uri.parse(articleListMoyo.get(i).getUrl());
+                        Intent openlinkIntent = new Intent(Intent.ACTION_VIEW, address);
+                        startActivity(openlinkIntent);
+                    } else {
+
+                        if (isConnected()) {
+                            articleListMoyo.remove(articleListMoyo.size() - 1);
+                            goodsPricesListMoyo.remove(goodsPricesListMoyo.size() - 1);
+                            goodsOldPricesListMoyo.remove(goodsOldPricesListMoyo.size() - 1);
+                            goodsNamesListMoyo.remove(goodsNamesListMoyo.size() - 1);
+                            goodsImagesListMoyo.remove(goodsImagesListMoyo.size() - 1);
+                            goodsColorsMoyo.remove(goodsColorsMoyo.size() - 1);
+                            pageCounterMoyo++;
+
+                            getMoyoGoods("https://eldorado.ua/search/?q="+currentRequestString);
+                            Log.d("TEST","loadCLicked");
+
+
+
+                        } else {
+
+                            errorTextMain.setVisibility(View.VISIBLE);
+                            goodsNamesList.clear();
+                            goodsImagesList.clear();
+                            goodsPricesList.clear();
+                            goodsOldPricesList.clear();
+                            goodsNamesListMoyo.clear();
+                            goodsNamesListRozetka.clear();
+                            goodsImagesListMoyo.clear();
+                            goodsImagesListRozetka.clear();
+                            goodsPricesListMoyo.clear();
+                            goodsPricesListRozetka.clear();
+                            goodsColorsList.clear();
+                            goodsColorsMoyo.clear();
+                            goodsColorsRozetka.clear();
+                            goodsOldPricesListMoyo.clear();
+                            goodsOldPricesListRozetka.clear();
+                            articleList.clear();
+                            articleListMoyo.clear();
+                            articleListRozetka.clear();
+                            adapterCitrus.notifyDataSetChanged();
+                            adapterMoyo.notifyDataSetChanged();
+                            adapterRozetka.notifyDataSetChanged();
+                            currentRequestString = "";
+                            pageCounter = 1;
+                            pageCounterMoyo = 1;
+                            pageCounterRozerka = 1;
+                            goodsCount = 0;
+                            goodsCountMoyo = 0;
+                            goodsCountRozetka = 0;
+                        }
+                    }
                 }else if (currentStoreIndex == 2) {
                     Element loadElement = doc2.getElementsByAttributeValue("class", "pagination__next__link").first();
 
@@ -710,8 +748,6 @@ View view1;
                     } else {
 
                         if (isConnected()) {
-
-                            progressBar.setVisibility(View.VISIBLE);
                             articleListRozetka.remove(articleListRozetka.size() - 1);
                             goodsPricesListRozetka.remove(goodsPricesListRozetka.size() - 1);
                             goodsOldPricesListRozetka.remove(goodsOldPricesListRozetka.size() - 1);
@@ -719,8 +755,11 @@ View view1;
                             goodsImagesListRozetka.remove(goodsImagesListRozetka.size() - 1);
                             goodsColorsRozetka.remove(goodsColorsRozetka.size() - 1);
                             pageCounterRozerka++;
-                            adapterRozetka.notifyDataSetChanged();
+
                             getRozetkaGoods("https://allo.ua/ru/catalogsearch/result/index/p-"+pageCounterRozerka+"/?q="+currentRequestString.replace("%20", "+").replace("айфон","iphone"));
+
+
+
                         } else {
 
                             errorTextMain.setVisibility(View.VISIBLE);
@@ -807,7 +846,6 @@ View view1;
         mySearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                goodsListView.setAdapter(adapterCitrus);
                 stopHandlers = false;
                 listSearches.setVisibility(View.INVISIBLE);
                 currentStoreIndex = -1;
@@ -905,9 +943,6 @@ View view1;
         mySearchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                progressBar.setVisibility(View.GONE);
-                currentStoreIndex = -1;
-                goodsListView.setAdapter(adapterCitrus);
                 stopHandlers = true;
                 goodsNamesList.clear();
                 goodsImagesList.clear();
@@ -989,7 +1024,6 @@ View view1;
 
     void getCitrus(String s){
         errorTextMain.setVisibility(View.INVISIBLE);
-       // goodsListView.setEnabled(false);
 
         runnable = new Runnable() {
             @Override
@@ -997,7 +1031,6 @@ View view1;
 
 
                     try {
-                        isLoadedCitrus = false;
                         doc = Jsoup.connect("https://www.citrus.ua/search?query=" + s.replace(" ", "%20")).get();
                         Log.d("TEXT", doc.getElementsByAttributeValue("class", "product-img").attr("src"));
                         Log.d("CONNECT", "connected main Citrus");
@@ -1076,7 +1109,6 @@ View view1;
                         goodsCount = articleList.size();
                         Element loadElement = doc.getElementsByAttributeValue("class", LoadMoreCitrusClass).first();
 
-
                         if (loadElement != null && goodsCount > 0 && !stopHandlers) {
                             goodsNamesList.add(getString(R.string.load_more));
                             goodsPricesList.add("");
@@ -1089,21 +1121,6 @@ View view1;
                         }
                         if (articleList.size() > 0) {
                             Log.d("TEST", "Citrus =>" + isLoadedCitrus);
-                            getActivity().runOnUiThread(new Runnable() {
-
-                                @Override
-                                public void run() {
-
-                                    if(isStoreLoaded){
-                                        progressBar.setVisibility(View.GONE);
-                                        storeListView.setEnabled(true);
-                                    }
-
-                                }
-
-                            });
-
-
 
                             if (!isStoreLoaded) {
 
@@ -1155,8 +1172,6 @@ View view1;
 
         webThread = new Thread(runnable);
         webThread.start();
-
-
 
     }
 
@@ -1279,7 +1294,7 @@ View view1;
                                             }
                                             String title = element.getElementsByAttributeValue("class", TitleRozetkaClass).first().child(0).child(0).text();
                                             //String imgUrl = element.getElementsByAttributeValue("class", ImageRozetkaClass).first().attr("src");
-                                            String imgUrl = "http://testingfortest.tk/images/Screenshot_6.jpg";
+                                            String imgUrl = "https://cdn.icon-icons.com/icons2/2440/PNG/512/do_not_disturb_icon_148542.png";
 
                                             boolean isContains = false;
 
@@ -1337,6 +1352,19 @@ View view1;
                                     });
                                 }
 
+                                if (articleListRozetka.size() > 0) {
+                                    isLoadedRozetka = true;
+                                    Log.d("TEST", "Rozetka =>" + isLoadedRozetka);
+
+                                    if (!isStoreLoaded) {
+                                        currentStoreIndex = 0;
+                                        goodsListView.setAdapter(adapterMoyo);
+                                        initRecyclerView();
+                                        isStoreLoaded = true;
+                                        progressBar.setVisibility(View.GONE); // to hide
+                                    }
+
+                                }
 
 
                             /*isLoadedRozetka = true;
@@ -1348,8 +1376,6 @@ View view1;
                                 isFoundMoyo = true;
                                 adapterMoyo.notifyDataSetChanged();
                                 goodsListView.setEnabled(true);
-
-                            storeListView.setEnabled(true);
 //                            }
 
                                 //Log.d("TEST", doc.html());
@@ -1366,10 +1392,8 @@ View view1;
 
 
     void getRozetkaGoods(String search) {
-
+        goodsListView.setEnabled(false);
         isFoundRozetka = false;
-        isLoadedAllo = false;
-
         uiHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -1387,7 +1411,6 @@ View view1;
         try {
 
             isFoundRozetka = false;
-
             Log.d(TAG,"Step 1");
             Log.d(TAG,"TEST");
             browserRozetka.setWebChromeClient(new WebChromeClient());
@@ -1441,8 +1464,6 @@ View view1;
                         @Override
                         public void run() {
                                 Log.d("CONNECT", "connected main Allo");
-
-
 
                                 if (!isFoundRozetka) {
                                     Log.d(TAG, "Step 3");
@@ -1513,9 +1534,9 @@ View view1;
 
                                                 }
                                                 goodsCountRozetka = articleListRozetka.size();
-                                                Element loadElement = doc2.getElementsByAttributeValue("class", LoadMoreAlloClass).first();
+                                                Element loadElement = doc2.getElementsByAttributeValue("class", LoadMoreAlloClass).last();
 
-                                                if (loadElement != null && goodsCountRozetka > 0 && !stopHandlers) {
+                                                if (loadElement != null && goodsCount > 0 && !stopHandlers) {
                                                     goodsNamesListRozetka.add(getString(R.string.load_more));
                                                     goodsPricesListRozetka.add("");
                                                     goodsOldPricesListRozetka.add("");
@@ -1532,11 +1553,7 @@ View view1;
                                     }
 
 
-
-
-
-
-                                 if (articleListRozetka.size() > 0) {
+                                    if (articleListRozetka.size() > 0) {
                                         isLoadedAllo = true;
                                         Log.d("TEST", "Allo =>" + isLoadedAllo);
                                         if (!isStoreLoaded) {
@@ -1546,15 +1563,19 @@ View view1;
                                             isStoreLoaded = true;
                                             progressBar.setVisibility(View.GONE); // to hide
                                         }
+                                  /*  if (!isLoadedCitrus && !isLoadedRozetka && isLoadedAllo) {
+                                        Log.d("TEST", "Allo => SHOW");
 
+
+                                        // isLoadedAllo = false;
+                                        initRecyclerView();
+                                    }*/
                                     }
 
-                                    isLoadedAllo = true;
+
                                     isFoundRozetka = true;
                                     adapterRozetka.notifyDataSetChanged();
                                     goodsListView.setEnabled(true);
-                                    progressBar.setVisibility(View.GONE);
-                                    storeListView.setEnabled(true);
                                 }
                             }
                     }
@@ -1681,8 +1702,6 @@ View view1;
 
 
                     if (isConnected()){
-
-
                         mDatabase.child("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
                             public boolean inChosen;
                             @Override
@@ -1749,16 +1768,6 @@ View view1;
                     } else {
                         Toast.makeText(getActivity(),getString(R.string.internet_error),Toast.LENGTH_SHORT).show();
                     }
-
-                    uiHandler.postDelayed(
-                            new Runnable() {
-                                @Override
-                                public void run() {
-
-
-                                    ((BottomNavigationActivity) getContext()).onClickUpdate();
-                                }
-                            }, 500);
 
 
 

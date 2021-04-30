@@ -1,4 +1,4 @@
-package com.example.goodsfinder;
+package com.forbuy.goodsfinder;
 import android.content.Intent;
 
 import androidx.appcompat.app.AppCompatActivity;

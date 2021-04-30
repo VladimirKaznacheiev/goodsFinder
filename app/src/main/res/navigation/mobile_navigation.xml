@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.goodsfinder.HomeFragment"
+        android:name="com.forbuy.goodsfinder.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home2" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.example.goodsfinder.FavouriteFragment"
+        android:name="com.forbuy.goodsfinder.FavouriteFragment"
         android:label="Favourite"
         tools:layout="@layout/fragment_favourite2" />
 
