@@ -16,13 +16,13 @@
 
 
         <activity
-            android:name=".BottomNavigationActivity"
+            android:name="com.example.goodsfinder.BottomNavigationActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".SplashActivity"
+            android:name="com.example.goodsfinder.SplashActivity"
             android:theme="@style/SplashTheme"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -31,7 +31,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity"
+        <activity android:name="com.example.goodsfinder.LoginActivity"
             android:screenOrientation="portrait"/>
     </application>
 

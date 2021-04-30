@@ -1,7 +1,6 @@
 package com.example.goodsfinder;
 import android.content.Intent;
 
-import androidx.annotation.MainThread;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
