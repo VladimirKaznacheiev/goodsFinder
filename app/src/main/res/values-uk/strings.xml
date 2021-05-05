@@ -23,8 +23,8 @@
     <string name="goods_no_loaded">Завантажилися не всі товари, зачекайте</string>
     <string name="main">Головна</string>
     <string name="chosen_empty">В обраному немає товарів</string>
-    <string name="up">По зростанню</string>
-    <string name="down">За зменшенням</string>
+    <string name="up">За зростанням</string>
+    <string name="down">За спаданням</string>
     <string name="def">Стандартно</string>
     <string name="reload">Перезавантажити</string>
     <string name="theme">Тема</string>

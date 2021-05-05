@@ -22,7 +22,7 @@
     <string name="loading">Загрузка</string>
     <string name="goods_no_loaded">Загрузились не все товары, подождите</string>
     <string name="main">Главная</string>
-    <string name="chosen_empty">В избранном нету товаров</string>
+    <string name="chosen_empty">В избранном нет товаров</string>
     <string name="up">По возрастанию</string>
     <string name="down">По убыванию</string>
     <string name="def">Стандартно</string>

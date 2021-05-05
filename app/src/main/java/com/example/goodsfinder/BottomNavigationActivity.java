@@ -161,7 +161,6 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
                 .setArrowOrientation(ArrowOrientation.TOP)
                 .setArrowPosition(0.75f)
                 .setWidth(BalloonSizeSpec.WRAP)
-                .setHeight(65)
                 .setTextSize(15f)
                 .setCornerRadius(4f)
                 .setText(this.getResources().getString((R.string.balloon4)))
@@ -170,6 +169,7 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
                 .setBackgroundColor(ContextCompat.getColor(this, R.color.bg_learn))
                 .setBalloonAnimation(BalloonAnimation.OVERSHOOT)
                 .setArrowAlignAnchorPadding(10)
+                .setPadding(7)
                 .setOnBalloonDismissListener(new OnBalloonDismissListener() {
                     @Override
                     public void onBalloonDismiss() {
@@ -200,7 +200,6 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
                 .setArrowOrientation(ArrowOrientation.LEFT)
                 .setArrowPosition(0.5f)
                 .setWidth(BalloonSizeSpec.WRAP)
-                .setHeight(40)
                 .setTextSize(15f)
                 .setCornerRadius(4f)
                 .setText(this.getResources().getString((R.string.balloon8)))
@@ -209,6 +208,7 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
                 .setBackgroundColor(ContextCompat.getColor(this, R.color.bg_learn))
                 .setBalloonAnimation(BalloonAnimation.OVERSHOOT)
                 .setArrowAlignAnchorPadding(10)
+                .setPadding(7)
                 .setOnBalloonDismissListener(new OnBalloonDismissListener() {
                     @Override
                     public void onBalloonDismiss() {
@@ -222,7 +222,6 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
                 .setArrowOrientation(ArrowOrientation.TOP)
                 .setArrowPosition(0.95f)
                 .setWidth(BalloonSizeSpec.WRAP)
-                .setHeight(65)
                 .setTextSize(15f)
                 .setCornerRadius(4f)
                 .setText(this.getResources().getString((R.string.balloon9)))
@@ -231,6 +230,7 @@ public class BottomNavigationActivity extends AppCompatActivity implements Navig
                 .setBackgroundColor(ContextCompat.getColor(this, R.color.bg_learn))
                 .setBalloonAnimation(BalloonAnimation.OVERSHOOT)
                 .setArrowAlignAnchorPadding(10)
+                .setPadding(7)
                 .setOnBalloonDismissListener(new OnBalloonDismissListener() {
                     @Override
                     public void onBalloonDismiss() {

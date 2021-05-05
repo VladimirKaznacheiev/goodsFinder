@@ -256,7 +256,6 @@ public class HomeFragment extends Fragment{
                 .setArrowOrientation(ArrowOrientation.TOP)
                 .setArrowPosition(0.3f)
                 .setWidth(BalloonSizeSpec.WRAP)
-                .setHeight(65)
                 .setTextSize(15f)
                 .setCornerRadius(4f)
                 .setText(context.getResources().getString((R.string.balloon1)))
@@ -265,6 +264,7 @@ public class HomeFragment extends Fragment{
                 .setBackgroundColor(ContextCompat.getColor(context, R.color.bg_learn))
                 .setBalloonAnimation(BalloonAnimation.OVERSHOOT)
                 .setArrowAlignAnchorPadding(10)
+                .setPadding(7)
                 .setOnBalloonDismissListener(new OnBalloonDismissListener() {
                     @Override
                     public void onBalloonDismiss() {
@@ -278,7 +278,6 @@ public class HomeFragment extends Fragment{
                 .setArrowOrientation(ArrowOrientation.TOP)
                 .setArrowPosition(0.7f)
                 .setWidth(BalloonSizeSpec.WRAP)
-                .setHeight(65)
                 .setTextSize(15f)
                 .setCornerRadius(4f)
                 .setText(context.getResources().getString((R.string.balloon2)))
@@ -287,6 +286,7 @@ public class HomeFragment extends Fragment{
                 .setBackgroundColor(ContextCompat.getColor(context, R.color.bg_learn))
                 .setBalloonAnimation(BalloonAnimation.OVERSHOOT)
                 .setArrowAlignAnchorPadding(10)
+                .setPadding(7)
                 .setOnBalloonDismissListener(new OnBalloonDismissListener() {
                     @Override
                     public void onBalloonDismiss() {
@@ -306,7 +306,6 @@ public class HomeFragment extends Fragment{
                 .setArrowOrientation(ArrowOrientation.TOP)
                 .setArrowPosition(0.5f)
                 .setWidth(BalloonSizeSpec.WRAP)
-                .setHeight(65)
                 .setTextSize(15f)
                 .setCornerRadius(4f)
                 .setText(context.getResources().getString((R.string.balloon3)))
@@ -315,6 +314,7 @@ public class HomeFragment extends Fragment{
                 .setBackgroundColor(ContextCompat.getColor(context, R.color.bg_learn))
                 .setBalloonAnimation(BalloonAnimation.OVERSHOOT)
                 .setArrowAlignAnchorPadding(10)
+                .setPadding(7)
                 .setOnBalloonDismissListener(new OnBalloonDismissListener() {
                     @Override
                     public void onBalloonDismiss() {
@@ -1272,8 +1272,16 @@ public class HomeFragment extends Fragment{
                                 if (!stopHandlers) {
                                     try {
                                         String url = "https://eldorado.ua"+element.getElementsByAttributeValue("class", UrlRozetkaClass).first().child(0).attr("href");
-                                        Element elprice = element.getElementsByAttributeValue("class", PriceRozetkaClass).first().child(0);
-                                        Element elprice2 = element.getElementsByAttributeValue("class", OldPriceRozetkaClass).first();
+                                        Element elprice = null;
+                                        Element elprice2 = null;
+                                        try {
+                                            elprice = element.getElementsByAttributeValue("class", PriceRozetkaClass).first().child(0);
+                                            elprice2 = element.getElementsByAttributeValue("class", OldPriceRozetkaClass).first();
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                            Log.d(TAG, "Rozetka Error");
+                                        }
+
 
 
 
@@ -1300,9 +1308,12 @@ public class HomeFragment extends Fragment{
                                                 oldPrice = "";
                                             }
                                         } else {
+                                            Log.d("ELDORADO", "NULL");
                                             price = getString(R.string.form_price);
                                             oldPrice = "";
                                         }
+                                        Log.d("ELDORADO", price+oldPrice);
+
                                         String title = element.getElementsByAttributeValue("class", TitleRozetkaClass).first().child(0).child(0).text();
                                         //String imgUrl = element.getElementsByAttributeValue("class", ImageRozetkaClass).first().attr("src");
                                         String imgUrl = "http://testingfortest.tk/images/Screenshot_6.jpg";

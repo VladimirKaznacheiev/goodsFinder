@@ -142,6 +142,11 @@ public class FavouriteFragment extends Fragment {
 
     public void loadChoosen(){
 
+        errorTextChoosen.setVisibility(View.INVISIBLE);
+        emptyTextChoosen.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+
+
         mDatabase.child("Users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -158,6 +163,7 @@ public class FavouriteFragment extends Fragment {
                 infoLoadedUp.clear();
                 favouritesList.clear();
                 urlsRozetka.clear();
+                isLoadedRozetka=false;
 
                 boolean isNotEmpty = false;
                 Log.d("RELOADING", "reloading");
@@ -362,7 +368,6 @@ public class FavouriteFragment extends Fragment {
                 .setArrowOrientation(ArrowOrientation.TOP)
                 .setArrowPosition(0.5f)
                 .setWidth(BalloonSizeSpec.WRAP)
-                .setHeight(65)
                 .setTextSize(15f)
                 .setCornerRadius(4f)
                 .setText(context.getResources().getString((R.string.balloon5)))
@@ -371,6 +376,7 @@ public class FavouriteFragment extends Fragment {
                 .setBackgroundColor(ContextCompat.getColor(context, R.color.bg_learn))
                 .setBalloonAnimation(BalloonAnimation.OVERSHOOT)
                 .setArrowAlignAnchorPadding(10)
+                .setPadding(7)
                 .setOnBalloonDismissListener(new OnBalloonDismissListener() {
                     @Override
                     public void onBalloonDismiss() {
@@ -384,7 +390,6 @@ public class FavouriteFragment extends Fragment {
                 .setArrowOrientation(ArrowOrientation.TOP)
                 .setArrowPosition(0.5f)
                 .setWidth(BalloonSizeSpec.WRAP)
-                .setHeight(65)
                 .setTextSize(15f)
                 .setCornerRadius(4f)
                 .setText(context.getResources().getString((R.string.balloon6)))
@@ -393,6 +398,7 @@ public class FavouriteFragment extends Fragment {
                 .setBackgroundColor(ContextCompat.getColor(context, R.color.bg_learn))
                 .setBalloonAnimation(BalloonAnimation.OVERSHOOT)
                 .setArrowAlignAnchorPadding(10)
+                .setPadding(7)
                 .setOnBalloonDismissListener(new OnBalloonDismissListener() {
                     @Override
                     public void onBalloonDismiss() {
@@ -406,7 +412,6 @@ public class FavouriteFragment extends Fragment {
                 .setArrowOrientation(ArrowOrientation.TOP)
                 .setArrowPosition(0.13f)
                 .setWidth(BalloonSizeSpec.WRAP)
-                .setHeight(65)
                 .setTextSize(15f)
                 .setCornerRadius(4f)
                 .setText(context.getResources().getString((R.string.balloon7)))
@@ -415,6 +420,7 @@ public class FavouriteFragment extends Fragment {
                 .setBackgroundColor(ContextCompat.getColor(context, R.color.bg_learn))
                 .setBalloonAnimation(BalloonAnimation.OVERSHOOT)
                 .setArrowAlignAnchorPadding(10)
+                .setPadding(7)
                 .setOnBalloonDismissListener(new OnBalloonDismissListener() {
                     @Override
                     public void onBalloonDismiss() {
@@ -431,16 +437,14 @@ public class FavouriteFragment extends Fragment {
 
                 String item = (String)parent.getItemAtPosition(position);
 
+                Log.d("ELDORADO", String.valueOf(isLoadedRozetka));
+
                 if (item.equals(context.getString(R.string.def)) && isLoadedRozetka){
                     sortDefault();
-                    Log.d("TETS", item);
                 } else if (item.equals(context.getString(R.string.up))){
-                    Log.d("ELDORADO", String.valueOf(isLoadedRozetka));
                     sortUp();
-                    Log.d("TETS", item);
                 } else if (item.equals(context.getString(R.string.down))){
                     sortDown();
-                    Log.d("TETS", item);
                 }
 
 
@@ -554,20 +558,25 @@ public class FavouriteFragment extends Fragment {
                             try {
 
                                 doc1 = Jsoup.parse(htmlContent);
-                                Log.d("ELDORADO", doc1.getElementsByAttributeValue("class", "price-value").last().text());
+                               // Log.d("ELDORADO", doc1.getElementsByAttributeValue("class", "price-value").last().text());
                                 //Log.d("ELDORADO", doc1.getElementsByAttributeValue("class", "base-slick slick-slide-item").last().html());
-                                priceRozetka = doc1.getElementsByAttributeValue("class", "price-value ").last().text();
+                                //Element status = doc1.getElementsByAttributeValue("class", "out-of-stock").first();
+                                try {
+                                    priceRozetka = doc1.getElementsByAttributeValue("class", "price-value").last().text();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    Log.d("ERROR", "Moyo Error");
+                                    priceRozetka = context.getString(R.string.form_price);
+                                }
+
                                 Element oldPriceRozetka = doc1.getElementsByAttributeValue("class", "old-price-value").last();
 
 
-
-
-                                if (priceRozetka!=null){
                                     String price1;
                                     if (!priceRozetka.contains(context.getString(R.string.form_price))){
                                         price1 = priceRozetka.replace("₴", "").replace("грн", "").replace(" грн", "").replace(".", "") + " грн";
                                     } else {
-                                        price1 = priceRozetka;
+                                        price1 = context.getString(R.string.form_price);
                                     }
 
 
@@ -583,13 +592,6 @@ public class FavouriteFragment extends Fragment {
                                         infoLoaded.set(infoLoaded.size()-1-Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)),  infoLoaded.get(infoLoaded.size()-1-Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)))+"0"+"SPLITFORBUY"+price1);
                                     }
 
-
-
-
-                                } else {
-                                    favouritesPricesList.set(Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)), context.getString(R.string.form_price));
-                                    favouritesOldPricesList.set(Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)),  " ");
-                                }
 
                                 //favouritesPricesList.set(Integer.parseInt(positionsRozetka.get(positionsRozetka.size()-1-iRozetka)), priceRozetka.replace("₴", "").replace("грн", "").replace(" грн", "") + " грн");
                                 adapter1.notifyDataSetChanged();
@@ -672,7 +674,7 @@ public class FavouriteFragment extends Fragment {
                 favouritesPricesList.add(i, infoLoaded.get(i));
                 favouritesOldPricesList.add(i, infoLoadedUp.get(i));
 
-                if (Integer.parseInt(goodsInfo[5].replace(" ", ""). replace("грн", "")) != 0) {
+                if (Integer.parseInt(goodsInfo[5].replace(context.getString(R.string.form_price), "0").replace(" ", ""). replace("грн", "")) != 0) {
                     if (Integer.parseInt(goodsInfo[4].replace(" ", ""). replace("грн", "")) != 0){
                         favouritesPricesList.add(i,  goodsInfo[5]);
                         favouritesOldPricesList.add(i,  goodsInfo[4]);
@@ -707,7 +709,7 @@ public class FavouriteFragment extends Fragment {
                     String[] goodsInfo = String.valueOf(infoLoadedUp.get(i)).split("SPLITFORBUY", 6);
                     String[] goodsInfoNext = String.valueOf(infoLoadedUp.get(i+1)).split("SPLITFORBUY", 6);
 
-                    if (Integer.parseInt(goodsInfo[5].replace("грн", "").replace(" ", "")) < Integer.parseInt(goodsInfoNext[5].replace("грн", "").replace(" ", ""))) {
+                    if (Integer.parseInt(goodsInfo[5].replace(context.getString(R.string.form_price), "0").replace("грн", "").replace(" ", "")) < Integer.parseInt(goodsInfoNext[5].replace(context.getString(R.string.form_price), "0").replace("грн", "").replace(" ", ""))) {
                         temp = infoLoadedUp.get(i);
                         infoLoadedUp.set(i, infoLoadedUp.get(i+1));
                         infoLoadedUp.set(i+1, temp);
@@ -744,7 +746,7 @@ public class FavouriteFragment extends Fragment {
                 favouritesPricesList.add(i, infoLoadedUp.get(i));
                 favouritesOldPricesList.add(i, infoLoadedUp.get(i));
 
-                if (Integer.parseInt(goodsInfo[5].replace(" ", ""). replace("грн", "")) != 0) {
+                if (Integer.parseInt(goodsInfo[5].replace(context.getString(R.string.form_price), "0").replace(" ", ""). replace("грн", "")) != 0) {
                     if (Integer.parseInt(goodsInfo[4].replace(" ", ""). replace("грн", "")) != 0){
                         favouritesPricesList.add(i, goodsInfo[5]);
                         favouritesOldPricesList.add(i,goodsInfo[4]);
@@ -780,11 +782,8 @@ public class FavouriteFragment extends Fragment {
                     String[] goodsInfo = String.valueOf(infoLoadedUp.get(i)).split("SPLITFORBUY", 6);
                     String[] goodsInfoNext = String.valueOf(infoLoadedUp.get(i+1)).split("SPLITFORBUY", 6);
 
-                    Log.d("START", String.valueOf(goodsInfo[2])+", "+goodsInfoNext[2]);
-                    Log.d("FIRST", String.valueOf(goodsInfo[4])+", "+goodsInfoNext[4]);
-                    Log.d("SECOND", String.valueOf(goodsInfo[5])+", "+goodsInfoNext[5]);
 
-                    if (Integer.parseInt(goodsInfo[5].replace("грн", "").replace(" ", "")) > Integer.parseInt(goodsInfoNext[5].replace("грн", "").replace(" ", ""))) {
+                    if (Integer.parseInt(goodsInfo[5].replace(context.getString(R.string.form_price), "0").replace("грн", "").replace(" ", "")) > Integer.parseInt(goodsInfoNext[5].replace(context.getString(R.string.form_price), "0").replace("грн", "").replace(" ", ""))) {
                         temp = infoLoadedUp.get(i);
 
                         infoLoadedUp.set(i, infoLoadedUp.get(i+1));
@@ -823,7 +822,7 @@ public class FavouriteFragment extends Fragment {
                 favouritesPricesList.add(i, infoLoadedUp.get(i));
                 favouritesOldPricesList.add(i, infoLoadedUp.get(i));
 
-                if (Integer.parseInt(goodsInfo[5].replace(" ", ""). replace("грн", "")) != 0) {
+                if (Integer.parseInt(goodsInfo[5].replace(context.getString(R.string.form_price), "0").replace(" ", ""). replace("грн", "")) != 0) {
                     if (Integer.parseInt(goodsInfo[4].replace(" ", "").replace("грн", "")) != 0) {
                         favouritesPricesList.add(i, goodsInfo[5]);
                         favouritesOldPricesList.add(i, goodsInfo[4]);
@@ -996,7 +995,7 @@ public class FavouriteFragment extends Fragment {
 
                                                 adapter1.notifyDataSetChanged();
 
-                                                loadChoosen();
+                                                reload();
 
                                                 break;
                                             }
