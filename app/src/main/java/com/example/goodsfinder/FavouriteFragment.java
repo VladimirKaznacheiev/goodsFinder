@@ -1,15 +1,18 @@
-package com.forbuy.goodsfinder;
+package com.example.goodsfinder;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -126,16 +129,14 @@ public class FavouriteFragment extends Fragment {
     FirebaseListAdapter mAdapter;
 
     boolean isConnected() {
-        boolean connected = false;
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
-                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
-            //we are connected to a network
-            connected = true;
-        } else
-            connected = false;
-
-        return connected;
+        ConnectivityManager cm = (ConnectivityManager)
+                context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        }else{
+            return false;
+        }
     }
 
 
@@ -908,6 +909,7 @@ public class FavouriteFragment extends Fragment {
             }
 
             imageDelete.setImageResource(R.drawable.ic_baseline_delete_24);
+
 
 
             imageDelete.setOnClickListener(new View.OnClickListener() {

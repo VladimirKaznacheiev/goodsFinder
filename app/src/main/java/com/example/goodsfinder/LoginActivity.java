@@ -1,4 +1,4 @@
-package com.forbuy.goodsfinder;
+package com.example.goodsfinder;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -31,16 +31,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText ETpassword;
 
     boolean isConnected() {
-        boolean connected = false;
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
-                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
-            //we are connected to a network
-            connected = true;
-        } else
-            connected = false;
 
-        return connected;
+        ConnectivityManager cm = (ConnectivityManager)
+                this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        }else{
+            return false;
+        }
+
     }
 
     @Override

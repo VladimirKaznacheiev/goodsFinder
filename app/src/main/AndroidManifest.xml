@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.forbuy.goodsfinder">
+    package="com.example.goodsfinder">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -16,13 +16,13 @@
 
 
         <activity
-            android:name="com.forbuy.goodsfinder.BottomNavigationActivity"
+            android:name="com.example.goodsfinder.BottomNavigationActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="com.forbuy.goodsfinder.SplashActivity"
+            android:name="com.example.goodsfinder.SplashActivity"
             android:theme="@style/SplashTheme"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -31,7 +31,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.forbuy.goodsfinder.LoginActivity"
+        <activity android:name="com.example.goodsfinder.LoginActivity"
             android:screenOrientation="portrait"/>
     </application>
 
