@@ -26,6 +26,7 @@ public class Dialog extends DialogFragment implements DialogInterface.OnClickLis
         getDialog().setTitle(getString(R.string.theme));
         View v = inflater.inflate(R.layout.dialog, null);
         v.findViewById(R.id.btnYes).setOnClickListener(this);
+        
         v.findViewById(R.id.btnNo).setOnClickListener(this);
 
         return v;
